@@ -1,35 +1,151 @@
 ---
+import Icon from "../../components/Icon.astro";
+import PageHead from "../../components/PageHead.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-
-const widgets = [
-  { name: "Clock", status: "Available", detail: "Local time, date, 12/24-hour formats." },
-  { name: "System monitor", status: "Milestone 3", detail: "CPU, memory, battery, uptime with honest unsupported states." },
-  { name: "Tasks", status: "Milestone 3", detail: "Local todos with due dates, search, and persistence." },
-  { name: "Calendar", status: "Milestone 3", detail: "Local events and month view; cloud sync only when implemented." },
-  { name: "Weather", status: "Planned", detail: "Optional provider with user-supplied API keys." },
-  { name: "GitHub", status: "Planned", detail: "Public activity with optional OAuth token storage." },
-];
+import { repoLinks } from "../../data/site";
+import { offlineWidgetCount, widgetCategories, widgets, widgetsIn } from "../../data/widgets";
 ---
 
 <BaseLayout
   title="Widgets"
-  description="Browse OpenDock built-in widgets, permissions, and roadmap status."
+  description={`All ${widgets.length} OpenDock widgets, with what each one stores and which hosts, if any, it contacts.`}
 >
-  <header class="page-header container">
-    <h1>Widgets</h1>
-    <p>Every widget declares what it reads, where data goes, and how often it refreshes.</p>
-  </header>
+  <PageHead
+    eyebrow={`${widgets.length} built in · ${offlineWidgetCount} fully offline`}
+    title="Widgets"
+    lead="Every widget comes in three sizes and handles loading, empty and error states. Each one declares what it stores and which internet hosts it may contact; OpenDock blocks everything else."
+  />
+
+  {
+    widgetCategories.map((category) => (
+      <section class="section widget-section" aria-labelledby={`cat-${category}`}>
+        <div class="container">
+          <h2 class="widget-category" id={`cat-${category}`}>
+            {category}
+          </h2>
+          <ul class="widget-cards">
+            {widgetsIn(category).map((widget) => (
+              <li class="card widget-card">
+                <span class="glyph">
+                  <Icon name={widget.icon} size={20} />
+                </span>
+                <h3>{widget.name}</h3>
+                <p>{widget.summary}</p>
+                <dl class="widget-facts">
+                  <div>
+                    <dt>Network</dt>
+                    <dd>
+                      {widget.network.length === 0 ? (
+                        <span class="pill is-offline">
+                          <Icon name="lock" size={12} />
+                          Stays on this device
+                        </span>
+                      ) : (
+                        widget.network.map((host) => <code>{host}</code>)
+                      )}
+                    </dd>
+                  </div>
+                  {widget.stores ? (
+                    <div>
+                      <dt>Stores</dt>
+                      <dd>{widget.stores}</dd>
+                    </div>
+                  ) : null}
+                </dl>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    ))
+  }
+
   <section class="section">
-    <div class="container card-grid two">
-      {
-        widgets.map((widget) => (
-          <article class="card">
-            <h3>{widget.name}</h3>
-            <p><strong>Status:</strong> {widget.status}</p>
-            <p>{widget.detail}</p>
-          </article>
-        ))
-      }
+    <div class="container">
+      <div class="notice">
+        <Icon name="plus" size={18} />
+        <div>
+          <p><strong>Missing a widget?</strong></p>
+          <p>
+            <a href={repoLinks.newWidget}>Request a widget</a> and tell us the question it should answer. A widget SDK
+            for building your own is on the <a href="/roadmap/">roadmap</a>.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .widget-section {
+    padding-block: 2.5rem;
+  }
+
+  .widget-section + .widget-section {
+    border-top: 0;
+  }
+
+  .widget-category {
+    margin-bottom: 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .widget-cards {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .widget-card {
+    display: grid;
+    align-content: start;
+    gap: 0.6rem;
+  }
+
+  .widget-card .glyph {
+    margin-bottom: 0.4rem;
+  }
+
+  .widget-facts {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0.5rem 0 0;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.88rem;
+  }
+
+  .widget-facts div {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    gap: 0.5rem;
+  }
+
+  .widget-facts dt {
+    color: var(--muted);
+  }
+
+  .widget-facts dd {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0;
+  }
+
+  @media (min-width: 720px) {
+    .widget-cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1040px) {
+    .widget-cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

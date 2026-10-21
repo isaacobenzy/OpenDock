@@ -1,58 +1,45 @@
-import { defaultAppSettings, type AppSettings } from "@opendock/config-schema";
-import { isTauri } from "@tauri-apps/api/core";
-import { listen } from "@tauri-apps/api/event";
-import { useEffect, useState } from "react";
+import { useEffect, type ReactNode } from "react";
 import { DockBar } from "../features/dock/DockBar";
-import { applyDockLayout, getCurrentMonitorId, getSettings } from "../services/ipc";
+import { FlyoutApp } from "../features/flyout/FlyoutApp";
+import { HubApp } from "../features/hub/HubApp";
+import { ToastApp } from "../features/toast/ToastApp";
+import { LiveDataProvider } from "../services/live";
+import { SettingsProvider } from "../services/settings";
+import { useSettings } from "../services/settingsContext";
 import "../styles/tokens.css";
+import "../styles/base.css";
 
-export function App() {
-  const [settings, setSettings] = useState<AppSettings>(defaultAppSettings);
-  const [ready, setReady] = useState(false);
+export type WindowKind = "main" | "hub" | "flyout" | "toast";
 
+/** Mirrors the dock's theme and style onto the document so every window matches. */
+function Themed({ kind, children }: { kind: WindowKind; children: ReactNode }) {
+  const { settings, ready } = useSettings();
   useEffect(() => {
-    let cancelled = false;
+    const root = document.documentElement;
+    root.dataset.window = kind;
+    root.dataset.theme = settings.dock.theme;
+    root.dataset.style = settings.dock.style;
+  }, [kind, settings.dock.theme, settings.dock.style]);
+  return ready ? <>{children}</> : null;
+}
 
-    async function bootstrap() {
-      try {
-        const loaded = await getSettings();
-        const monitorId = await getCurrentMonitorId();
-        const withMonitor =
-          loaded.dock.monitorId == null && monitorId
-            ? { ...loaded, dock: { ...loaded.dock, monitorId } }
-            : loaded;
-        if (!cancelled) {
-          setSettings(withMonitor);
-          setReady(true);
-        }
-        await applyDockLayout();
-      } catch {
-        if (!cancelled) {
-          setSettings(defaultAppSettings);
-          setReady(true);
-        }
-      }
-    }
-
-    void bootstrap();
-
-    const unsubs: Array<() => void> = [];
-    if (isTauri()) {
-      void listen("dock:fullscreen-hidden", () => undefined).then((u) => unsubs.push(u));
-      void listen("dock:fullscreen-visible", () => {
-        void applyDockLayout();
-      }).then((u) => unsubs.push(u));
-    }
-
-    return () => {
-      cancelled = true;
-      unsubs.forEach((u) => u());
-    };
-  }, []);
-
-  if (!ready) {
-    return null;
+export function App({ kind }: { kind: WindowKind }) {
+  if (kind === "toast") {
+    return (
+      <SettingsProvider>
+        <Themed kind={kind}>
+          <ToastApp />
+        </Themed>
+      </SettingsProvider>
+    );
   }
-
-  return <DockBar settings={settings} onSettingsChange={setSettings} />;
+  return (
+    <SettingsProvider>
+      <LiveDataProvider>
+        <Themed kind={kind}>
+          {kind === "hub" ? <HubApp /> : kind === "flyout" ? <FlyoutApp /> : <DockBar />}
+        </Themed>
+      </LiveDataProvider>
+    </SettingsProvider>
+  );
 }

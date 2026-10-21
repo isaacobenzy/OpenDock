@@ -1,0 +1,18 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "hub",
+  "description": "The hub window: widget gallery, Automation Studio and settings",
+  "windows": ["hub"],
+  "permissions": [
+    "core:default",
+    "dock-core",
+    "widget-read",
+    "widget-control",
+    "widget-config",
+    "automation",
+    "apps-read",
+    "apps-setup",
+    "navigation",
+    "hub-window"
+  ]
+}

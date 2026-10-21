@@ -1,0 +1,9 @@
+# Normalise line endings in the repository; checkouts follow each contributor's settings.
+* text=auto
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.icns binary
+*.webp binary
+*.woff2 binary

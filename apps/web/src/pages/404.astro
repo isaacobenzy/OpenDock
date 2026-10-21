@@ -1,0 +1,17 @@
+---
+import PageHead from "../components/PageHead.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Page not found" description="The page you were looking for doesn't exist.">
+  <PageHead
+    eyebrow="404"
+    title="This page isn't here"
+    lead="It may have moved, or the link may be mistyped. These are good places to continue:"
+  >
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/">Go to the home page</a>
+      <a class="btn btn-secondary" href="/docs/">Browse the docs</a>
+    </div>
+  </PageHead>
+</BaseLayout>

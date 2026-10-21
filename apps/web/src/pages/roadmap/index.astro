@@ -1,31 +1,26 @@
 ---
+import PageHead from "../../components/PageHead.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-
-const milestones = [
-  { name: "Milestone 2", status: "In progress", detail: "Dock prototype, settings persistence, marketing site." },
-  { name: "Milestone 3", status: "Next", detail: "Clock, system monitor, tasks, local calendar widgets." },
-  { name: "Milestone 4", status: "Planned", detail: "SQLite migrations, settings UI, import/export." },
-  { name: "Milestone 5", status: "Planned", detail: "Widget SDK permissions and automation studio." },
-  { name: "Milestone 7", status: "Planned", detail: "Signed Windows installer and release candidate." },
-];
+import { Content } from "../../../../../ROADMAP.md";
+import { repoLinks } from "../../data/site";
 ---
 
-<BaseLayout title="Roadmap" description="OpenDock milestone roadmap and feature status.">
-  <header class="page-header container">
-    <h1>Roadmap</h1>
-    <p>We ship in small, verifiable milestones. Status labels reflect real code, not marketing wishes.</p>
-  </header>
+<BaseLayout
+  title="Roadmap"
+  description="Where OpenDock is going: 1.0 for Windows, a widget SDK, and Linux and macOS versions."
+>
+  <PageHead
+    eyebrow="Direction, not dates"
+    title="Roadmap"
+    lead="What's done, what's next, and the ideas we're exploring. Everything here is open for discussion."
+  >
+    <p><a class="link-arrow" href={repoLinks.discussions}>Join the discussion</a></p>
+  </PageHead>
   <section class="section">
-    <div class="container card-grid two">
-      {
-        milestones.map((item) => (
-          <article class="card">
-            <h3>{item.name}</h3>
-            <p><strong>{item.status}</strong></p>
-            <p>{item.detail}</p>
-          </article>
-        ))
-      }
+    <div class="container">
+      <div class="prose md-body">
+        <Content />
+      </div>
     </div>
   </section>
 </BaseLayout>

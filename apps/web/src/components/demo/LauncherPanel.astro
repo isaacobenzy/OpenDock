@@ -1,0 +1,53 @@
+---
+import { pinnedDemoApps } from "../../data/demo";
+import Icon from "../Icon.astro";
+
+type Props = { id?: string; hidden?: boolean };
+const { id, hidden = false } = Astro.props;
+
+const results = [
+  { name: "Notes", icon: "note", tone: 3 },
+  { name: "Notifications", icon: "bell", tone: 6 },
+  { name: "Network settings", icon: "wifi", tone: 1 },
+] as const;
+---
+
+<div class="panel panel--launcher" id={id} hidden={hidden} role={id ? "dialog" : undefined} aria-label={id ? "Start" : undefined}>
+  <div class="search-field" aria-hidden="true">
+    <Icon name="search" size={16} />
+    <span class="search-query">no<span class="caret"></span></span>
+  </div>
+  <p class="panel-label">Pinned</p>
+  <ul class="pin-grid" aria-label="Pinned apps">
+    {
+      pinnedDemoApps.map((app) => (
+        <li>
+          <span class="dk-tile" data-tone={app.tone}>
+            <Icon name={app.icon} size={18} />
+          </span>
+          <span>{app.name}</span>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="panel-label">Best matches</p>
+  <ul class="result-list" aria-label="Search results">
+    {
+      results.map((r, i) => (
+        <li class:list={{ "is-selected": i === 0 }}>
+          <span class="dk-tile is-small" data-tone={r.tone}>
+            <Icon name={r.icon} size={14} />
+          </span>
+          {r.name}
+          {i === 0 ? <kbd>Enter</kbd> : null}
+        </li>
+      ))
+    }
+  </ul>
+  <div class="power-row" aria-label="Power">
+    <span title="Lock"><Icon name="lock" size={15} /></span>
+    <span title="Sleep"><Icon name="moon" size={15} /></span>
+    <span title="Restart"><Icon name="restart" size={15} /></span>
+    <span class="is-confirm"><Icon name="power" size={15} />Click again to shut down</span>
+  </div>
+</div>

@@ -1,30 +1,45 @@
 ---
-import { footerNav } from "../data/nav";
-const year = new Date().getFullYear();
+import { footerNav, isExternal } from "../data/nav";
+import { currentRelease } from "../data/releases";
+import { repoLinks } from "../data/site";
+import BrandMark from "./BrandMark.astro";
 ---
 
 <footer class="site-footer">
-  <div class="container footer-grid">
-    <div>
-      <p>
-        <strong>OpenDock</strong> is a privacy-first, open-source dock and widget platform for desktop
-        operating systems. No account required. MIT licensed.
-      </p>
-      <p>© {year} OpenDock Contributors</p>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <a class="brand" href="/">
+          <BrandMark />
+          <span>OpenDock</span>
+        </a>
+        <p>
+          A privacy-first, open-source dock and taskbar replacement for Windows. No account, no telemetry, and the
+          taskbar always comes back.
+        </p>
+      </div>
+      {
+        footerNav.map((group) => (
+          <nav aria-label={group.label}>
+            <h2>{group.label}</h2>
+            <ul>
+              {group.links.map((link) => (
+                <li>
+                  <a href={link.href} rel={isExternal(link.href) ? "noopener" : undefined}>
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
     </div>
-    {
-      footerNav.map((group) => (
-        <div>
-          <h2>{group.label}</h2>
-          <ul>
-            {group.links.map((link) => (
-              <li>
-                <a href={link.href}>{link.label}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))
-    }
+    <div class="footer-legal">
+      <p>
+        Released under the <a href={repoLinks.license}>MIT License</a>. Current version {currentRelease.version}.
+      </p>
+      <p>Windows is a trademark of Microsoft. OpenDock is not affiliated with Microsoft.</p>
+    </div>
   </div>
 </footer>

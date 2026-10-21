@@ -1,38 +1,94 @@
 ---
+import Icon from "../../components/Icon.astro";
+import PageHead from "../../components/PageHead.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { repoLinks, site } from "../../data/site";
+
+const included = [
+  "Every widget and every feature, including Automation Studio",
+  "Commercial use, at work or at home, on as many PCs as you like",
+  "No account, licence key, trial or nag screen",
+  "The full source code under the MIT License",
+];
 ---
 
-<BaseLayout
-  title="Pricing"
-  description="OpenDock is free, open source, and MIT licensed. No subscriptions or license keys."
->
-  <header class="page-header container">
-    <h1>Pricing</h1>
-    <p>Zero cost. Zero license server. You pay only for optional third-party APIs you choose to connect.</p>
-  </header>
+<BaseLayout title="Pricing" description="OpenDock is free and open source under the MIT License, with no paid tier.">
+  <PageHead
+    eyebrow="Pricing"
+    title="Free. All of it."
+    lead="OpenDock has no paid tier, no pro features and no subscription. It's open source under the MIT License, and that won't change."
+  />
+
   <section class="section">
-    <div class="container card-grid two">
-      <article class="card">
-        <h3>OpenDock Community</h3>
-        <p><strong>$0</strong> — forever</p>
-        <ul>
-          <li>Full desktop app source (MIT)</li>
-          <li>Built-in widgets as they ship</li>
-          <li>Local automations and settings export</li>
-          <li>Community support via GitHub</li>
+    <div class="container pricing">
+      <div class="card price-card">
+        <p class="eyebrow">OpenDock</p>
+        <p class="price"><span>$0</span> forever</p>
+        <ul class="checks">
+          {included.map((item) => <li>{item}</li>)}
         </ul>
-        <a class="btn btn-primary" href="/docs/#download">Download</a>
-      </article>
-      <article class="card">
-        <h3>Optional integrations</h3>
-        <p>Bring your own keys</p>
-        <ul>
-          <li>Weather providers when enabled</li>
-          <li>GitHub OAuth for private activity</li>
-          <li>Future marketplace widgets with signed manifests</li>
+        <a class="btn btn-primary" href="/download/">
+          <Icon name="download" size={18} />
+          Download for Windows
+        </a>
+      </div>
+      <div class="stack">
+        <h2>How it's sustained</h2>
+        <p class="muted">
+          OpenDock has no servers to pay for, because everything runs on your PC. The project is sustained by the people
+          who use it and contribute to it.
+        </p>
+        <h2>Ways to help</h2>
+        <ul class="link-list">
+          <li><a class="link-arrow" href={site.repo}>Star the repository <Icon name="arrow" size={16} /></a></li>
+          <li><a class="link-arrow" href={repoLinks.newBug}>Report bugs you find <Icon name="arrow" size={16} /></a></li>
+          <li>
+            <a class="link-arrow" href={repoLinks.contributing}>Contribute code or docs <Icon name="arrow" size={16} /></a>
+          </li>
+          <li><a class="link-arrow" href="/feedback/">Tell us what to build next <Icon name="arrow" size={16} /></a></li>
         </ul>
-        <a class="btn btn-secondary" href="/docs/">Read integration docs</a>
-      </article>
+      </div>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .pricing {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  .price-card {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+  }
+
+  .price {
+    color: var(--muted);
+  }
+
+  .price span {
+    font-family: var(--font-display);
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+  }
+
+  .pricing h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+
+  .pricing h2 + p {
+    margin-bottom: 1rem;
+  }
+
+  @media (min-width: 900px) {
+    .pricing {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

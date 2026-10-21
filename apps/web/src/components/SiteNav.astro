@@ -1,104 +1,56 @@
 ---
-import { moreNav, primaryNav } from "../data/nav";
+import { isCurrent, primaryNav } from "../data/nav";
+import { site } from "../data/site";
+import BrandMark from "./BrandMark.astro";
+import Icon from "./Icon.astro";
 
-const currentPath = Astro.url.pathname;
-const isActive = (href: string) =>
-  href === "/" ? currentPath === "/" : currentPath.startsWith(href);
+const pathname = Astro.url.pathname;
 ---
 
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="/" aria-label="OpenDock home">
-      <img
-        class="brand-icon"
-        src="/icons/icon-32.png"
-        width="32"
-        height="32"
-        alt=""
-        decoding="async"
-      />
+    <a class="brand" href="/">
+      <BrandMark />
       <span>OpenDock</span>
     </a>
 
-    <nav class="desktop-nav" aria-label="Primary">
-      {
-        primaryNav.map((group) => (
-          <div class="nav-group">
-            <button
-              type="button"
-              class="nav-trigger"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              {group.label}
-            </button>
-            <div class="nav-panel" role="menu" aria-label={group.label}>
-              {group.links.map((link) => (
-                <a
-                  href={link.href}
-                  role="menuitem"
-                  aria-current={isActive(link.href) ? "page" : undefined}
-                >
-                  {link.label}
-                  {link.description ? <small>{link.description}</small> : null}
-                </a>
-              ))}
-            </div>
-          </div>
-        ))
-      }
-
-      <div class="nav-group">
-        <button
-          type="button"
-          class="nav-trigger"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          More
-        </button>
-        <div class="nav-panel" role="menu" aria-label="More">
-          {
-            moreNav.map((link) => (
-              <a
-                href={link.href}
-                role="menuitem"
-                target={link.href.startsWith("http") ? "_blank" : undefined}
-                rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-              >
+    <nav class="primary-nav" aria-label="Main">
+      <ul>
+        {
+          primaryNav.map((link) => (
+            <li>
+              <a href={link.href} aria-current={isCurrent(link.href, pathname) ? "page" : undefined}>
                 {link.label}
-                {link.description ? <small>{link.description}</small> : null}
               </a>
-            ))
-          }
-        </div>
-      </div>
+            </li>
+          ))
+        }
+      </ul>
     </nav>
 
     <div class="header-actions">
-      <a class="btn btn-secondary" href="/docs/">Docs</a>
-      <a class="btn btn-primary" href="/docs/#download">Download</a>
+      <a class="icon-link" href={site.repo} aria-label="OpenDock on GitHub">
+        <Icon name="github" size={20} />
+      </a>
+      <a class="btn btn-primary btn-small" href="/download/">
+        <Icon name="download" size={16} />
+        Download
+      </a>
       <details class="mobile-menu">
-        <summary class="menu-toggle">Menu</summary>
-        <nav class="mobile-nav" aria-label="Mobile">
-          {
-            primaryNav.map((group) => (
-              <section>
-                <h2>{group.label}</h2>
-                {group.links.map((link) => (
-                  <a href={link.href} aria-current={isActive(link.href) ? "page" : undefined}>
+        <summary>Menu</summary>
+        <nav aria-label="Main">
+          <ul>
+            {
+              primaryNav.map((link) => (
+                <li>
+                  <a href={link.href} aria-current={isCurrent(link.href, pathname) ? "page" : undefined}>
                     {link.label}
                   </a>
-                ))}
-              </section>
-            ))
-          }
-          <section>
-            <h2>More</h2>
-            {moreNav.map((link) => (
-              <a href={link.href}>{link.label}</a>
-            ))}
-          </section>
+                </li>
+              ))
+            }
+            <li><a href="/download/">Download</a></li>
+          </ul>
         </nav>
       </details>
     </div>

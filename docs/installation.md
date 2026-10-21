@@ -1,57 +1,75 @@
-# Installation and toolchain
+# Installing OpenDock
 
-## Supported platforms
+## System requirements
 
-| OS | Status |
+- Windows 10 or Windows 11, 64-bit
+- Microsoft Edge WebView2 runtime (preinstalled on Windows 11; the installer fetches it on Windows 10 if it's missing)
+- About 30 MB of disk space
+
+## Download
+
+Get the latest version from [GitHub Releases](https://github.com/isaacobenzy/OpenDock/releases/latest). Each release has:
+
+| File | Use it when |
 | --- | --- |
-| Windows 11 x64 | Supported (primary) |
-| Windows 10 x64 | Supported (best-effort) |
+| `OpenDock_<version>_x64-setup.exe` | You're installing for yourself. Recommended. |
+| `OpenDock_<version>_x64_en-US.msi` | You deploy software with Group Policy, Intune or another management tool |
+| `SHA256SUMS.txt` | You want to verify the download |
 
-Minimum build targets follow Tauri 2 and WebView2 requirements documented upstream. Re-validate after upgrading `@tauri-apps/cli`.
+### Verify the download
 
-## Reference toolchain (local dev machine)
-
-Record actual versions after install:
-
-- Node.js 22.22.0
-- pnpm 10.34.4
-- Rust stable MSVC (`rust-toolchain.toml` pins stable + rustfmt + clippy)
-- WebView2 runtime 155.x
-- Visual Studio 2022 Build Tools with C++ workload
-
-## Install dependencies
-
-### Rust
+In PowerShell, in your Downloads folder:
 
 ```powershell
-winget install Rustlang.Rustup
-rustup default stable-x86_64-pc-windows-msvc
-rustup component add rustfmt clippy
+Get-FileHash .\OpenDock_0.2.0_x64-setup.exe -Algorithm SHA256
 ```
 
-### Visual Studio Build Tools
+The hash must match the line for that file in `SHA256SUMS.txt` (letter case doesn't matter).
 
-```powershell
-winget install Microsoft.VisualStudio.2022.BuildTools --override "--quiet --wait --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
-```
+## Install
 
-### Node and pnpm
+1. Run the installer.
+2. Pre-1.0 builds aren't code-signed yet, so Windows SmartScreen may show *Windows protected your PC*. If the checksum matched, choose **More info**, then **Run anyway**.
+3. When OpenDock starts for the first time, the welcome setup asks three things:
+   - **Taskbar:** *Replace the taskbar* (recommended), *Auto-hide* or *Keep the taskbar*.
+   - **Your apps:** which of your current taskbar pins to bring over.
+   - **Look and feel:** style, theme, and whether to start with Windows.
 
-Use Node 20+ and enable pnpm via Corepack or a global install.
+You can change all of these later from the dock menu (right-click an empty part of the dock) or the hub.
 
-## Clone and run
+## Update
 
-```powershell
-git clone <your-fork-url> OpenDock
-cd OpenDock
-pnpm install
-pnpm dev
-```
+Install the newer version over the existing one. Your settings, pins, todos, notes, rules and calendars are kept. An automatic updater is planned for 1.0.
 
-## Production build (no installer yet)
+## Uninstall
 
-```powershell
-pnpm build:desktop
-```
+Use **Settings → Apps → Installed apps → OpenDock → Uninstall**. The uninstaller:
 
-Windows installer packaging is scheduled for Milestone 7.
+1. Restores the Windows taskbar to how it was before OpenDock changed it.
+2. Removes OpenDock from startup.
+3. Removes the program files.
+
+Your data stays in `%APPDATA%\com.opendock.app` in case you reinstall. To remove it too, delete that folder, and delete any `OpenDock` entries in **Credential Manager → Windows Credentials**.
+
+## Recovering the Windows taskbar
+
+OpenDock restores the taskbar when it quits, when it crashes (a small guard process watches for that), before it signs out, restarts or shuts down the PC from the launcher, and when it's uninstalled. If Windows ends OpenDock some other way, for example a sign-out from the Windows menu, OpenDock repairs the taskbar the next time it starts.
+
+If the taskbar is still hidden, try these in order:
+
+1. **Restart OpenDock and quit it properly:** right-click the dock and choose **Quit OpenDock**.
+2. **Run the restore command:** press `Win+R` and run:
+
+   ```
+   "%LOCALAPPDATA%\OpenDock\opendock-desktop.exe" --restore-taskbar
+   ```
+
+   Adjust the path if you installed somewhere else.
+3. **Turn off auto-hide in Windows:** open **Settings → Personalization → Taskbar → Taskbar behaviors** and clear **Automatically hide the taskbar**.
+4. **Restart Windows Explorer:** open Task Manager (`Ctrl+Shift+Esc`), find **Windows Explorer**, and choose **Restart**.
+
+If none of these work, please [open a bug report](https://github.com/isaacobenzy/OpenDock/issues/new?template=bug_report.yml) with your Windows version.
+
+## Build from source
+
+See [development.md](development.md).

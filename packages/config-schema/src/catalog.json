@@ -1,0 +1,265 @@
+{
+  "events": [
+    {
+      "name": "calendar.event.starting",
+      "label": "A calendar event is about to start",
+      "source": "Calendar",
+      "fields": [
+        { "key": "minutesUntil", "label": "Minutes until start", "type": "number" },
+        { "key": "title", "label": "Title", "type": "string" },
+        { "key": "location", "label": "Location", "type": "string" }
+      ]
+    },
+    {
+      "name": "media.state.changed",
+      "label": "Media starts or stops",
+      "source": "Media",
+      "fields": [
+        { "key": "playing", "label": "Playing", "type": "boolean" },
+        { "key": "title", "label": "Track title", "type": "string" },
+        { "key": "artist", "label": "Artist", "type": "string" },
+        { "key": "app", "label": "App", "type": "string" }
+      ]
+    },
+    {
+      "name": "focus.session.started",
+      "label": "A focus round starts",
+      "source": "Focus timer",
+      "fields": [{ "key": "minutes", "label": "Length in minutes", "type": "number" }]
+    },
+    {
+      "name": "focus.session.ended",
+      "label": "A focus round ends",
+      "source": "Focus timer",
+      "fields": [
+        { "key": "minutes", "label": "Minutes focused", "type": "number" },
+        { "key": "completed", "label": "Completed", "type": "boolean" }
+      ]
+    },
+    {
+      "name": "system.battery.changed",
+      "label": "Battery level changes",
+      "source": "System",
+      "fields": [
+        { "key": "percent", "label": "Battery percent", "type": "number" },
+        { "key": "charging", "label": "Charging", "type": "boolean" }
+      ]
+    },
+    {
+      "name": "system.cpu.sampled",
+      "label": "CPU and memory are sampled",
+      "source": "System",
+      "fields": [
+        { "key": "cpu", "label": "CPU percent", "type": "number" },
+        { "key": "memory", "label": "Memory percent", "type": "number" }
+      ]
+    },
+    {
+      "name": "weather.rain.soon",
+      "label": "Rain is expected soon",
+      "source": "Weather",
+      "fields": [
+        { "key": "minutesUntil", "label": "Minutes until rain", "type": "number" },
+        { "key": "probability", "label": "Probability percent", "type": "number" }
+      ]
+    },
+    {
+      "name": "sun.sunset",
+      "label": "The sun sets",
+      "source": "Weather",
+      "fields": []
+    },
+    {
+      "name": "sun.sunrise",
+      "label": "The sun rises",
+      "source": "Weather",
+      "fields": []
+    },
+    {
+      "name": "time.tick",
+      "label": "At a time of day",
+      "source": "Clock",
+      "fields": [
+        { "key": "time", "label": "Time (HH:MM)", "type": "string" },
+        { "key": "weekday", "label": "Weekday (mon-sun)", "type": "string" }
+      ]
+    },
+    {
+      "name": "system.fullscreen.changed",
+      "label": "A fullscreen app opens or closes",
+      "source": "System",
+      "fields": [{ "key": "active", "label": "Fullscreen active", "type": "boolean" }]
+    },
+    {
+      "name": "app.window.focused",
+      "label": "You switch to an app",
+      "source": "Apps",
+      "fields": [
+        { "key": "app", "label": "App name", "type": "string" },
+        { "key": "title", "label": "Window title", "type": "string" }
+      ]
+    },
+    {
+      "name": "app.window.opened",
+      "label": "An app opens a window",
+      "source": "Apps",
+      "fields": [
+        { "key": "app", "label": "App name", "type": "string" },
+        { "key": "title", "label": "Window title", "type": "string" }
+      ]
+    },
+    {
+      "name": "todos.completed",
+      "label": "A todo is ticked off",
+      "source": "Todos",
+      "fields": [
+        { "key": "title", "label": "Todo title", "type": "string" },
+        { "key": "remaining", "label": "Open todos left", "type": "number" }
+      ]
+    }
+  ],
+  "actions": [
+    { "action": "media.pause", "label": "Pause media", "undoable": true },
+    { "action": "media.play", "label": "Play media", "undoable": true },
+    { "action": "media.next", "label": "Next track", "undoable": false },
+    { "action": "toast.show", "label": "Show toast", "undoable": false },
+    { "action": "system.theme.set", "label": "Set Windows theme", "undoable": true },
+    { "action": "dock.theme.set", "label": "Set dock theme", "undoable": true },
+    { "action": "focus.start", "label": "Start a focus round", "undoable": true },
+    { "action": "focus.stop", "label": "Stop the focus round", "undoable": false },
+    { "action": "dock.highlight", "label": "Highlight a widget", "undoable": false }
+  ],
+  "conditions": [
+    { "condition": "quietHours", "label": "Quiet hours" },
+    { "condition": "focusActive", "label": "A focus round is running" },
+    { "condition": "fullscreenActive", "label": "A fullscreen app is open" },
+    { "condition": "mediaPlaying", "label": "Media is playing" },
+    { "condition": "timeBetween", "label": "Time is between" }
+  ],
+  "recipes": [
+    {
+      "id": "meeting-mode",
+      "name": "Meeting mode",
+      "enabled": true,
+      "when": { "event": "calendar.event.starting", "where": { "minutesUntil": { "lte": 5 } } },
+      "then": [
+        { "action": "media.pause" },
+        { "action": "dock.highlight", "widget": "calendar" },
+        { "action": "toast.show", "text": "{{title}} in {{minutesUntil}} min", "undo": true }
+      ],
+      "unless": [{ "condition": "quietHours" }],
+      "cooldownMinutes": 0
+    },
+    {
+      "id": "battery-low",
+      "name": "Low battery warning",
+      "enabled": true,
+      "when": {
+        "event": "system.battery.changed",
+        "where": { "percent": { "lte": 20 }, "charging": { "eq": false } }
+      },
+      "then": [{ "action": "toast.show", "text": "Battery at {{percent}}%. Plug in soon.", "undo": false }],
+      "unless": [],
+      "cooldownMinutes": 30
+    },
+    {
+      "id": "rain-alert",
+      "name": "Rain alert",
+      "enabled": true,
+      "when": { "event": "weather.rain.soon", "where": { "probability": { "gte": 60 } } },
+      "then": [
+        { "action": "dock.highlight", "widget": "weather" },
+        { "action": "toast.show", "text": "Rain in about {{minutesUntil}} min. Take an umbrella.", "undo": false }
+      ],
+      "unless": [{ "condition": "quietHours" }],
+      "cooldownMinutes": 180
+    },
+    {
+      "id": "focus-break",
+      "name": "Break reminder",
+      "enabled": true,
+      "when": { "event": "focus.session.ended", "where": { "completed": { "eq": true } } },
+      "then": [{ "action": "toast.show", "text": "{{minutes}} minutes of focus done. Take a short break.", "undo": false }],
+      "unless": [],
+      "cooldownMinutes": 0
+    },
+    {
+      "id": "focus-quiet",
+      "name": "Pause music while focusing",
+      "enabled": false,
+      "when": { "event": "focus.session.started", "where": {} },
+      "then": [
+        { "action": "media.pause" },
+        { "action": "toast.show", "text": "Focus round started. Music paused.", "undo": true }
+      ],
+      "unless": [],
+      "cooldownMinutes": 0
+    },
+    {
+      "id": "sunset-dark",
+      "name": "Sunset dark mode",
+      "enabled": false,
+      "when": { "event": "sun.sunset", "where": {} },
+      "then": [
+        { "action": "system.theme.set", "mode": "dark" },
+        { "action": "toast.show", "text": "Sunset. Windows switched to dark.", "undo": true }
+      ],
+      "unless": [],
+      "cooldownMinutes": 0
+    },
+    {
+      "id": "sunrise-light",
+      "name": "Sunrise light mode",
+      "enabled": false,
+      "when": { "event": "sun.sunrise", "where": {} },
+      "then": [{ "action": "system.theme.set", "mode": "light" }],
+      "unless": [],
+      "cooldownMinutes": 0
+    },
+    {
+      "id": "cpu-high",
+      "name": "High CPU warning",
+      "enabled": false,
+      "when": { "event": "system.cpu.sampled", "where": { "cpu": { "gte": 90 } } },
+      "then": [
+        { "action": "dock.highlight", "widget": "system" },
+        { "action": "toast.show", "text": "CPU is at {{cpu}}%.", "undo": false }
+      ],
+      "unless": [{ "condition": "fullscreenActive" }],
+      "cooldownMinutes": 15
+    },
+    {
+      "id": "todos-done",
+      "name": "All todos done",
+      "enabled": true,
+      "when": { "event": "todos.completed", "where": { "remaining": { "eq": 0 } } },
+      "then": [{ "action": "toast.show", "text": "Every todo is done. Nice work.", "undo": false }],
+      "unless": [],
+      "cooldownMinutes": 0
+    },
+    {
+      "id": "call-app-quiet",
+      "name": "Pause music for calls",
+      "enabled": false,
+      "when": { "event": "app.window.opened", "where": { "app": { "contains": "Zoom" } } },
+      "then": [
+        { "action": "media.pause" },
+        { "action": "toast.show", "text": "{{app}} opened. Music paused.", "undo": true }
+      ],
+      "unless": [],
+      "cooldownMinutes": 5
+    },
+    {
+      "id": "evening-wind-down",
+      "name": "Evening wind-down",
+      "enabled": false,
+      "when": { "event": "time.tick", "where": { "time": { "eq": "21:30" } } },
+      "then": [
+        { "action": "dock.theme.set", "mode": "dark" },
+        { "action": "toast.show", "text": "It's 21:30. Time to wind down.", "undo": true }
+      ],
+      "unless": [],
+      "cooldownMinutes": 0
+    }
+  ]
+}

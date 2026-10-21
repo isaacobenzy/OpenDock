@@ -2,65 +2,46 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
-  web:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe28b06526aa82a82f3c625e92296
-
-      - name: Setup Node
-        uses: actions/setup-node@39370e3975a2e84a327a586371a32e25b2732940
-        with:
-          node-version: 22
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@4c14688a0834b0cb34abac1f1e9aabcb6b22f2c0
-        with:
-          version: 10
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Lint web
-        run: pnpm --filter @opendock/web lint
-
-      - name: Test web
-        run: pnpm --filter @opendock/web test
-
-      - name: Build web
-        run: pnpm build:web
-
-      - name: Lighthouse
-        run: pnpm lighthouse:web
-
-  verify:
+  desktop:
+    name: Desktop (Windows)
     runs-on: windows-latest
+    timeout-minutes: 45
     steps:
       - name: Checkout
-        uses: actions/checkout@11bd71901bbe28b06526aa82a82f3c625e92296
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Setup Node
-        uses: actions/setup-node@39370e3975a2e84a327a586371a32e25b2732940
-        with:
-          node-version: 22
+      - name: Set up pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@4c14688a0834b0cb34abac1f1e9aabcb6b22f2c0
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          version: 10
+          node-version-file: .nvmrc
+          cache: pnpm
 
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
         with:
+          toolchain: stable
           components: rustfmt, clippy
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          workspaces: apps/desktop/src-tauri
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -71,17 +52,46 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
-      - name: Frontend tests
+      - name: Frontend and schema tests
         run: pnpm test
 
       - name: Rust format
         run: pnpm fmt:check
 
+      - name: Clippy
+        run: cargo clippy --manifest-path apps/desktop/src-tauri/Cargo.toml --all-targets --locked -- -D warnings
+
       - name: Rust tests
         run: pnpm test:rust
 
-      - name: Clippy
-        run: cargo clippy --manifest-path apps/desktop/src-tauri/Cargo.toml -- -D warnings
-
-      - name: Build desktop (no bundle)
+      - name: Release build (no installer)
         run: pnpm build:desktop
+
+  website:
+    name: Website
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm --filter @opendock/web lint
+
+      - name: Test
+        run: pnpm --filter @opendock/web test
+
+      - name: Build and audit with Lighthouse
+        run: pnpm lighthouse:web

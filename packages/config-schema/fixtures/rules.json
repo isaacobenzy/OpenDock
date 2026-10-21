@@ -1,0 +1,85 @@
+{
+  "valid": [
+    {
+      "id": "meeting-mode",
+      "name": "Meeting mode",
+      "enabled": true,
+      "when": { "event": "calendar.event.starting", "where": { "minutesUntil": { "lte": 5 } } },
+      "then": [{ "action": "media.pause" }, { "action": "toast.show", "text": "{{title}}", "undo": true }],
+      "unless": [{ "condition": "quietHours" }],
+      "cooldownMinutes": 0
+    },
+    {
+      "id": "minimal",
+      "name": "Minimal rule",
+      "when": { "event": "sun.sunset" },
+      "then": [{ "action": "system.theme.set", "mode": "toggle" }]
+    },
+    {
+      "id": "time-window",
+      "name": "Only in the evening",
+      "enabled": false,
+      "when": { "event": "time.tick", "where": { "time": { "eq": "18:00" } } },
+      "then": [{ "action": "focus.start", "minutes": 50 }, { "action": "dock.highlight", "widget": "focus" }],
+      "unless": [{ "condition": "timeBetween", "start": "22:00", "end": "07:00" }],
+      "cooldownMinutes": 60
+    }
+  ],
+  "invalid": [
+    {
+      "id": "Bad Id",
+      "name": "Uppercase id",
+      "when": { "event": "sun.sunset" },
+      "then": [{ "action": "media.pause" }]
+    },
+    {
+      "id": "no-actions",
+      "name": "No actions",
+      "when": { "event": "sun.sunset" },
+      "then": []
+    },
+    {
+      "id": "unknown-action",
+      "name": "Unknown action",
+      "when": { "event": "sun.sunset" },
+      "then": [{ "action": "shell.exec", "command": "rm -rf /" }]
+    },
+    {
+      "id": "bad-time",
+      "name": "Bad time",
+      "when": { "event": "sun.sunset" },
+      "then": [{ "action": "media.pause" }],
+      "unless": [{ "condition": "timeBetween", "start": "25:00", "end": "07:00" }]
+    },
+    {
+      "id": "bad-event",
+      "name": "Bad event",
+      "when": { "event": "Not An Event" },
+      "then": [{ "action": "media.pause" }]
+    },
+    {
+      "id": "empty-comparator",
+      "name": "Empty comparator",
+      "when": { "event": "sun.sunset", "where": { "x": {} } },
+      "then": [{ "action": "media.pause" }]
+    },
+    {
+      "id": "long-toast",
+      "name": "Toast too long",
+      "when": { "event": "sun.sunset" },
+      "then": [
+        {
+          "action": "toast.show",
+          "text": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        }
+      ]
+    },
+    {
+      "id": "big-cooldown",
+      "name": "Cooldown too long",
+      "when": { "event": "sun.sunset" },
+      "then": [{ "action": "media.pause" }],
+      "cooldownMinutes": 5000
+    }
+  ]
+}

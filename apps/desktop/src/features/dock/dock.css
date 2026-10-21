@@ -1,139 +1,574 @@
-html,
-body,
-#root {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: transparent;
-  font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
-}
-
 .dock-shell {
-  box-sizing: border-box;
+  --tile-h: 44px;
+  --tile-gap: 6px;
+  position: relative;
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 100%;
-  padding: 6px 10px;
+  padding: 0 8px;
   border: 1px solid var(--od-border);
-  border-radius: var(--od-radius);
-  background: var(--od-bg-solid);
+  border-radius: 999px;
   color: var(--od-text);
-  box-shadow: var(--od-shadow);
+  box-shadow: var(--od-highlight);
+  overflow: hidden;
 }
 
-.dock-shell[data-glass="on"] {
-  background: var(--od-bg);
-  backdrop-filter: blur(var(--od-blur));
+.dock-shell.size-s {
+  --tile-h: 36px;
+  --tile-gap: 4px;
+  font-size: 12.5px;
 }
 
-.dock-shell.vertical .dock-track {
+.dock-shell.size-l {
+  --tile-h: 54px;
+  --tile-gap: 8px;
+  font-size: 14.5px;
+}
+
+.dock-shell.mode-full {
+  border-radius: var(--od-radius-lg);
+}
+
+.dock-shell.style-glass {
+  background: var(--od-surface);
+  backdrop-filter: blur(var(--od-blur)) saturate(1.4);
+}
+
+.dock-shell.style-solid {
+  background: var(--od-surface-solid);
+}
+
+.dock-shell.style-midnight {
+  background: var(--od-midnight);
+  border-color: var(--od-midnight-edge);
+  box-shadow:
+    var(--od-highlight),
+    inset 0 0 24px var(--od-accent-soft);
+}
+
+.dock-shell.vertical {
   flex-direction: column;
+  padding: 8px 0;
 }
 
 .dock-track {
   display: flex;
   align-items: center;
-  gap: 8px;
-  height: 100%;
+  gap: var(--tile-gap);
+  margin: 0 auto;
 }
 
-.sortable-wrap {
-  display: flex;
+.dock-shell.vertical .dock-track {
+  flex-direction: column;
+  margin: auto 0;
 }
 
 .dock-item {
-  display: inline-flex;
+  position: relative;
+  display: flex;
+  height: var(--tile-h);
+  border-radius: calc(var(--tile-h) / 2);
+  cursor: pointer;
+  outline: none;
+  touch-action: none;
+  transition:
+    background var(--od-fast) var(--od-ease),
+    box-shadow var(--od-fast) var(--od-ease);
+}
+
+.dock-item:hover {
+  background: var(--od-hover);
+}
+
+.dock-item:active {
+  background: var(--od-pressed);
+}
+
+.dock-item:focus-visible {
+  box-shadow: 0 0 0 2px var(--od-accent);
+}
+
+.dock-item.is-dragging {
+  z-index: 2;
+  background: var(--od-pressed);
+  cursor: grabbing;
+}
+
+.dock-item.is-highlighted {
+  animation: dock-pulse 1.2s var(--od-ease) 3;
+  background: var(--od-accent-soft);
+}
+
+@keyframes dock-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--od-accent-glow);
+  }
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+    background: var(--od-accent-soft);
+  }
+}
+
+/* ---------- tiles ---------- */
+
+.tile {
+  display: flex;
   align-items: center;
+  gap: 9px;
+  height: 100%;
+  min-width: var(--tile-h);
+  padding: 0 12px 0 8px;
+  white-space: nowrap;
+}
+
+.dock-shell.vertical .tile {
+  width: var(--tile-h);
+  padding: 0;
   justify-content: center;
-  gap: 8px;
-  min-width: 44px;
-  min-height: 44px;
-  padding: 0 12px;
-  border-radius: 12px;
-  border: 1px solid transparent;
-  background: rgba(255, 255, 255, 0.04);
 }
 
-.dock-item:focus-visible,
-.add-widget-button:focus-visible,
-.dock-context-menu button:focus-visible {
-  outline: 2px solid var(--od-accent);
-  outline-offset: 2px;
+.tile-icon {
+  display: grid;
+  place-items: center;
+  width: calc(var(--tile-h) - 14px);
+  height: calc(var(--tile-h) - 14px);
+  border-radius: 50%;
+  background: var(--od-raised);
+  color: var(--od-text);
+  flex: none;
 }
 
-.clock-widget {
+.dock-shell.size-s .tile-icon {
+  background: transparent;
+}
+
+.tile-text {
+  display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding: 4px 12px;
+  justify-content: center;
+  gap: 1px;
+  min-width: 0;
+  line-height: 1.2;
+}
+
+.tile-primary {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.tile-secondary {
+  font-size: 0.82em;
+  color: var(--od-muted);
+}
+
+.tile-truncate {
+  display: block;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dock-shell.size-s .tile-truncate {
+  max-width: 110px;
+}
+
+.dock-shell.size-l .tile-truncate {
+  max-width: 200px;
+}
+
+.tile.is-empty .tile-primary,
+.tile.is-error .tile-primary {
+  color: var(--od-muted);
+  font-weight: 500;
+}
+
+.tile.is-empty .tile-icon {
+  color: var(--od-muted);
+}
+
+.tile.is-error .tile-icon {
+  color: var(--od-warn);
+  background: var(--od-warn-soft);
+}
+
+.tile-extra {
+  display: flex;
+  align-items: center;
+}
+
+.tile-start {
+  padding: 0 4px;
+}
+
+.start-logo {
+  display: grid;
+  place-items: center;
+  width: calc(var(--tile-h) - 8px);
+  height: calc(var(--tile-h) - 8px);
+  border-radius: 50%;
+  background: var(--od-accent-soft);
+  color: var(--od-accent);
+}
+
+.tile-add {
+  padding: 0;
+  justify-content: center;
+  width: var(--tile-h);
+  color: var(--od-muted);
+}
+
+.dock-item:hover .tile-add {
+  color: var(--od-accent);
+}
+
+.tile-clock {
+  padding: 0 12px;
 }
 
 .clock-time {
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.1;
+  font-size: 1.08em;
+  font-variant-numeric: tabular-nums;
 }
 
-.clock-date {
-  font-size: 0.72rem;
-  color: var(--od-text-muted);
+.tile-clock.is-compact {
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
 }
 
-.add-widget-button {
-  font-size: 1.4rem;
-  line-height: 1;
-  cursor: pointer;
-  color: var(--od-text);
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.dock-context-menu {
-  position: fixed;
-  z-index: 20;
-  min-width: 180px;
-  padding: 8px;
-  border-radius: 12px;
-  border: 1px solid var(--od-border);
-  background: var(--od-bg-solid);
-  box-shadow: var(--od-shadow);
-}
-
-.dock-context-menu section {
-  margin-bottom: 8px;
-}
-
-.menu-label {
-  margin: 0 0 4px;
-  font-size: 0.72rem;
-  color: var(--od-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.dock-context-menu button {
-  display: block;
+.media-art {
+  display: grid;
+  place-items: center;
   width: 100%;
-  text-align: left;
-  margin: 2px 0;
-  padding: 6px 8px;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--od-accent);
+  color: var(--od-accent-ink);
+  transition: transform var(--od-fast);
 }
 
-.dock-context-menu button[aria-checked="true"] {
-  background: rgba(110, 168, 255, 0.18);
+.media-art:hover {
+  transform: scale(1.06);
 }
 
-.menu-toggle {
+.media-art.is-playing {
+  box-shadow: 0 0 0 3px var(--od-accent-soft);
+}
+
+.eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+}
+
+.eq i {
+  width: 3px;
+  border-radius: 2px;
+  background: var(--od-accent);
+  animation: eq 0.9s ease-in-out infinite;
+}
+
+.eq i:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.eq i:nth-child(3) {
+  animation-delay: -0.6s;
+}
+
+@keyframes eq {
+  0%,
+  100% {
+    height: 4px;
+  }
+  50% {
+    height: 14px;
+  }
+}
+
+.tile-system {
+  gap: 6px;
+}
+
+.tile-battery.is-warn .tile-primary {
+  color: var(--od-warn);
+}
+
+.battery-glyph {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  padding: 4px 0;
+  justify-content: center;
+  width: 24px;
+  height: 13px;
+  padding: 1.5px;
+  border: 1.5px solid var(--od-muted);
+  border-radius: 4px;
 }
 
-.menu-actions .danger {
-  color: #ffb4b4;
+.battery-glyph::after {
+  content: "";
+  position: absolute;
+  right: -4px;
+  width: 2px;
+  height: 5px;
+  border-radius: 0 2px 2px 0;
+  background: var(--od-muted);
+}
+
+.battery-fill {
+  position: absolute;
+  left: 1.5px;
+  top: 1.5px;
+  bottom: 1.5px;
+  max-width: calc(100% - 3px);
+  border-radius: 2px;
+  background: var(--od-accent);
+}
+
+.tile-battery.is-warn .battery-fill {
+  background: var(--od-warn);
+}
+
+.battery-glyph .od-icon {
+  position: relative;
+  color: var(--od-text);
+}
+
+.event-dot {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  color: var(--od-accent-ink);
+}
+
+.tile-progress .tile-text {
+  width: 110px;
+  gap: 4px;
+}
+
+.tile-progress .od-bar {
+  height: 4px;
+}
+
+/* ---------- apps, tray and volume ---------- */
+
+/* Groups highlight their own buttons rather than the whole tile. */
+.dock-item:has(.tile-apps.is-ready):hover,
+.dock-item:has(.tile-tray):hover {
+  background: transparent;
+}
+
+.tile-apps,
+.tile-tray {
+  gap: 2px;
+  padding: 0 2px;
+}
+
+.dock-shell.vertical .tile-apps.is-ready,
+.dock-shell.vertical .tile-tray {
+  flex-direction: column;
+  height: auto;
+  padding: 2px 0;
+}
+
+.dock-shell.vertical .dock-item:has(.tile-apps.is-ready),
+.dock-shell.vertical .dock-item:has(.tile-tray) {
+  height: auto;
+}
+
+.app-button,
+.tray-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: calc(var(--tile-h) - 6px);
+  min-width: calc(var(--tile-h) - 6px);
+  padding: 0 6px;
+  border-radius: var(--od-radius-sm);
+  cursor: pointer;
+  transition:
+    background var(--od-fast) var(--od-ease),
+    transform var(--od-fast) var(--od-ease);
+}
+
+.app-button:hover,
+.tray-button:hover {
+  background: var(--od-hover);
+}
+
+.app-button:active,
+.tray-button:active {
+  background: var(--od-pressed);
+  transform: scale(0.94);
+}
+
+.app-button:focus-visible,
+.tray-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--od-accent);
+}
+
+.app-button.is-active {
+  background: var(--od-raised);
+  box-shadow: var(--od-highlight);
+}
+
+.app-glyph {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.app-icon {
+  display: block;
+  border-radius: 7px;
+  object-fit: contain;
+  user-select: none;
+}
+
+.app-monogram {
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.app-monogram.tone-0 {
+  background: var(--od-accent-soft);
+  color: var(--od-accent);
+}
+
+.app-monogram.tone-1 {
+  background: var(--od-info-soft);
+  color: var(--od-info);
+}
+
+.app-monogram.tone-2 {
+  background: var(--od-warn-soft);
+  color: var(--od-warn);
+}
+
+.app-monogram.tone-3 {
+  background: var(--od-danger-soft);
+  color: var(--od-danger);
+}
+
+.app-monogram.tone-4 {
+  background: color-mix(in srgb, var(--od-info) 22%, var(--od-accent-soft));
+  color: var(--od-text);
+}
+
+.app-monogram.tone-5 {
+  background: var(--od-pressed);
+  color: var(--od-text);
+}
+
+.app-count {
+  position: absolute;
+  top: -5px;
+  right: -7px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--od-surface-solid);
+  border: 1px solid var(--od-border-strong);
+  font-size: 9.5px;
+  font-weight: 700;
+  line-height: 13px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.app-title {
+  max-width: 140px;
+  font-size: 0.92em;
+  font-weight: 550;
+}
+
+.app-indicator {
+  position: absolute;
+  left: 50%;
+  bottom: 1px;
+  width: 0;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--od-faint);
+  transform: translateX(-50%);
+  transition:
+    width var(--od-slow) var(--od-ease),
+    background var(--od-fast) var(--od-ease);
+}
+
+.app-button.is-running .app-indicator {
+  width: 5px;
+}
+
+.app-button.is-active .app-indicator {
+  width: 16px;
+  background: var(--od-accent);
+}
+
+.dock-shell.position-top .app-indicator {
+  top: 1px;
+  bottom: auto;
+}
+
+.dock-shell.vertical .app-indicator {
+  top: 50%;
+  left: 1px;
+  bottom: auto;
+  width: 3px;
+  height: 0;
+  transform: translateY(-50%);
+  transition: height var(--od-slow) var(--od-ease);
+}
+
+.dock-shell.vertical .app-button.is-running .app-indicator {
+  width: 3px;
+  height: 5px;
+}
+
+.dock-shell.vertical .app-button.is-active .app-indicator {
+  width: 3px;
+  height: 16px;
+}
+
+.tray-button {
+  color: var(--od-muted);
+}
+
+.tray-button:hover {
+  color: var(--od-text);
+}
+
+.tile-volume.is-muted .tile-icon,
+.tile-volume.is-muted .tile-primary {
+  color: var(--od-faint);
+}
+
+/* Gallery previews reuse the shell at a fixed thickness. */
+.preview-dock {
+  display: inline-flex;
+  width: auto;
+  max-width: 100%;
+  height: calc(var(--tile-h) + 16px);
+  box-shadow: var(--od-shadow-soft);
+  pointer-events: none;
+}
+
+.preview-dock .dock-track {
+  margin: 0;
 }

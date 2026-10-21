@@ -1,0 +1,42 @@
+name: Feature request
+description: Suggest an improvement to OpenDock.
+labels: ["enhancement", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Good requests explain the problem first. We may solve it differently from your proposal, and that's fine.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      placeholder: When I join a call, I have to pause music and mute notifications by hand…
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you've considered
+  - type: dropdown
+    id: privacy
+    attributes:
+      label: Does it need the network or personal data?
+      description: OpenDock is local-first. Anything that leaves the device must be declared and visible to the user.
+      options:
+        - No, it works fully offline
+        - Yes, it calls a service (describe it above)
+        - Not sure
+    validations:
+      required: true
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Contribution
+      options:
+        - label: I'd like to help build this.

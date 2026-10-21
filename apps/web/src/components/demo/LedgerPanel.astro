@@ -1,0 +1,51 @@
+---
+import { offlineWidgetCount, widgets } from "../../data/widgets";
+import Icon from "../Icon.astro";
+
+const rows = [
+  { widget: "Weather", host: "api.open-meteo.com", requests: 48, failed: 0, last: "4 min ago" },
+  { widget: "Next event", host: "calendar.google.com", requests: 96, failed: 1, last: "11 min ago" },
+  { widget: "Weather", host: "geocoding-api.open-meteo.com", requests: 3, failed: 0, last: "Yesterday" },
+];
+---
+
+<figure class="panel panel--ledger">
+  <header class="ledger-head">
+    <Icon name="shield" size={18} />
+    <span>
+      <strong>Privacy Ledger</strong>
+      <small>Every request in the last 24 hours</small>
+    </span>
+  </header>
+  <div class="ledger-scroll">
+    <table>
+      <caption class="sr-only">Example Privacy Ledger entries</caption>
+      <thead>
+        <tr>
+          <th scope="col">Widget</th>
+          <th scope="col">Host</th>
+          <th scope="col" class="num">Requests</th>
+          <th scope="col" class="num">Failed</th>
+          <th scope="col">Last</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map((r) => (
+            <tr>
+              <td>{r.widget}</td>
+              <td><code>{r.host}</code></td>
+              <td class="num">{r.requests}</td>
+              <td class="num">{r.failed}</td>
+              <td>{r.last}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <figcaption class="ledger-foot">
+    <Icon name="lock" size={14} />
+    {offlineWidgetCount} of {widgets.length} widgets never touch the network.
+  </figcaption>
+</figure>

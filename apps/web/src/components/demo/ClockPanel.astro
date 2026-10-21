@@ -1,0 +1,46 @@
+---
+import Icon from "../Icon.astro";
+
+type Props = { id?: string; hidden?: boolean };
+const { id, hidden = false } = Astro.props;
+
+const weekdays = ["M", "T", "W", "T", "F", "S", "S"];
+const agenda = [
+  { time: "10:00", title: "Team standup", note: "in 19 min", soon: true },
+  { time: "14:30", title: "Design review", note: "Room 2", soon: false },
+];
+---
+
+<div class="panel panel--clock" id={id} hidden={hidden} role={id ? "dialog" : undefined} aria-label={id ? "Calendar" : undefined}>
+  <header class="clock-head">
+    <strong>09:41</strong>
+    <small>Wednesday 21 October</small>
+  </header>
+  <div class="month" aria-hidden="true">
+    <p class="month-name">October 2026</p>
+    <div class="month-grid">
+      {weekdays.map((d) => <span class="wd">{d}</span>)}
+      {Array.from({ length: 3 }, () => <span />)}
+      {
+        Array.from({ length: 31 }, (_, i) => (
+          <span class:list={{ today: i + 1 === 21 }}>{i + 1}</span>
+        ))
+      }
+    </div>
+  </div>
+  <p class="panel-label">Today</p>
+  <ul class="agenda">
+    {
+      agenda.map((e) => (
+        <li class:list={{ "is-soon": e.soon }}>
+          <span class="agenda-time">{e.time}</span>
+          <span class="agenda-title">
+            <strong>{e.title}</strong>
+            <small>{e.note}</small>
+          </span>
+          {e.soon ? <Icon name="bell" size={14} /> : null}
+        </li>
+      ))
+    }
+  </ul>
+</div>

@@ -1,38 +1,104 @@
 ---
+import Icon from "../../components/Icon.astro";
+import PageHead from "../../components/PageHead.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import type { IconName } from "../../data/icons";
+import { repoLinks } from "../../data/site";
+
+const channels: { title: string; summary: string; href: string; action: string; icon: IconName }[] = [
+  {
+    title: "Something isn't working",
+    summary: "Tell us what you did, what you expected and what happened. The form asks for your Windows version.",
+    href: repoLinks.newBug,
+    action: "Report a bug",
+    icon: "bug",
+  },
+  {
+    title: "An idea for a feature",
+    summary: "Describe the problem you'd like solved, not just the solution. That helps us find the best fit.",
+    href: repoLinks.newFeature,
+    action: "Suggest a feature",
+    icon: "spark",
+  },
+  {
+    title: "A widget you'd like",
+    summary: "What question should it answer at a glance? Does it need the internet, and if so, which service?",
+    href: repoLinks.newWidget,
+    action: "Request a widget",
+    icon: "plus",
+  },
+  {
+    title: "A question, or something to show",
+    summary: "Ask for help, share your layout, or talk through an idea before it becomes an issue.",
+    href: repoLinks.discussions,
+    action: "Open Discussions",
+    icon: "chat",
+  },
+];
 ---
 
-<BaseLayout
-  title="Feedback"
-  description="Request widgets, report bugs, and suggest improvements for OpenDock."
->
-  <header class="page-header container">
-    <h1>Feedback</h1>
-    <p>We read every GitHub issue and discussion. No account wall, no hidden inbox.</p>
-  </header>
+<BaseLayout title="Feedback" description="Report bugs, suggest features and request widgets for OpenDock.">
+  <PageHead
+    eyebrow="Feedback"
+    title="Help shape OpenDock"
+    lead="OpenDock has no telemetry, so we only learn what works and what doesn't from you. Every report is read."
+  />
+
   <section class="section">
-    <div class="container prose">
-      <h2>Fastest paths</h2>
-      <ul>
-        <li><a href="https://github.com/isaacobenzy/OpenDock/issues">Bug reports and feature requests</a></li>
-        <li><a href="https://github.com/isaacobenzy/OpenDock/discussions">Show-and-tell and widget ideas</a></li>
-        <li><a href="/docs/#security">Security disclosures</a> (private, see SECURITY.md)</li>
+    <div class="container">
+      <ul class="channels">
+        {
+          channels.map((channel) => (
+            <li class="card channel">
+              <span class="glyph">
+                <Icon name={channel.icon} size={18} />
+              </span>
+              <h2>{channel.title}</h2>
+              <p>{channel.summary}</p>
+              <a class="link-arrow" href={channel.href}>
+                {channel.action} <Icon name="arrow" size={16} />
+              </a>
+            </li>
+          ))
+        }
       </ul>
-      <form class="form-grid" action="https://github.com/isaacobenzy/OpenDock/issues/new" method="get">
-        <label>
-          Topic
-          <select name="labels">
-            <option value="enhancement">Feature idea</option>
-            <option value="bug">Bug report</option>
-            <option value="widget">Widget request</option>
-          </select>
-        </label>
-        <label>
-          Summary (prefill GitHub title)
-          <input name="title" required minlength="8" maxlength="120" placeholder="Describe the change in one line" />
-        </label>
-        <button class="btn btn-primary" type="submit">Open GitHub issue composer</button>
-      </form>
+
+      <div class="notice security-note">
+        <Icon name="lock" size={18} />
+        <div>
+          <p><strong>Found a security issue?</strong></p>
+          <p>
+            Please don't open a public issue. <a href={repoLinks.security}>Report it privately</a> instead, and we'll
+            reply within three working days.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .channels {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .channel {
+    display: grid;
+    align-content: start;
+    gap: 0.75rem;
+  }
+
+  .security-note {
+    margin-top: 2rem;
+  }
+
+  @media (min-width: 720px) {
+    .channels {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

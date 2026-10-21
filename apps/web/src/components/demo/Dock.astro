@@ -1,0 +1,186 @@
+---
+import type { DockItem } from "../../data/demo";
+import Icon from "../Icon.astro";
+
+type Props = {
+  items: DockItem[];
+  style?: "pill" | "bar";
+  /** Interactive docks render flyout triggers as buttons; others are decorative. */
+  interactive?: boolean;
+  label?: string;
+};
+
+const { items, style = "pill", interactive = false, label = "OpenDock" } = Astro.props;
+
+function appLabel(item: Extract<DockItem, { kind: "app" }>): string {
+  const { name, state, windows } = item.app;
+  if (state === "pinned") return `${name}, pinned`;
+  const count = windows && windows > 1 ? `${windows} windows` : "1 window";
+  return `${name}, ${count}${state === "active" ? ", in front" : ""}`;
+}
+---
+
+<div
+  class:list={["dock", `dock--${style}`]}
+  role={interactive ? "group" : undefined}
+  aria-label={interactive ? label : undefined}
+  aria-hidden={interactive ? undefined : "true"}
+>
+  {
+    items.map((item) => {
+      const hide = item.narrow === "hide" ? "narrow-hide" : undefined;
+      switch (item.kind) {
+        case "divider":
+          return <span class:list={["dk-divider", hide]} aria-hidden="true" />;
+        case "start": {
+          const Tag = interactive && item.flyout ? "button" : "span";
+          return (
+            <Tag
+              class:list={["dk-cell dk-start", hide]}
+              type={Tag === "button" ? "button" : undefined}
+              aria-label={Tag === "button" ? "Start" : undefined}
+              aria-expanded={Tag === "button" ? "false" : undefined}
+              aria-controls={Tag === "button" ? item.flyout : undefined}
+              data-flyout={Tag === "button" ? item.flyout : undefined}
+            >
+              <img class="dk-logo" src="/favicon.svg" alt="" width="24" height="24" />
+            </Tag>
+          );
+        }
+        case "app": {
+          const { app } = item;
+          const Tag = interactive && app.flyout ? "button" : "span";
+          return (
+            <Tag
+              class:list={["dk-cell dk-app", `is-${app.state}`, hide]}
+              type={Tag === "button" ? "button" : undefined}
+              aria-label={Tag === "button" ? appLabel(item) : undefined}
+              aria-hidden={Tag === "button" ? undefined : "true"}
+              aria-expanded={Tag === "button" ? "false" : undefined}
+              aria-controls={Tag === "button" ? app.flyout : undefined}
+              data-flyout={Tag === "button" ? app.flyout : undefined}
+              title={app.name}
+            >
+              <span class="dk-tile" data-tone={app.tone}>
+                <Icon name={app.icon} size={18} />
+              </span>
+              {app.windows && app.windows > 1 ? <span class="dk-count">{app.windows}</span> : null}
+              <span class="dk-run" />
+            </Tag>
+          );
+        }
+        case "media":
+          return (
+            <span class:list={["dk-cell dk-media", hide]} aria-hidden="true">
+              <span class="dk-art" />
+              <span class="dk-text">
+                <strong>{item.title}</strong>
+                <small>{item.artist}</small>
+              </span>
+              <span class="dk-controls">
+                <Icon name="prev" size={14} />
+                <Icon name="pause" size={14} />
+                <Icon name="next" size={14} />
+              </span>
+            </span>
+          );
+        case "weather":
+          return (
+            <span class:list={["dk-cell dk-weather", hide]} aria-hidden="true">
+              <Icon name={item.condition} size={18} class={`is-${item.condition}`} />
+              <strong>{item.temperature}°</strong>
+            </span>
+          );
+        case "system":
+          return (
+            <span class:list={["dk-cell dk-meter", hide]} aria-hidden="true">
+              <span class="dk-ring" style={`--p: ${item.cpu}`}>
+                <Icon name="cpu" size={12} />
+              </span>
+              <span class="dk-text">
+                <strong>{item.cpu}%</strong>
+                <small>CPU</small>
+              </span>
+            </span>
+          );
+        case "focus":
+          return (
+            <span class:list={["dk-cell dk-meter", hide]} aria-hidden="true">
+              <span class="dk-ring is-focus" style={`--p: ${item.percent}`}>
+                <Icon name="timer" size={12} />
+              </span>
+              <span class="dk-text">
+                <strong>{item.remaining}</strong>
+                <small>Focus</small>
+              </span>
+            </span>
+          );
+        case "calendar":
+          return (
+            <span class:list={["dk-cell dk-event", hide]} aria-hidden="true">
+              <Icon name="calendar" size={16} />
+              <span class="dk-text">
+                <strong>{item.title}</strong>
+                <small>{item.when}</small>
+              </span>
+            </span>
+          );
+        case "todos":
+          return (
+            <span class:list={["dk-cell dk-chip", hide]} aria-hidden="true">
+              <Icon name="check" size={16} />
+              <strong>{item.left}</strong>
+            </span>
+          );
+        case "battery":
+          return (
+            <span class:list={["dk-cell dk-chip", hide]} aria-hidden="true">
+              <Icon name="battery" size={18} />
+              <strong>{item.percent}%</strong>
+            </span>
+          );
+        case "progress":
+          return (
+            <span class:list={["dk-cell dk-meter", hide]} aria-hidden="true">
+              <span class="dk-ring is-day" style={`--p: ${item.percent}`} />
+              <span class="dk-text">
+                <strong>{item.percent}%</strong>
+                <small>of today</small>
+              </span>
+            </span>
+          );
+        case "volume":
+          return (
+            <span class:list={["dk-cell dk-icon", hide]} aria-hidden="true">
+              <Icon name="volume" size={18} />
+            </span>
+          );
+        case "quick":
+          return (
+            <span class:list={["dk-cell dk-icons", hide]} aria-hidden="true">
+              <Icon name="wifi" size={16} />
+              <Icon name="bell" size={16} />
+              <Icon name="desktop" size={16} />
+            </span>
+          );
+        case "clock": {
+          const Tag = interactive && item.flyout ? "button" : "span";
+          return (
+            <Tag
+              class:list={["dk-cell dk-clock", hide]}
+              type={Tag === "button" ? "button" : undefined}
+              aria-label={Tag === "button" ? "Clock and agenda" : undefined}
+              aria-hidden={Tag === "button" ? undefined : "true"}
+              aria-expanded={Tag === "button" ? "false" : undefined}
+              aria-controls={Tag === "button" ? item.flyout : undefined}
+              data-flyout={Tag === "button" ? item.flyout : undefined}
+            >
+              <strong>{item.time}</strong>
+              <small>{item.date}</small>
+            </Tag>
+          );
+        }
+      }
+    })
+  }
+</div>

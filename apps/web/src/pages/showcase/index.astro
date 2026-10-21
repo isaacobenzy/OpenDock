@@ -1,29 +1,79 @@
 ---
+import Dock from "../../components/demo/Dock.astro";
+import Icon from "../../components/Icon.astro";
+import PageHead from "../../components/PageHead.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { exampleLayouts } from "../../data/demo";
+import { repoLinks } from "../../data/site";
 ---
 
 <BaseLayout
-  title="Showcase"
-  description="Community dock layouts and widget boards built with OpenDock."
+  title="Example layouts"
+  description="Three ways to set up OpenDock: as a taskbar replacement, for deep work, and for creative studios."
 >
-  <header class="page-header container">
-    <h1>Showcase</h1>
-    <p>Share your dock once Milestone 3 widgets ship. Until then, star the repo and watch releases.</p>
-  </header>
+  <PageHead
+    eyebrow="Example layouts"
+    title="One dock, set up your way"
+    lead="Pick widgets, a style and a size, and drag things into the order you like. Here are three starting points."
+  />
+
   <section class="section">
-    <div class="container card-grid">
-      <article class="card">
-        <h3>Founder focus board</h3>
-        <p>Clock, tasks, and calendar in a bottom pill dock with quiet-hour automations.</p>
-      </article>
-      <article class="card">
-        <h3>Developer status strip</h3>
-        <p>Full-width top dock with system monitor and GitHub activity (coming soon).</p>
-      </article>
-      <article class="card">
-        <h3>Minimal student bar</h3>
-        <p>Compact dock with tasks and music controls when supported by the OS.</p>
-      </article>
+    <div class="container layouts">
+      {
+        exampleLayouts.map((layout) => (
+          <article class="layout" aria-labelledby={`layout-${layout.id}`}>
+            <div class="layout-frame">
+              <div class="wallpaper" aria-hidden="true" />
+              <div class="layout-frame-inner">
+                <Dock items={layout.items} style={layout.style} />
+              </div>
+            </div>
+            <div class="layout-copy">
+              <h2 id={`layout-${layout.id}`}>{layout.name}</h2>
+              <p class="muted">{layout.summary}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="notice">
+        <Icon name="heart" size={18} />
+        <div>
+          <p><strong>Share your setup</strong></p>
+          <p>
+            Post a screenshot of your dock in <a href={repoLinks.discussions}>GitHub Discussions</a>. Please crop out
+            anything personal, such as window titles or notifications.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .layouts {
+    display: grid;
+    gap: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .layout {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .layout-copy {
+    display: grid;
+    gap: 0.4rem;
+    max-width: 42rem;
+  }
+
+  .layout-copy h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+</style>

@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "toast",
+  "description": "The automation notification strip",
+  "windows": ["toast"],
+  "permissions": ["core:default", "navigation", "toast-window"]
+}

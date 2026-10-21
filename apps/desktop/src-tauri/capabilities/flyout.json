@@ -1,0 +1,18 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "flyout",
+  "description": "The widget panel above the dock",
+  "windows": ["flyout"],
+  "permissions": [
+    "core:default",
+    "dock-core",
+    "widget-read",
+    "widget-control",
+    "apps-read",
+    "apps-control",
+    "previews",
+    "power",
+    "navigation",
+    "flyout-window"
+  ]
+}

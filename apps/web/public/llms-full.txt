@@ -1,22 +1,31 @@
-# OpenDock — extended context for agents
+# OpenDock: extended context
 
-OpenDock is a Tauri 2 + React + Rust desktop shell with a static Astro marketing site on Cloudflare Pages.
+OpenDock is a free, open-source dock and taskbar replacement for Windows 10 and 11, licensed under MIT. Current version: 0.2.0.
 
-## Stack
+## What it does
 
-- Desktop: `apps/desktop` (Tauri 2, React 19, Vite)
-- Shared config: `packages/config-schema` (Zod)
-- Web: `apps/web` (Astro, static export)
+- Replaces the Windows taskbar: pinned apps and open windows grouped by app, live window previews on right-click, and a screen-edge reservation so maximised windows stop at the dock.
+- Start launcher with instant search over installed apps, pinning, and power actions that confirm before ending a session.
+- 14 widgets: Start, Apps, Volume, Quick actions, Clock, Now playing, Focus timer, Todos, Notes, Next event (iCal calendars), System, Battery, Weather and Day progress.
+- Automation Studio: rules made of an event, optional conditions and actions (for example, pause media before a meeting). Rules are JSON data, not scripts, with dry runs, an activity log, cooldowns, rate limits and Undo.
+- Privacy Ledger: a local record of every network request.
 
-## Downloads
+## Privacy and security
 
-- Windows installer: GitHub Releases tag `v0.1.0-milestone-2` (NSIS `.exe` when published)
-- macOS `.dmg` and Linux `.AppImage` / `.deb`: planned; same codebase, not yet shipped for Milestone 2
+- No account, backend, telemetry or remote configuration.
+- Only the Weather widget (api.open-meteo.com, geocoding-api.open-meteo.com) and calendar feeds the user adds make network requests, through a host allow-list.
+- Data is stored locally in %APPDATA%\com.opendock.app; calendar feed links are stored in Windows Credential Manager.
+- The taskbar is restored on quit, crash (via a guard process), power actions, next start and uninstall.
 
-## Privacy
+## Technology
 
-No account required. No telemetry by default. Settings stored locally with atomic writes and invalid-config recovery.
+- Desktop app: Tauri 2 with a Rust core and a React 19 + TypeScript UI (apps/desktop).
+- Shared schemas: Zod and Rust validators tested against shared fixtures (packages/config-schema).
+- Storage: SQLite with migrations; settings in JSON.
+- Website: static Astro site on Cloudflare Pages (apps/web).
 
-## License
+## Links
 
-MIT — https://github.com/isaacobenzy/OpenDock/blob/main/LICENSE
+- Source and releases: https://github.com/isaacobenzy/OpenDock
+- Documentation: https://github.com/isaacobenzy/OpenDock/tree/main/docs
+- License: https://github.com/isaacobenzy/OpenDock/blob/main/LICENSE

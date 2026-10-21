@@ -1,0 +1,13 @@
+# Maintainers who review changes to each area. The last matching pattern wins.
+# See GOVERNANCE.md for how to become a maintainer.
+
+*                                         @isaacobenzy
+
+# Security-sensitive areas need a maintainer review.
+/apps/desktop/src-tauri/src/platform/     @isaacobenzy
+/apps/desktop/src-tauri/capabilities/     @isaacobenzy
+/apps/desktop/src-tauri/permissions/      @isaacobenzy
+/apps/desktop/src-tauri/src/net.rs        @isaacobenzy
+/apps/desktop/src-tauri/src/secrets.rs    @isaacobenzy
+/apps/desktop/src-tauri/tauri.conf.json   @isaacobenzy
+/.github/                                 @isaacobenzy

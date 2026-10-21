@@ -1,10 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="OpenDock">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#5eead4"/>
-      <stop offset="1" stop-color="#60a5fa"/>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a3145"/>
+      <stop offset="1" stop-color="#11141c"/>
+    </linearGradient>
+    <linearGradient id="dock" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7cf2c8"/>
+      <stop offset="1" stop-color="#8ab4ff"/>
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="16" fill="#0f1623"/>
-  <rect x="10" y="24" width="44" height="16" rx="8" fill="url(#g)"/>
+  <rect width="1024" height="1024" rx="232" fill="url(#tile)"/>
+  <rect x="3" y="3" width="1018" height="1018" rx="229" fill="none" stroke="#ffffff" stroke-opacity="0.14" stroke-width="6"/>
+  <rect x="128" y="588" width="768" height="252" rx="126" fill="url(#dock)"/>
+  <rect x="238" y="650" width="128" height="128" rx="40" fill="#11141c" fill-opacity="0.8"/>
+  <rect x="448" y="650" width="128" height="128" rx="40" fill="#f3f5f9"/>
+  <rect x="658" y="650" width="128" height="128" rx="40" fill="#11141c" fill-opacity="0.8"/>
 </svg>

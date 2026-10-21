@@ -1,13 +1,15 @@
 {
   "name": "opendock",
   "private": true,
-  "version": "0.1.0",
-  "description": "Privacy-first open-source desktop dock and widget platform for Windows",
+  "version": "0.2.0",
+  "description": "A privacy-first, open-source dock and taskbar replacement for Windows",
   "license": "MIT",
+  "packageManager": "pnpm@10.34.4",
   "scripts": {
     "dev": "pnpm --filter @opendock/desktop tauri dev",
     "build": "pnpm --filter @opendock/desktop build",
     "build:desktop": "pnpm --filter @opendock/desktop tauri build --no-bundle",
+    "bundle:desktop": "pnpm --filter @opendock/desktop tauri build",
     "dev:web": "pnpm --filter @opendock/web dev",
     "build:web": "pnpm --filter @opendock/web build",
     "lighthouse:web": "pnpm --filter @opendock/web lighthouse",
@@ -18,8 +20,8 @@
     "test:rust": "pnpm --filter @opendock/desktop test:rust"
   },
   "engines": {
-    "node": ">=20",
-    "pnpm": ">=9"
+    "node": ">=22",
+    "pnpm": ">=10"
   },
   "pnpm": {
     "onlyBuiltDependencies": ["esbuild"]

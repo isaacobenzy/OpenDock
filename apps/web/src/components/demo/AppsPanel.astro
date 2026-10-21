@@ -1,0 +1,41 @@
+---
+import Icon from "../Icon.astro";
+
+type Props = { id?: string; hidden?: boolean };
+const { id, hidden = false } = Astro.props;
+
+const windows = [
+  { title: "dock.rs — opendock", active: true, lines: [62, 80, 44, 70, 30, 56, 74] },
+  { title: "README.md — opendock", active: false, lines: [40, 86, 72, 50, 66, 34, 58] },
+];
+---
+
+<div class="panel panel--apps" id={id} hidden={hidden} role={id ? "dialog" : undefined} aria-label={id ? "Code windows" : undefined}>
+  <header class="panel-head">
+    <span class="dk-tile" data-tone="4"><Icon name="code" size={16} /></span>
+    <span class="panel-title">
+      <strong>Code</strong>
+      <small>2 windows</small>
+    </span>
+    <span class="panel-btn is-on" title="Unpin Code"><Icon name="pin" size={15} /></span>
+  </header>
+  <ul class="window-grid" aria-label="Windows">
+    {
+      windows.map((w) => (
+        <li class:list={["window-card", { "is-active": w.active }]}>
+          <span class="window-thumb" aria-hidden="true">
+            <span class="thumb-bar" />
+            {w.lines.map((width, i) => (
+              <span class="thumb-line" style={`--w: ${width}%; --i: ${i}`} />
+            ))}
+          </span>
+          <span class="window-title">{w.title}</span>
+        </li>
+      ))
+    }
+  </ul>
+  <div class="panel-menu">
+    <span class="menu-row"><Icon name="plus" size={15} />New window</span>
+    <span class="menu-row is-danger"><Icon name="close" size={15} />Close all 2 windows</span>
+  </div>
+</div>

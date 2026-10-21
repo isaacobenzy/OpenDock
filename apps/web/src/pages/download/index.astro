@@ -1,0 +1,129 @@
+---
+import Icon from "../../components/Icon.astro";
+import PageHead from "../../components/PageHead.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  checksumsFile,
+  currentRelease,
+  downloadUrl,
+  formatReleaseDate,
+  releasePageUrl,
+} from "../../data/releases";
+import { repoLinks, site } from "../../data/site";
+
+const setup = currentRelease.files.find((file) => file.kind === "setup")!;
+---
+
+<BaseLayout
+  title="Download"
+  description={`Download OpenDock ${currentRelease.version} for Windows 10 and 11. Free, open source, and verified with published SHA-256 checksums.`}
+>
+  <PageHead
+    eyebrow={`Version ${currentRelease.version} · ${formatReleaseDate(currentRelease.date)}`}
+    title="Download OpenDock"
+    lead="For Windows 10 and Windows 11, 64-bit. Installs for your account in about a minute, without admin rights."
+  >
+    <div class="hero-actions">
+      <a class="btn btn-primary" href={downloadUrl(currentRelease, setup.name)}>
+        <Icon name="download" size={18} />
+        Download installer
+      </a>
+      <a class="btn btn-secondary" href={releasePageUrl(currentRelease)}>What's new in {currentRelease.version}</a>
+    </div>
+  </PageHead>
+
+  <section class="section" aria-labelledby="files-title">
+    <div class="container"><div class="prose">
+      <h2 id="files-title">Files</h2>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">File</th>
+              <th scope="col">Use it when</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              currentRelease.files.map((file) => (
+                <tr>
+                  <td>
+                    <a href={downloadUrl(currentRelease, file.name)}>{file.label}</a>
+                    <br />
+                    <code>{file.name}</code>
+                  </td>
+                  <td>{file.note}</td>
+                </tr>
+              ))
+            }
+            <tr>
+              <td>
+                <a href={downloadUrl(currentRelease, checksumsFile)}>Checksums</a>
+                <br />
+                <code>{checksumsFile}</code>
+              </td>
+              <td>You want to confirm your download is exactly the file we published.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Install</h2>
+      <ol>
+        <li>Run <code>{setup.name}</code>.</li>
+        <li>
+          OpenDock isn't code-signed yet, so Windows SmartScreen may say <em>Windows protected your PC</em>. Once
+          you've checked the download, choose <strong>More info</strong>, then <strong>Run anyway</strong>.
+        </li>
+        <li>
+          The welcome setup asks how to treat the taskbar (replace it, auto-hide it or keep it), offers to bring over
+          your pinned apps, and lets you pick a style.
+        </li>
+      </ol>
+      <div class="notice">
+        <Icon name="shield" size={18} />
+        <div>
+          <p>
+            <strong>Why the warning?</strong> SmartScreen trusts apps with a paid code-signing certificate and a
+            download history. Signing is planned before 1.0. Until then, the checksum below proves the file came from
+            us unchanged.
+          </p>
+        </div>
+      </div>
+
+      <h2 id="verify">Verify your download</h2>
+      <p>Open PowerShell in your Downloads folder and run:</p>
+      <pre><code>Get-FileHash .\{setup.name} -Algorithm SHA256</code></pre>
+      <p>
+        The hash must match the line for that file in <a href={downloadUrl(currentRelease, checksumsFile)}
+          >{checksumsFile}</a
+        >. Letter case doesn't matter.
+      </p>
+
+      <h2>Requirements</h2>
+      <ul>
+        <li>Windows 10 or Windows 11, 64-bit</li>
+        <li>
+          Microsoft Edge WebView2. It's built into Windows 11; on Windows 10 the installer downloads it from Microsoft
+          if it's missing.
+        </li>
+        <li>No account and no internet connection needed, except for the weather and calendar widgets</li>
+      </ul>
+
+      <h2>Update and uninstall</h2>
+      <p>
+        To update, install the new version over the old one; your settings and data are kept. To uninstall, use
+        <strong>Settings → Apps → Installed apps</strong>. The uninstaller restores the Windows taskbar and removes
+        OpenDock from startup. If the taskbar ever stays hidden, follow the
+        <a href={`${repoLinks.docs("installation.md")}#recovering-the-windows-taskbar`}>recovery steps</a>.
+      </p>
+
+      <h2>Other platforms</h2>
+      <p>
+        Linux and macOS versions are planned; see the <a href="/roadmap/">roadmap</a>. You can also
+        <a href={repoLinks.docs("development.md")}>build OpenDock from source</a>, or browse
+        <a href={repoLinks.releases}>all releases</a> on <a href={site.repo}>GitHub</a>.
+      </p>
+    </div></div>
+  </section>
+</BaseLayout>

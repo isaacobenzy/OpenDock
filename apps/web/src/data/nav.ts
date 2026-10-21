@@ -1,7 +1,8 @@
+import { repoLinks, site } from "./site";
+
 export type NavLink = {
   label: string;
   href: string;
-  description?: string;
 };
 
 export type NavGroup = {
@@ -9,59 +10,49 @@ export type NavGroup = {
   links: NavLink[];
 };
 
-export const primaryNav: NavGroup[] = [
-  {
-    label: "Product",
-    links: [
-      { label: "Overview", href: "/", description: "OpenDock at a glance" },
-      { label: "Widgets", href: "/widgets/", description: "Built-in and community widgets" },
-      { label: "Pricing", href: "/pricing/", description: "Free and open source" },
-    ],
-  },
-  {
-    label: "Community",
-    links: [
-      { label: "Showcase", href: "/showcase/", description: "Layouts from the community" },
-      { label: "Feedback", href: "/feedback/", description: "Request features and report issues" },
-    ],
-  },
-  {
-    label: "Resources",
-    links: [
-      { label: "Docs", href: "/docs/", description: "Install, configure, and develop" },
-    ],
-  },
-];
-
-export const moreNav: NavLink[] = [
-  { label: "Changelog", href: "/changelog/", description: "Release history" },
-  { label: "Roadmap", href: "/roadmap/", description: "What we are building next" },
-  { label: "GitHub", href: "https://github.com/isaacobenzy/OpenDock", description: "Source code" },
-  { label: "Contributing", href: "/docs/#contribute", description: "Help build OpenDock" },
+export const primaryNav: NavLink[] = [
+  { label: "Features", href: "/#features" },
+  { label: "Widgets", href: "/widgets/" },
+  { label: "Docs", href: "/docs/" },
+  { label: "Roadmap", href: "/roadmap/" },
+  { label: "Changelog", href: "/changelog/" },
 ];
 
 export const footerNav: NavGroup[] = [
   {
     label: "Product",
     links: [
-      { label: "Overview", href: "/" },
+      { label: "Download", href: "/download/" },
       { label: "Widgets", href: "/widgets/" },
+      { label: "Example layouts", href: "/showcase/" },
       { label: "Pricing", href: "/pricing/" },
     ],
   },
   {
-    label: "Community",
+    label: "Project",
     links: [
-      { label: "Showcase", href: "/showcase/" },
+      { label: "Roadmap", href: "/roadmap/" },
+      { label: "Changelog", href: "/changelog/" },
       { label: "Feedback", href: "/feedback/" },
+      { label: "Source code", href: site.repo },
     ],
   },
   {
     label: "Resources",
     links: [
-      { label: "Docs", href: "/docs/" },
-      { label: "Changelog", href: "/changelog/" },
-      { label: "Roadmap", href: "/roadmap/" },
+      { label: "Documentation", href: "/docs/" },
+      { label: "Contributing", href: repoLinks.contributing },
+      { label: "Privacy", href: "/privacy/" },
+      { label: "Report a vulnerability", href: repoLinks.security },
     ],
   },
 ];
+
+export function isExternal(href: string): boolean {
+  return /^https?:\/\//.test(href);
+}
+
+export function isCurrent(href: string, pathname: string): boolean {
+  if (href.includes("#")) return false;
+  return href === "/" ? pathname === "/" : pathname.startsWith(href);
+}

@@ -1,40 +1,23 @@
 ---
+import PageHead from "../../components/PageHead.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-
-const releases = [
-  {
-    version: "0.1.0-milestone-2",
-    date: "2026-10-21",
-    notes: [
-      "Tauri 2 + React monorepo scaffold",
-      "Floating dock prototype with persisted layout",
-      "Live clock widget and context menu controls",
-      "Marketing site on Cloudflare Pages",
-    ],
-  },
-];
+import { Content } from "../../../../../CHANGELOG.md";
+import { repoLinks } from "../../data/site";
 ---
 
-<BaseLayout title="Changelog" description="OpenDock release notes and milestone history.">
-  <header class="page-header container">
-    <h1>Changelog</h1>
-    <p>Newest releases first. Pre-1.0 versions are milestone tags.</p>
-  </header>
+<BaseLayout title="Changelog" description="Every notable change to OpenDock, release by release.">
+  <PageHead
+    eyebrow="Release history"
+    title="Changelog"
+    lead="Every notable change, newest first. OpenDock follows semantic versioning; until 1.0, breaking changes are called out in each release."
+  >
+    <p><a class="link-arrow" href={repoLinks.releases}>Downloads for every release</a></p>
+  </PageHead>
   <section class="section">
-    <div class="container prose">
-      {
-        releases.map((release) => (
-          <article>
-            <h2>{release.version}</h2>
-            <p><time datetime={release.date}>{release.date}</time></p>
-            <ul>
-              {release.notes.map((note) => (
-                <li>{note}</li>
-              ))}
-            </ul>
-          </article>
-        ))
-      }
+    <div class="container">
+      <div class="prose md-body">
+        <Content />
+      </div>
     </div>
   </section>
 </BaseLayout>

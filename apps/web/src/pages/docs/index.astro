@@ -1,62 +1,229 @@
 ---
+import Icon from "../../components/Icon.astro";
+import PageHead from "../../components/PageHead.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import type { IconName } from "../../data/icons";
+import { repoLinks } from "../../data/site";
 
-const releaseTag = "v0.1.0-milestone-2";
-const releaseUrl = `https://github.com/isaacobenzy/OpenDock/releases/tag/${releaseTag}`;
+type Doc = { title: string; href: string; summary: string; icon: IconName };
+
+const groups: { title: string; intro: string; docs: Doc[] }[] = [
+  {
+    title: "Using OpenDock",
+    intro: "Install it, learn your way around, and know exactly what it does with your data.",
+    docs: [
+      {
+        title: "Installation",
+        href: repoLinks.docs("installation.md"),
+        summary: "Download, verify, install, update and uninstall, plus how to recover the taskbar.",
+        icon: "download",
+      },
+      {
+        title: "User guide",
+        href: repoLinks.docs("user-guide.md"),
+        summary: "The dock, apps and windows, the launcher, widgets, calendars, automations and taskbar modes.",
+        icon: "list",
+      },
+      {
+        title: "Security and privacy",
+        href: repoLinks.docs("security.md"),
+        summary: "What OpenDock promises, how each promise is enforced, and its known limits.",
+        icon: "shield",
+      },
+    ],
+  },
+  {
+    title: "Contributing",
+    intro: "Everything you need to make your first change, and to understand why the code looks the way it does.",
+    docs: [
+      {
+        title: "Contributing guide",
+        href: repoLinks.contributing,
+        summary: "Branches, commit style, the checks to run, and what reviewers look for.",
+        icon: "heart",
+      },
+      {
+        title: "Development setup",
+        href: repoLinks.docs("development.md"),
+        summary: "Prerequisites, commands, where data lives, and how to debug both halves of the app.",
+        icon: "terminal",
+      },
+      {
+        title: "Architecture",
+        href: repoLinks.docs("architecture.md"),
+        summary: "Windows and processes, commands and events, services, storage and the taskbar flow.",
+        icon: "grid",
+      },
+      {
+        title: "Project structure",
+        href: repoLinks.docs("project-structure.md"),
+        summary: "A guided tour of the repository: what lives where and why.",
+        icon: "folder",
+      },
+      {
+        title: "Testing",
+        href: repoLinks.docs("testing.md"),
+        summary: "Automated tests, shared schema fixtures, and the manual Windows test matrix.",
+        icon: "check",
+      },
+      {
+        title: "Architecture decisions",
+        href: repoLinks.docs("adr/README.md"),
+        summary: "Short records of the big choices, such as how the taskbar is always restored.",
+        icon: "note",
+      },
+    ],
+  },
+  {
+    title: "Maintaining",
+    intro: "How releases are cut and how this website is deployed.",
+    docs: [
+      {
+        title: "Releasing",
+        href: repoLinks.docs("releasing.md"),
+        summary: "The release checklist, from release branch to published installers and checksums.",
+        icon: "restart",
+      },
+      {
+        title: "Website",
+        href: repoLinks.docs("website.md"),
+        summary: "How this site is built, its quality bar, and how it's deployed.",
+        icon: "globe",
+      },
+    ],
+  },
+];
 ---
 
 <BaseLayout
-  title="Docs"
-  description="Install OpenDock on Windows, macOS, or Linux; configure the dock; download bundled installers."
+  title="Documentation"
+  description="OpenDock documentation: installation, the user guide, the security model, and guides for contributors."
 >
-  <header class="page-header container">
-    <h1>Documentation</h1>
-    <p>Install, configure, and hack on OpenDock with the same docs that live in the repository.</p>
-  </header>
-  <section class="section">
-    <div class="container prose">
-      <h2 id="download">Download</h2>
-      <p>
-        OpenDock is an open desktop platform: one codebase, platform-specific installers. Milestone 2
-        ships a <strong>Windows x64 installer</strong> built locally and attached to GitHub Releases
-        (no GitHub Actions minutes required for this drop).
-      </p>
-      <ul>
-        <li>
-          <a href={releaseUrl}>GitHub Release {releaseTag}</a> — Windows <code>.exe</code> (when published)
-        </li>
-        <li>macOS <code>.dmg</code> — planned; not yet published</li>
-        <li>Linux <code>.AppImage</code> / <code>.deb</code> — planned; build from source</li>
-      </ul>
+  <PageHead
+    eyebrow="Documentation"
+    title="Learn OpenDock"
+    lead="The documentation lives with the code on GitHub, so it changes in the same pull request as the feature it describes."
+  />
 
-      <h3>Build from source (all platforms)</h3>
-      <pre><code>git clone https://github.com/isaacobenzy/OpenDock.git
-cd OpenDock
-pnpm install
-pnpm dev</code></pre>
-      <p>
-        Windows builds need Rust (MSVC), WebView2, and VS 2022 Build Tools (C++). See
-        <a href="https://github.com/isaacobenzy/OpenDock/blob/main/docs/installation.md">installation.md</a>.
-      </p>
+  {
+    groups.map((group) => (
+      <section class="section docs-group" aria-labelledby={`docs-${group.title}`}>
+        <div class="container">
+          <header class="docs-group-head">
+            <h2 id={`docs-${group.title}`}>{group.title}</h2>
+            <p class="muted">{group.intro}</p>
+          </header>
+          <ul class="docs-grid">
+            {group.docs.map((doc) => (
+              <li>
+                <a class="card doc-card" href={doc.href}>
+                  <span class="glyph">
+                    <Icon name={doc.icon} size={18} />
+                  </span>
+                  <span class="doc-text">
+                    <strong>{doc.title}</strong>
+                    <span>{doc.summary}</span>
+                  </span>
+                  <Icon name="arrow" size={18} class="doc-arrow" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    ))
+  }
 
-      <h2>Configure the dock</h2>
-      <ul>
-        <li>Right-click the dock for position, size, theme, and startup options.</li>
-        <li>Drag widgets to reorder; layout persists in <code>settings.json</code>.</li>
-        <li>Invalid settings are quarantined and replaced with safe defaults.</li>
-      </ul>
-
-      <h2 id="contribute">Contribute</h2>
-      <p>
-        See <a href="https://github.com/isaacobenzy/OpenDock/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>
-        for coding standards, tests, and security expectations.
-      </p>
-
-      <h2 id="security">Security</h2>
-      <p>
-        Report vulnerabilities privately via GitHub Security Advisories. OpenDock does not collect telemetry
-        or embed provider secrets.
-      </p>
+  <section class="section docs-group">
+    <div class="container">
+      <div class="notice">
+        <Icon name="chat" size={18} />
+        <div>
+          <p><strong>Can't find an answer?</strong></p>
+          <p>
+            Ask in <a href={repoLinks.discussions}>GitHub Discussions</a>, or <a href={repoLinks.newBug}>report a bug</a>
+            if something isn't working.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .docs-group {
+    padding-block: 2.5rem;
+  }
+
+  .docs-group + .docs-group {
+    border-top: 0;
+  }
+
+  .docs-group-head {
+    display: grid;
+    gap: 0.35rem;
+    max-width: 40rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .docs-group-head h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .docs-grid {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .doc-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    height: 100%;
+    text-decoration: none;
+    transition: border-color 160ms var(--ease);
+  }
+
+  .doc-card:hover {
+    border-color: var(--accent);
+  }
+
+  .doc-text {
+    display: grid;
+    flex: 1;
+    gap: 0.25rem;
+  }
+
+  .doc-text span {
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+
+  .doc-card :global(.doc-arrow) {
+    margin-top: 0.15rem;
+    color: var(--muted);
+    transition: transform 160ms var(--ease);
+  }
+
+  .doc-card:hover :global(.doc-arrow) {
+    color: var(--accent);
+    transform: translateX(3px);
+  }
+
+  @media (min-width: 720px) {
+    .docs-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1040px) {
+    .docs-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

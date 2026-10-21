@@ -1,131 +1,287 @@
 ---
+import AppsPanel from "../components/demo/AppsPanel.astro";
+import DesktopStage from "../components/demo/DesktopStage.astro";
+import LauncherPanel from "../components/demo/LauncherPanel.astro";
+import LedgerPanel from "../components/demo/LedgerPanel.astro";
+import RuleCard from "../components/demo/RuleCard.astro";
+import Icon from "../components/Icon.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { currentRelease, downloadUrl, releasePageUrl } from "../data/releases";
+import { repoLinks, site } from "../data/site";
+import { widgetCategories, widgets, widgetsIn } from "../data/widgets";
 
-const releaseTag = "v0.1.0-milestone-2";
-const releaseBase = `https://github.com/isaacobenzy/OpenDock/releases/download/${releaseTag}`;
+const setup = currentRelease.files.find((file) => file.kind === "setup")!;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "OpenDock",
+  description: site.description,
+  url: site.url,
+  applicationCategory: "UtilitiesApplication",
+  operatingSystem: "Windows 10, Windows 11",
+  softwareVersion: currentRelease.version,
+  downloadUrl: downloadUrl(currentRelease, setup.name),
+  license: repoLinks.license,
+  isAccessibleForFree: true,
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+};
+
+const restore = [
+  { when: "You quit OpenDock", then: "Restored immediately." },
+  { when: "OpenDock crashes or is force-closed", then: "A small guard process notices and restores it within seconds." },
+  {
+    when: "You sign out, restart or shut down from the launcher",
+    then: "Restored before Windows starts closing apps.",
+  },
+  { when: "Windows ends the session another way", then: "Repaired the next time OpenDock starts." },
+  { when: "You uninstall OpenDock", then: "The uninstaller restores the taskbar and removes OpenDock from startup." },
+];
+
+function networkNote(network: string[]): string {
+  if (network.length === 0) return "Stays on this device";
+  return `Contacts ${network[0]}`;
+}
 ---
 
-<BaseLayout
-  title="Overview"
-  description="OpenDock is an open-source, privacy-first smart dock for Windows, macOS, and Linux with live widgets, local automations, and no mandatory account."
->
+<BaseLayout description={site.description} structuredData={structuredData}>
   <section class="hero">
-    <div class="container hero-grid">
+    <div class="container">
       <div class="hero-copy">
-        <div class="hero-badges">
-          <span class="badge">MIT licensed</span>
-          <span class="badge">Runs locally</span>
-          <span class="badge">Cross-platform roadmap</span>
+        <div class="stack">
+          <p class="eyebrow">Version {currentRelease.version} · Free and open source</p>
+          <h1 class="display">The Windows taskbar, rebuilt in the open.</h1>
         </div>
-        <h1>Not another taskbar clone. A dock you own.</h1>
-        <p class="lead">
-          OpenDock brings live widgets, layout persistence, and programmable automations to your
-          desktop—without a subscription, license server, or hidden telemetry. Built with Tauri for
-          Windows today; macOS and Linux builds follow the same open core.
-        </p>
-        <div class="hero-cta">
-          <a class="btn btn-primary" href="/docs/#download">Download builds</a>
-          <a class="btn btn-secondary" href="https://github.com/isaacobenzy/OpenDock">View on GitHub</a>
+        <div class="hero-side">
+          <p class="lead">
+            OpenDock replaces the taskbar with a dock of your apps, live window previews and widgets that can act for
+            you. It runs entirely on your PC: no account, no telemetry.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/download/">
+              <Icon name="download" size={18} />
+              Download for Windows
+            </a>
+            <a class="btn btn-secondary" href={site.repo}>
+              <Icon name="github" size={18} />
+              View source
+            </a>
+          </div>
+          <ul class="hero-facts">
+            <li><Icon name="check" size={16} />MIT licensed</li>
+            <li><Icon name="check" size={16} />Works offline</li>
+            <li><Icon name="check" size={16} />Taskbar restored on uninstall</li>
+          </ul>
         </div>
       </div>
-      <figure class="dock-preview">
-        <img
-          src="/screenshots/dock-windows.png"
-          width="640"
-          height="360"
-          alt="OpenDock floating dock on Windows with clock and widget placeholders"
-          loading="eager"
-          decoding="async"
-        />
-        <figcaption class="screenshot-caption">Milestone 2 prototype on Windows</figcaption>
+      <DesktopStage />
+      <p class="stage-note">Try it: open Start, the Code app or the clock.</p>
+    </div>
+  </section>
+
+  <section class="section" id="features" aria-labelledby="features-title">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">What changes</p>
+        <h2 class="title" id="features-title">Everything the taskbar did, then the things it never could.</h2>
+      </header>
+
+      <article class="feature">
+        <div class="feature-copy">
+          <p class="eyebrow"><Icon name="window" size={14} />Apps widget</p>
+          <h3>Every window, one click away</h3>
+          <p class="muted">
+            Pinned apps and open windows share one row, grouped by app with a window count. Right-click an app for a
+            live preview of each window.
+          </p>
+          <ul class="checks">
+            <li>Click to switch, click again to minimise</li>
+            <li>Shift-click or middle-click for a new window</li>
+            <li>Bring your existing taskbar pins over in one step</li>
+            <li>Maximised windows stop at the dock instead of sliding underneath</li>
+          </ul>
+        </div>
+        <div class="artifact">
+          <div class="wallpaper" aria-hidden="true"></div>
+          <AppsPanel />
+        </div>
+      </article>
+
+      <article class="feature is-flipped">
+        <div class="feature-copy">
+          <p class="eyebrow"><Icon name="grid" size={14} />Start widget</p>
+          <h3>A launcher that finds things as you type</h3>
+          <p class="muted">
+            Start searches every installed app instantly and keeps your favourites pinned. Power options are there too,
+            and the ones that end your session ask twice.
+          </p>
+          <ul class="checks">
+            <li>Arrow keys and Enter, no mouse needed</li>
+            <li>Pin or unpin straight from the results</li>
+            <li>Prefer Windows Start? One setting switches it back</li>
+          </ul>
+        </div>
+        <div class="artifact">
+          <div class="wallpaper" aria-hidden="true"></div>
+          <LauncherPanel />
+        </div>
+      </article>
+
+      <article class="feature">
+        <div class="feature-copy">
+          <p class="eyebrow"><Icon name="spark" size={14} />Automation Studio</p>
+          <h3>Rules that act, with an Undo for when they shouldn't have</h3>
+          <p class="muted">
+            Tell the dock what to do when something happens: pause the music before a meeting, warn about a low
+            battery, switch Windows to dark mode at sunset. Rules are settings you can read, not scripts.
+          </p>
+          <ul class="checks">
+            <li>Eleven ready-made recipes to start from</li>
+            <li>A dry run shows what a rule would do right now</li>
+            <li>Every run is logged with the reason it fired</li>
+            <li>Cooldowns and rate limits stop runaway rules</li>
+          </ul>
+        </div>
+        <div class="artifact">
+          <div class="wallpaper" aria-hidden="true"></div>
+          <RuleCard />
+        </div>
+      </article>
+
+      <article class="feature is-flipped">
+        <div class="feature-copy">
+          <p class="eyebrow"><Icon name="shield" size={14} />Privacy Ledger</p>
+          <h3>See every request it makes</h3>
+          <p class="muted">
+            OpenDock has no servers and sends no telemetry. The two widgets that need the internet, weather and
+            calendars, can only reach the hosts they declare, and every request is listed in the Privacy Ledger.
+          </p>
+          <ul class="checks">
+            <li>No account, ever</li>
+            <li>Calendar links kept in Windows Credential Manager</li>
+            <li>Everything else stays in a local database on your PC</li>
+          </ul>
+        </div>
+        <div class="artifact">
+          <div class="wallpaper" aria-hidden="true"></div>
+          <LedgerPanel />
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="widgets-title">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Widgets</p>
+        <h2 class="title" id="widgets-title">{widgets.length} widgets, each answering one question.</h2>
+        <p class="lead">
+          Arrange them on the dock in three sizes. Each one tells you what it stores and whether it ever goes online.
+        </p>
+      </header>
+      <div class="widget-columns">
+        {
+          widgetCategories.map((category) => (
+            <div class="widget-group">
+              <h3>{category}</h3>
+              <ul class="widget-mini">
+                {widgetsIn(category).map((widget) => (
+                  <li>
+                    <span class="glyph">
+                      <Icon name={widget.icon} size={18} />
+                    </span>
+                    <strong>{widget.name}</strong>
+                    <small>{networkNote(widget.network)}</small>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+      <p class="section-foot">
+        <a class="link-arrow" href="/widgets/">Browse all widgets <Icon name="arrow" size={16} /></a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="restore-title">
+    <div class="container guarantee">
+      <header class="stack">
+        <p class="eyebrow">Safe to try</p>
+        <h2 class="title" id="restore-title">Your taskbar always comes back.</h2>
+        <p class="lead">
+          Replacing part of Windows should never be a one-way door. OpenDock saves your taskbar settings before it
+          changes anything, and puts them back on every way out.
+        </p>
+        <p>
+          <a class="link-arrow" href={`${repoLinks.docs("installation.md")}#recovering-the-windows-taskbar`}>
+            Recovery steps, just in case <Icon name="arrow" size={16} />
+          </a>
+        </p>
+      </header>
+      <dl class="restore-list">
+        {
+          restore.map((row) => (
+            <div>
+              <dt>{row.when}</dt>
+              <dd>{row.then}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="source-title">
+    <div class="container source">
+      <div class="stack">
+        <p class="eyebrow">Open source</p>
+        <h2 class="title" id="source-title">Read it, change it, ship it.</h2>
+        <p class="lead">
+          OpenDock is MIT licensed and built in public with Tauri, Rust and React. Design decisions are written down,
+          every change goes through review and CI, and new contributors are welcome.
+        </p>
+        <ul class="link-list">
+          <li><a class="link-arrow" href={repoLinks.contributing}>Contributing guide <Icon name="arrow" size={16} /></a></li>
+          <li>
+            <a class="link-arrow" href={repoLinks.docs("architecture.md")}>How it's built <Icon name="arrow" size={16} /></a>
+          </li>
+          <li><a class="link-arrow" href={repoLinks.goodFirstIssues}>Good first issues <Icon name="arrow" size={16} /></a></li>
+        </ul>
+      </div>
+      <figure class="terminal">
+        <figcaption class="terminal-bar"><Icon name="terminal" size={14} />Build it yourself</figcaption>
+        <pre><code><span class="comment"># Windows 10 or 11 with Node 22, pnpm 10 and Rust</span>
+<span class="prompt">&gt; </span>git clone {site.repo}.git
+<span class="prompt">&gt; </span>cd OpenDock
+<span class="prompt">&gt; </span>pnpm install
+<span class="prompt">&gt; </span>pnpm dev</code></pre>
       </figure>
     </div>
   </section>
 
-  <section class="section">
-    <div class="container">
-      <h2>One project, every desktop</h2>
-      <p class="section-intro">
-        Installers are platform-specific; the product vision is not. OpenDock targets bundled
-        <strong>.exe</strong>, <strong>.dmg</strong>, and Linux packages from the same repository.
-      </p>
-      <div class="card-grid">
-        <article class="card">
-          <h3>Windows</h3>
-          <p>Milestone 2 prototype: floating dock, clock, persisted layout, fullscreen hide.</p>
-          <a href={`${releaseBase}/OpenDock_0.1.0_x64-setup.exe`}>Download .exe installer</a>
-        </article>
-        <article class="card">
-          <h3>macOS</h3>
-          <p>.dmg packaging planned with Tauri bundler; not yet published for this milestone.</p>
-        </article>
-        <article class="card">
-          <h3>Linux</h3>
-          <p>.AppImage / .deb targets on the roadmap; build from source today.</p>
-        </article>
+  <section class="band" aria-labelledby="band-title">
+    <div class="container band-inner">
+      <div class="stack">
+        <h2 class="title" id="band-title">Try OpenDock today.</h2>
+        <p class="lead">
+          Free, open source, and about a minute to install. If it's not for you, uninstalling puts everything back.
+        </p>
       </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <h2>Widgets that cooperate, not compete</h2>
-      <p class="section-intro">
-        Calendar, tasks, system health, and optional integrations share context so OpenDock can
-        act before you open five different apps.
-      </p>
-      <div class="card-grid">
-        <article class="card">
-          <h3>Local automations</h3>
-          <p>Event-condition-action rules run on your PC with quiet hours, cooldowns, and explicit permissions.</p>
-        </article>
-        <article class="card">
-          <h3>Permissioned widget SDK</h3>
-          <p>Built-in widgets ship first; extensions declare capabilities up front instead of getting full native access.</p>
-        </article>
-        <article class="card">
-          <h3>Exportable setup</h3>
-          <p>Back up layouts and settings, move between machines, and recover gracefully from invalid configuration.</p>
-        </article>
+      <div class="stack">
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/download/">
+            <Icon name="download" size={18} />
+            Download {currentRelease.version}
+          </a>
+          <a class="btn btn-secondary" href={releasePageUrl(currentRelease)}>Release notes</a>
+        </div>
+        <p class="band-note">
+          Windows 10 and 11, 64-bit. <a href="/download/#verify">Verify your download</a> with the published SHA-256
+          checksums.
+        </p>
       </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container comparison">
-      <h2>Why teams pick OpenDock</h2>
-      <p class="section-intro">Inspired by the smart dock category, engineered for transparency and control.</p>
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Capability</th>
-            <th scope="col">OpenDock</th>
-            <th scope="col">Typical proprietary dock</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">License</th>
-            <td>MIT, free forever</td>
-            <td>Paid lifetime or subscription</td>
-          </tr>
-          <tr>
-            <th scope="row">Platforms</th>
-            <td>Windows (now); macOS/Linux (roadmap)</td>
-            <td>Often single OS</td>
-          </tr>
-          <tr>
-            <th scope="row">Account</th>
-            <td>Not required</td>
-            <td>Often required for activation</td>
-          </tr>
-          <tr>
-            <th scope="row">Telemetry</th>
-            <td>None by default</td>
-            <td>Often unclear or bundled</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </section>
 </BaseLayout>

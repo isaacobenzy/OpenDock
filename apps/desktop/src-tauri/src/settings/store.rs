@@ -1,7 +1,7 @@
 use std::{
     fs,
     io::Write,
-    path::{Path, PathBuf},
+    path::PathBuf,
     time::{SystemTime, UNIX_EPOCH},
 };
 
@@ -26,19 +26,24 @@ impl SettingsStore {
         Self { path }
     }
 
-    pub fn path(&self) -> &Path {
-        &self.path
-    }
-
     pub fn load(&self) -> Result<AppSettings, SettingsError> {
         if !self.path.exists() {
             return Ok(AppSettings::default());
         }
 
         let raw = fs::read_to_string(&self.path).map_err(SettingsError::Io)?;
-        match serde_json::from_str::<AppSettings>(&raw) {
-            Ok(settings) => match settings.validate() {
-                Ok(()) => Ok(settings),
+        let parsed = serde_json::from_str::<serde_json::Value>(&raw).and_then(|mut value| {
+            let migrated = AppSettings::migrate(&mut value);
+            serde_json::from_value::<AppSettings>(value).map(|s| (s, migrated))
+        });
+        match parsed {
+            Ok((settings, migrated)) => match settings.validate() {
+                Ok(()) => {
+                    if migrated {
+                        self.save(&settings)?;
+                    }
+                    Ok(settings)
+                }
                 Err(err) => {
                     self.backup_invalid(&raw)?;
                     tracing::warn!(?err, "settings failed validation; using defaults");

@@ -1,0 +1,82 @@
+name: Bug report
+description: Something in OpenDock doesn't work as expected.
+labels: ["bug", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this. Please search [existing issues](https://github.com/isaacobenzy/OpenDock/issues) first.
+
+        **Security problems must not be reported here.** Follow [SECURITY.md](https://github.com/isaacobenzy/OpenDock/blob/main/SECURITY.md) instead.
+
+        If your Windows taskbar is missing, see [Recovering the taskbar](https://github.com/isaacobenzy/OpenDock/blob/main/docs/installation.md#recovering-the-windows-taskbar).
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the Start launcher
+        2. Search for "calc"
+        3. Press Enter
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: OpenDock version
+      description: From Windows Settings → Apps → Installed apps, or the installer file name. Write "source" and the commit if you built it yourself.
+      placeholder: 0.2.0
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      description: Run `winver` to find it.
+      placeholder: Windows 11 24H2 (build 26100)
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Dock and widgets
+        - Apps, windows and previews
+        - Taskbar replacement or auto-hide
+        - Start launcher
+        - Automation Studio
+        - Settings and hub
+        - Installer or updates
+        - Website or docs
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: setup
+    attributes:
+      label: Display setup
+      description: Number of monitors, scaling (for example 150%), and dock position, if relevant.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      description: |
+        Remove anything personal first, such as window titles, calendar names or file paths.
+      render: text
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and this isn't a duplicate.
+          required: true
+        - label: I removed personal information from logs and screenshots.
+          required: true

@@ -1,0 +1,75 @@
+---
+import PageHead from "../../components/PageHead.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { repoLinks } from "../../data/site";
+import { widgets } from "../../data/widgets";
+
+const online = widgets.filter((widget) => widget.network.length > 0);
+---
+
+<BaseLayout
+  title="Privacy"
+  description="OpenDock collects no personal data. How the app and this website handle privacy, in plain language."
+>
+  <PageHead
+    eyebrow="Last updated 21 October 2026"
+    title="Privacy"
+    lead="Short version: OpenDock doesn't collect anything about you, and neither does this website."
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="prose">
+        <h2>The OpenDock app</h2>
+        <ul>
+          <li>No account, sign-in, analytics, telemetry or crash reporting. Nothing is sent to the OpenDock project.</li>
+          <li>
+            Your settings, todos, notes, focus history, rules and calendar events are stored on your PC in
+            <code>%APPDATA%\com.opendock.app</code>. Calendar feed links are kept in Windows Credential Manager.
+          </li>
+          <li>
+            OpenDock reads window titles to show your open windows, but doesn't save them. The one exception is an
+            automation rule you write yourself whose message includes a window title; that message is kept in the
+            local activity log, which you can clear at any time.
+          </li>
+          <li>
+            Only {online.length} widgets ever use the internet, and only when you set them up:
+            {
+              online.map((widget, i) => (
+                <>
+                  {i > 0 ? " and " : " "}
+                  <strong>{widget.name}</strong> ({widget.network.join(", ")})
+                </>
+              ))
+            }. Every request is listed in the app's Privacy Ledger.
+          </li>
+        </ul>
+        <p>
+          The full technical details are in the <a href={repoLinks.docs("security.md")}>security and privacy model</a>.
+        </p>
+
+        <h2>This website</h2>
+        <ul>
+          <li>No cookies, analytics, advertising, trackers or third-party scripts and fonts.</li>
+          <li>
+            The site is hosted on Cloudflare Pages. Like any web host, Cloudflare processes technical data such as your
+            IP address to deliver pages and protect against abuse. See
+            <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's privacy policy</a>.
+          </li>
+          <li>
+            Downloads, source code, issues and discussions are on GitHub, where
+            <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement"
+              >GitHub's privacy statement</a
+            > applies.
+          </li>
+        </ul>
+
+        <h2>Questions</h2>
+        <p>
+          Ask in <a href={repoLinks.discussions}>GitHub Discussions</a>. If you think OpenDock handles data in a way
+          that doesn't match this page, please <a href={repoLinks.security}>report it privately</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

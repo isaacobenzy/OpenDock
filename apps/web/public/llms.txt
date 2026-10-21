@@ -1,15 +1,21 @@
 # OpenDock
 
-> Open-source, privacy-first smart dock and widget platform for Windows, macOS, and Linux. Runs locally without a mandatory account; MIT licensed.
+> OpenDock is a free, open-source (MIT) dock and taskbar replacement for Windows 10 and 11. It shows pinned apps and open windows with live previews, a Start launcher, and widgets such as clock, media, weather, calendar and focus timer. Local automation rules can act on events. It has no account, no backend and no telemetry, and it always restores the Windows taskbar on quit, crash or uninstall.
 
-## Links
+## Pages
 
-- [Homepage](https://opendock.pages.dev/): Overview, comparison, and real product screenshots
-- [Documentation](https://opendock.pages.dev/docs/): Install, download builds, and developer setup
-- [GitHub](https://github.com/isaacobenzy/OpenDock): Source, issues, and releases (.exe today; .dmg / Linux packages on roadmap)
-- [Roadmap](https://opendock.pages.dev/roadmap/): Cross-platform bundling and widget SDK milestones
-- [Feedback](https://opendock.pages.dev/feedback/): Feature requests and bug reports
+- [Home](https://opendock.pages.dev/): What OpenDock does and how it protects your privacy
+- [Download](https://opendock.pages.dev/download/): The current Windows installers, requirements and checksum verification
+- [Widgets](https://opendock.pages.dev/widgets/): Every built-in widget, with what it stores and which hosts it contacts
+- [Documentation](https://opendock.pages.dev/docs/): Installation, user guide, security model and contributor guides
+- [Roadmap](https://opendock.pages.dev/roadmap/): 1.0 for Windows, the widget SDK, Linux and macOS
+- [Changelog](https://opendock.pages.dev/changelog/): Release history
+- [Privacy](https://opendock.pages.dev/privacy/): How the app and website handle data
+
+## Source
+
+- [GitHub repository](https://github.com/isaacobenzy/OpenDock): Source code, issues, discussions and releases
 
 ## Optional
 
-- [Extended agent context](https://opendock.pages.dev/llms-full.txt): Architecture, stack, and milestone status
+- [Extended context](https://opendock.pages.dev/llms-full.txt): Architecture and technical facts

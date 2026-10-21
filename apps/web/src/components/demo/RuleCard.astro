@@ -1,0 +1,39 @@
+---
+import Icon from "../Icon.astro";
+---
+
+<figure class="panel panel--rule">
+  <header class="rule-head">
+    <span class="rule-name">
+      <Icon name="spark" size={16} />
+      <strong>Meeting mode</strong>
+    </span>
+    <span class="switch is-on" aria-hidden="true"><span></span></span>
+  </header>
+  <dl class="rule-body">
+    <div>
+      <dt>When</dt>
+      <dd><span class="token">A calendar event is about to start</span> within <span class="token">5 min</span></dd>
+    </div>
+    <div>
+      <dt>Unless</dt>
+      <dd><span class="token">It's quiet hours</span></dd>
+    </div>
+    <div>
+      <dt>Then</dt>
+      <dd class="rule-actions">
+        <span class="token"><Icon name="pause" size={13} />Pause media</span>
+        <span class="token"><Icon name="calendar" size={13} />Highlight Next event</span>
+        <span class="token"><Icon name="bell" size={13} />Show “&#123;&#123;title&#125;&#125; in &#123;&#123;minutesUntil&#125;&#125; min”</span>
+      </dd>
+    </div>
+  </dl>
+  <figcaption class="toast" aria-label="Notification the rule shows">
+    <span class="toast-icon"><Icon name="spark" size={15} /></span>
+    <span class="toast-text">
+      <strong>Team standup in 5 min</strong>
+      <small>Meeting mode paused your music</small>
+    </span>
+    <span class="toast-action"><Icon name="undo" size={14} />Undo</span>
+  </figcaption>
+</figure>

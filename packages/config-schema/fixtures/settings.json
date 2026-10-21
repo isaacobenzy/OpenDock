@@ -1,0 +1,245 @@
+{
+  "valid": [
+    {
+      "version": 3,
+      "dock": {
+        "position": "bottom",
+        "size": "m",
+        "mode": "pill",
+        "theme": "dark",
+        "style": "glass",
+        "monitorId": null,
+        "itemOrder": ["start", "apps", "clock", "add-widget"],
+        "clock24h": false,
+        "launchAtStartup": false,
+        "autoHideInFullscreen": true,
+        "startAction": "launcher"
+      },
+      "taskbar": { "mode": "replace" },
+      "widgets": {
+        "weather": { "city": "Accra", "latitude": 5.6, "longitude": -0.19, "unit": "c" },
+        "focus": { "focusMinutes": 25, "breakMinutes": 5 }
+      },
+      "automation": { "enabled": true, "quietHours": { "enabled": true, "start": "22:00", "end": "07:00" } },
+      "apps": {
+        "pinned": [
+          { "name": "File Explorer", "path": "C:\\Windows\\explorer.exe", "target": "C:\\Windows\\explorer.exe" },
+          { "name": "Settings", "path": "ms-settings:", "target": null }
+        ],
+        "groupWindows": true,
+        "showTitles": false
+      },
+      "onboarded": true
+    },
+    {
+      "version": 3,
+      "dock": {
+        "position": "top",
+        "size": "l",
+        "mode": "full",
+        "theme": "light",
+        "style": "midnight",
+        "monitorId": "\\\\.\\DISPLAY1",
+        "itemOrder": ["clock"],
+        "clock24h": true,
+        "launchAtStartup": true,
+        "autoHideInFullscreen": false,
+        "startAction": "windows"
+      },
+      "taskbar": { "mode": "hidden" },
+      "widgets": {
+        "weather": { "city": "", "latitude": null, "longitude": null, "unit": "f" },
+        "focus": { "focusMinutes": 50, "breakMinutes": 10 }
+      },
+      "automation": { "enabled": false, "quietHours": { "enabled": false, "start": "23:30", "end": "06:00" } },
+      "apps": { "pinned": [], "groupWindows": false, "showTitles": true },
+      "onboarded": false
+    },
+    {
+      "version": 3,
+      "dock": {
+        "position": "left",
+        "size": "s",
+        "mode": "pill",
+        "theme": "dark",
+        "style": "solid",
+        "monitorId": null,
+        "itemOrder": ["start", "add-widget"],
+        "clock24h": false,
+        "launchAtStartup": false
+      }
+    }
+  ],
+  "invalid": [
+    {
+      "version": 3,
+      "dock": {
+        "position": "bottom",
+        "size": "m",
+        "mode": "pill",
+        "theme": "dark",
+        "style": "glass",
+        "monitorId": null,
+        "itemOrder": ["Bad Id"],
+        "clock24h": false,
+        "launchAtStartup": false,
+        "autoHideInFullscreen": true
+      },
+      "taskbar": { "mode": "normal" },
+      "widgets": {
+        "weather": { "city": "", "latitude": null, "longitude": null, "unit": "c" },
+        "focus": { "focusMinutes": 25, "breakMinutes": 5 }
+      },
+      "automation": { "enabled": true, "quietHours": { "enabled": false, "start": "22:00", "end": "07:00" } }
+    },
+    {
+      "version": 3,
+      "dock": {
+        "position": "bottom",
+        "size": "m",
+        "mode": "pill",
+        "theme": "dark",
+        "style": "glass",
+        "monitorId": null,
+        "itemOrder": ["clock", "clock"],
+        "clock24h": false,
+        "launchAtStartup": false,
+        "autoHideInFullscreen": true
+      },
+      "taskbar": { "mode": "normal" },
+      "widgets": {
+        "weather": { "city": "", "latitude": null, "longitude": null, "unit": "c" },
+        "focus": { "focusMinutes": 25, "breakMinutes": 5 }
+      },
+      "automation": { "enabled": true, "quietHours": { "enabled": false, "start": "22:00", "end": "07:00" } }
+    },
+    {
+      "version": 3,
+      "dock": {
+        "position": "bottom",
+        "size": "m",
+        "mode": "pill",
+        "theme": "dark",
+        "style": "glass",
+        "monitorId": null,
+        "itemOrder": ["clock"],
+        "clock24h": false,
+        "launchAtStartup": false,
+        "autoHideInFullscreen": true
+      },
+      "taskbar": { "mode": "normal" },
+      "widgets": {
+        "weather": { "city": "", "latitude": 120, "longitude": null, "unit": "c" },
+        "focus": { "focusMinutes": 25, "breakMinutes": 5 }
+      },
+      "automation": { "enabled": true, "quietHours": { "enabled": false, "start": "22:00", "end": "07:00" } }
+    },
+    {
+      "version": 3,
+      "dock": {
+        "position": "bottom",
+        "size": "m",
+        "mode": "pill",
+        "theme": "dark",
+        "style": "glass",
+        "monitorId": null,
+        "itemOrder": ["clock"],
+        "clock24h": false,
+        "launchAtStartup": false,
+        "autoHideInFullscreen": true
+      },
+      "taskbar": { "mode": "normal" },
+      "widgets": {
+        "weather": { "city": "", "latitude": null, "longitude": null, "unit": "c" },
+        "focus": { "focusMinutes": 0, "breakMinutes": 5 }
+      },
+      "automation": { "enabled": true, "quietHours": { "enabled": true, "start": "7pm", "end": "07:00" } }
+    },
+    {
+      "version": 9,
+      "dock": {
+        "position": "bottom",
+        "size": "m",
+        "mode": "pill",
+        "theme": "dark",
+        "style": "glass",
+        "monitorId": null,
+        "itemOrder": ["clock"],
+        "clock24h": false,
+        "launchAtStartup": false,
+        "autoHideInFullscreen": true
+      },
+      "taskbar": { "mode": "normal" },
+      "widgets": {
+        "weather": { "city": "", "latitude": null, "longitude": null, "unit": "c" },
+        "focus": { "focusMinutes": 25, "breakMinutes": 5 }
+      },
+      "automation": { "enabled": true, "quietHours": { "enabled": false, "start": "22:00", "end": "07:00" } }
+    },
+    {
+      "version": 3,
+      "dock": {
+        "position": "bottom",
+        "size": "m",
+        "mode": "pill",
+        "theme": "dark",
+        "style": "glass",
+        "monitorId": null,
+        "itemOrder": ["start"],
+        "clock24h": false,
+        "launchAtStartup": false,
+        "startAction": "spotlight"
+      }
+    },
+    {
+      "version": 3,
+      "dock": {
+        "position": "bottom",
+        "size": "m",
+        "mode": "pill",
+        "theme": "dark",
+        "style": "glass",
+        "monitorId": null,
+        "itemOrder": ["start"],
+        "clock24h": false,
+        "launchAtStartup": false
+      },
+      "apps": {
+        "pinned": [
+          { "name": "Editor", "path": "C:\\Apps\\Editor.lnk", "target": null },
+          { "name": "Editor again", "path": "c:\\apps\\editor.lnk", "target": null }
+        ]
+      }
+    },
+    {
+      "version": 3,
+      "dock": {
+        "position": "bottom",
+        "size": "m",
+        "mode": "pill",
+        "theme": "dark",
+        "style": "glass",
+        "monitorId": null,
+        "itemOrder": ["start"],
+        "clock24h": false,
+        "launchAtStartup": false
+      },
+      "apps": { "pinned": [{ "name": "", "path": "C:\\Apps\\Nameless.exe", "target": null }] }
+    },
+    {
+      "version": 3,
+      "dock": {
+        "position": "bottom",
+        "size": "m",
+        "mode": "pill",
+        "theme": "dark",
+        "style": "glass",
+        "monitorId": null,
+        "itemOrder": ["start"],
+        "clock24h": false,
+        "launchAtStartup": false
+      },
+      "taskbar": { "mode": "vanish" }
+    }
+  ]
+}

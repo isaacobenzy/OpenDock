@@ -43,11 +43,11 @@ pub struct DockRect {
     pub height: u32,
 }
 
-fn cross_axis_thickness(size: DockSize) -> u32 {
+pub fn cross_axis_thickness(size: DockSize) -> u32 {
     match size {
-        DockSize::S => 48,
-        DockSize::M => 56,
-        DockSize::L => 64,
+        DockSize::S => 52,
+        DockSize::M => 60,
+        DockSize::L => 70,
     }
 }
 
@@ -59,21 +59,34 @@ fn pill_main_length(size: DockSize) -> u32 {
     }
 }
 
+const MIN_PILL_LENGTH: u32 = 160;
+/// Gap between the dock and the screen edge, in logical pixels.
+pub const DOCK_MARGIN: i32 = 8;
+
+/// `content_length` is what the dock's widgets need along the main axis; pills hug it.
 pub fn compute_dock_rect(
     work: WorkArea,
     position: DockPosition,
     size: DockSize,
     mode: DockMode,
+    content_length: Option<u32>,
 ) -> DockRect {
-    let margin = 8_i32;
+    let margin = DOCK_MARGIN;
     let thickness = cross_axis_thickness(size);
+    let pill = |available: u32| {
+        let wanted = content_length.unwrap_or_else(|| pill_main_length(size));
+        let max = available
+            .saturating_sub(2 * margin as u32)
+            .max(MIN_PILL_LENGTH);
+        wanted.clamp(MIN_PILL_LENGTH, max)
+    };
 
     let (width, height) = match position {
         DockPosition::Top | DockPosition::Bottom => {
             let main = if mode == DockMode::Full {
                 work.width
             } else {
-                pill_main_length(size).min(work.width)
+                pill(work.width)
             };
             (main, thickness)
         }
@@ -81,7 +94,7 @@ pub fn compute_dock_rect(
             let main = if mode == DockMode::Full {
                 work.height
             } else {
-                pill_main_length(size).min(work.height)
+                pill(work.height)
             };
             (thickness, main)
         }
@@ -127,24 +140,65 @@ mod tests {
 
     #[test]
     fn bottom_pill_centered() {
-        let rect = compute_dock_rect(WORK, DockPosition::Bottom, DockSize::M, DockMode::Pill);
-        assert_eq!(rect.height, 56);
+        let rect = compute_dock_rect(
+            WORK,
+            DockPosition::Bottom,
+            DockSize::M,
+            DockMode::Pill,
+            None,
+        );
+        assert_eq!(rect.height, 60);
         assert_eq!(rect.width, 520);
-        assert_eq!(rect.y, WORK.height as i32 - 56 - 8);
+        assert_eq!(rect.y, WORK.height as i32 - 60 - 8);
         assert_eq!(rect.x, (1920 - 520) / 2);
     }
 
     #[test]
+    fn pill_hugs_content_within_bounds() {
+        let fit = compute_dock_rect(
+            WORK,
+            DockPosition::Bottom,
+            DockSize::M,
+            DockMode::Pill,
+            Some(840),
+        );
+        assert_eq!(fit.width, 840);
+        assert_eq!(fit.x, (1920 - 840) / 2);
+        let tiny = compute_dock_rect(
+            WORK,
+            DockPosition::Bottom,
+            DockSize::M,
+            DockMode::Pill,
+            Some(10),
+        );
+        assert_eq!(tiny.width, MIN_PILL_LENGTH);
+        let huge = compute_dock_rect(
+            WORK,
+            DockPosition::Bottom,
+            DockSize::M,
+            DockMode::Pill,
+            Some(5000),
+        );
+        assert_eq!(huge.width, 1920 - 16);
+    }
+
+    #[test]
     fn top_full_width() {
-        let rect = compute_dock_rect(WORK, DockPosition::Top, DockSize::S, DockMode::Full);
+        let rect = compute_dock_rect(
+            WORK,
+            DockPosition::Top,
+            DockSize::S,
+            DockMode::Full,
+            Some(300),
+        );
         assert_eq!(rect.width, 1920);
         assert_eq!(rect.y, 8);
     }
 
     #[test]
     fn left_pill_vertical() {
-        let rect = compute_dock_rect(WORK, DockPosition::Left, DockSize::L, DockMode::Pill);
-        assert_eq!(rect.width, 64);
+        let rect = compute_dock_rect(WORK, DockPosition::Left, DockSize::L, DockMode::Pill, None);
+        assert_eq!(rect.width, 70);
         assert_eq!(rect.height, 620);
     }
 }

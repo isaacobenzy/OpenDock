@@ -1,0 +1,6 @@
+---
+type Props = { class?: string; size?: number };
+const { class: className, size = 30 } = Astro.props;
+---
+
+<img class:list={["brand-mark", className]} src="/favicon.svg" width={size} height={size} alt="" decoding="async" />

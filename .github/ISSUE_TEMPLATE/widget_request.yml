@@ -1,0 +1,47 @@
+name: Widget request
+description: Propose a new widget for the dock.
+labels: ["widget", "enhancement", "needs triage"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Widget name
+      placeholder: CI status
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: What question does it answer at a glance?
+      description: Every widget should answer one question in under two seconds.
+      placeholder: Is my main branch green?
+    validations:
+      required: true
+  - type: textarea
+    id: sizes
+    attributes:
+      label: What does it show at each size?
+      description: Widgets render small (icon), medium and large on the dock, plus an optional panel when clicked.
+      placeholder: |
+        Small: a coloured dot
+        Medium: dot and "main ✓"
+        Large: dot, branch and time of the last run
+        Panel: the last five runs with links
+  - type: textarea
+    id: data
+    attributes:
+      label: Where does the data come from?
+      description: List any hosts it would contact and any credentials it needs. Credentials go in the OS keychain.
+    validations:
+      required: true
+  - type: textarea
+    id: events
+    attributes:
+      label: Automation events or actions
+      description: Could it publish events (for example `ci.run.failed`) or offer actions for the Automation Studio?
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Contribution
+      options:
+        - label: I'd like to build this widget.
