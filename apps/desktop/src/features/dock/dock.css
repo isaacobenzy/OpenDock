@@ -1,0 +1,139 @@
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+}
+
+.dock-shell {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--od-border);
+  border-radius: var(--od-radius);
+  background: var(--od-bg-solid);
+  color: var(--od-text);
+  box-shadow: var(--od-shadow);
+}
+
+.dock-shell[data-glass="on"] {
+  background: var(--od-bg);
+  backdrop-filter: blur(var(--od-blur));
+}
+
+.dock-shell.vertical .dock-track {
+  flex-direction: column;
+}
+
+.dock-track {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+}
+
+.sortable-wrap {
+  display: flex;
+}
+
+.dock-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.dock-item:focus-visible,
+.add-widget-button:focus-visible,
+.dock-context-menu button:focus-visible {
+  outline: 2px solid var(--od-accent);
+  outline-offset: 2px;
+}
+
+.clock-widget {
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 4px 12px;
+}
+
+.clock-time {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.clock-date {
+  font-size: 0.72rem;
+  color: var(--od-text-muted);
+}
+
+.add-widget-button {
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--od-text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.dock-context-menu {
+  position: fixed;
+  z-index: 20;
+  min-width: 180px;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid var(--od-border);
+  background: var(--od-bg-solid);
+  box-shadow: var(--od-shadow);
+}
+
+.dock-context-menu section {
+  margin-bottom: 8px;
+}
+
+.menu-label {
+  margin: 0 0 4px;
+  font-size: 0.72rem;
+  color: var(--od-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dock-context-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin: 2px 0;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.dock-context-menu button[aria-checked="true"] {
+  background: rgba(110, 168, 255, 0.18);
+}
+
+.menu-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  padding: 4px 0;
+}
+
+.menu-actions .danger {
+  color: #ffb4b4;
+}

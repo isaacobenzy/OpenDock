@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const widgets = [
+  { name: "Clock", status: "Available", detail: "Local time, date, 12/24-hour formats." },
+  { name: "System monitor", status: "Milestone 3", detail: "CPU, memory, battery, uptime with honest unsupported states." },
+  { name: "Tasks", status: "Milestone 3", detail: "Local todos with due dates, search, and persistence." },
+  { name: "Calendar", status: "Milestone 3", detail: "Local events and month view; cloud sync only when implemented." },
+  { name: "Weather", status: "Planned", detail: "Optional provider with user-supplied API keys." },
+  { name: "GitHub", status: "Planned", detail: "Public activity with optional OAuth token storage." },
+];
+---
+
+<BaseLayout
+  title="Widgets"
+  description="Browse OpenDock built-in widgets, permissions, and roadmap status."
+>
+  <header class="page-header container">
+    <h1>Widgets</h1>
+    <p>Every widget declares what it reads, where data goes, and how often it refreshes.</p>
+  </header>
+  <section class="section">
+    <div class="container card-grid two">
+      {
+        widgets.map((widget) => (
+          <article class="card">
+            <h3>{widget.name}</h3>
+            <p><strong>Status:</strong> {widget.status}</p>
+            <p>{widget.detail}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

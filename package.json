@@ -1,0 +1,27 @@
+{
+  "name": "opendock",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Privacy-first open-source desktop dock and widget platform for Windows",
+  "license": "MIT",
+  "scripts": {
+    "dev": "pnpm --filter @opendock/desktop tauri dev",
+    "build": "pnpm --filter @opendock/desktop build",
+    "build:desktop": "pnpm --filter @opendock/desktop tauri build --no-bundle",
+    "dev:web": "pnpm --filter @opendock/web dev",
+    "build:web": "pnpm --filter @opendock/web build",
+    "lighthouse:web": "pnpm --filter @opendock/web lighthouse",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "fmt:check": "pnpm --filter @opendock/desktop fmt:check",
+    "test:rust": "pnpm --filter @opendock/desktop test:rust"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  }
+}

@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Pricing"
+  description="OpenDock is free, open source, and MIT licensed. No subscriptions or license keys."
+>
+  <header class="page-header container">
+    <h1>Pricing</h1>
+    <p>Zero cost. Zero license server. You pay only for optional third-party APIs you choose to connect.</p>
+  </header>
+  <section class="section">
+    <div class="container card-grid two">
+      <article class="card">
+        <h3>OpenDock Community</h3>
+        <p><strong>$0</strong> — forever</p>
+        <ul>
+          <li>Full desktop app source (MIT)</li>
+          <li>Built-in widgets as they ship</li>
+          <li>Local automations and settings export</li>
+          <li>Community support via GitHub</li>
+        </ul>
+        <a class="btn btn-primary" href="/docs/#download">Download</a>
+      </article>
+      <article class="card">
+        <h3>Optional integrations</h3>
+        <p>Bring your own keys</p>
+        <ul>
+          <li>Weather providers when enabled</li>
+          <li>GitHub OAuth for private activity</li>
+          <li>Future marketplace widgets with signed manifests</li>
+        </ul>
+        <a class="btn btn-secondary" href="/docs/">Read integration docs</a>
+      </article>
+    </div>
+  </section>
+</BaseLayout>

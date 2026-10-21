@@ -1,0 +1,34 @@
+# Cloudflare Pages builds from Git when the repo is connected in the dashboard.
+# See docs/deployment-cloudflare.md for build settings (root: apps/web).
+name: Web quality gate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/web/**"
+      - "pnpm-lock.yaml"
+  pull_request:
+    paths:
+      - "apps/web/**"
+      - "pnpm-lock.yaml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe28b06526aa82a82f3c625e92296
+      - uses: actions/setup-node@39370e3975a2e84a327a586371a32e25b2732940
+        with:
+          node-version: 22
+      - uses: pnpm/action-setup@4c14688a0834b0cb34abac1f1e9aabcb6b22f2c0
+        with:
+          version: 10
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @opendock/web lint
+      - run: pnpm --filter @opendock/web test
+      - run: pnpm build:web
+      - run: pnpm lighthouse:web

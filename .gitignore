@@ -1,0 +1,16 @@
+node_modules/
+dist/
+target/
+*.local
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+*.log
+apps/desktop/src-tauri/gen/
+apps/web/dist/
+apps/web/.astro/
+apps/web/.lighthouseci/
+.vscode/*
+!.vscode/extensions.json

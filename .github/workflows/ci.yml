@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe28b06526aa82a82f3c625e92296
+
+      - name: Setup Node
+        uses: actions/setup-node@39370e3975a2e84a327a586371a32e25b2732940
+        with:
+          node-version: 22
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@4c14688a0834b0cb34abac1f1e9aabcb6b22f2c0
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint web
+        run: pnpm --filter @opendock/web lint
+
+      - name: Test web
+        run: pnpm --filter @opendock/web test
+
+      - name: Build web
+        run: pnpm build:web
+
+      - name: Lighthouse
+        run: pnpm lighthouse:web
+
+  verify:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe28b06526aa82a82f3c625e92296
+
+      - name: Setup Node
+        uses: actions/setup-node@39370e3975a2e84a327a586371a32e25b2732940
+        with:
+          node-version: 22
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@4c14688a0834b0cb34abac1f1e9aabcb6b22f2c0
+        with:
+          version: 10
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Frontend tests
+        run: pnpm test
+
+      - name: Rust format
+        run: pnpm fmt:check
+
+      - name: Rust tests
+        run: pnpm test:rust
+
+      - name: Clippy
+        run: cargo clippy --manifest-path apps/desktop/src-tauri/Cargo.toml -- -D warnings
+
+      - name: Build desktop (no bundle)
+        run: pnpm build:desktop

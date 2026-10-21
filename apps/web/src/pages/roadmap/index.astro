@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const milestones = [
+  { name: "Milestone 2", status: "In progress", detail: "Dock prototype, settings persistence, marketing site." },
+  { name: "Milestone 3", status: "Next", detail: "Clock, system monitor, tasks, local calendar widgets." },
+  { name: "Milestone 4", status: "Planned", detail: "SQLite migrations, settings UI, import/export." },
+  { name: "Milestone 5", status: "Planned", detail: "Widget SDK permissions and automation studio." },
+  { name: "Milestone 7", status: "Planned", detail: "Signed Windows installer and release candidate." },
+];
+---
+
+<BaseLayout title="Roadmap" description="OpenDock milestone roadmap and feature status.">
+  <header class="page-header container">
+    <h1>Roadmap</h1>
+    <p>We ship in small, verifiable milestones. Status labels reflect real code, not marketing wishes.</p>
+  </header>
+  <section class="section">
+    <div class="container card-grid two">
+      {
+        milestones.map((item) => (
+          <article class="card">
+            <h3>{item.name}</h3>
+            <p><strong>{item.status}</strong></p>
+            <p>{item.detail}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

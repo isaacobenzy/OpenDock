@@ -1,0 +1,29 @@
+{
+  "name": "@opendock/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "lint": "astro check && eslint \"src/**/*.ts\"",
+    "typecheck": "astro check",
+    "test": "vitest run",
+    "lighthouse": "pnpm build && lhci autorun"
+  },
+  "dependencies": {
+    "astro": "^5.7.10"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@eslint/js": "^9.30.1",
+    "@lhci/cli": "^0.14.0",
+    "eslint": "^9.30.1",
+    "eslint-plugin-astro": "^1.3.1",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.35.1",
+    "vitest": "^3.2.4",
+    "wrangler": "^4.14.0"
+  }
+}

@@ -1,0 +1,45 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Docs"
+  description="Install OpenDock, configure the dock, and contribute widgets."
+>
+  <header class="page-header container">
+    <h1>Documentation</h1>
+    <p>Install, configure, and hack on OpenDock with the same docs that live in the repository.</p>
+  </header>
+  <section class="section">
+    <div class="container prose">
+      <h2 id="download">Download</h2>
+      <p>
+        Milestone 2 builds from source. Windows installer packaging arrives in Milestone 7. Requirements:
+        Node 20+, pnpm 9+, Rust stable (MSVC), WebView2, and Visual Studio 2022 Build Tools (C++).
+      </p>
+      <pre><code>git clone https://github.com/isaacobenzy/OpenDock.git
+cd OpenDock
+pnpm install
+pnpm dev</code></pre>
+
+      <h2>Configure the dock</h2>
+      <ul>
+        <li>Right-click the dock for position, size, theme, and startup options.</li>
+        <li>Drag widgets to reorder; layout persists in <code>settings.json</code>.</li>
+        <li>Invalid settings are quarantined and replaced with safe defaults.</li>
+      </ul>
+
+      <h2 id="contribute">Contribute</h2>
+      <p>
+        See <a href="https://github.com/isaacobenzy/OpenDock/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>
+        for coding standards, tests, and security expectations.
+      </p>
+
+      <h2 id="security">Security</h2>
+      <p>
+        Report vulnerabilities privately via GitHub Security Advisories. OpenDock does not collect telemetry
+        or embed provider secrets.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

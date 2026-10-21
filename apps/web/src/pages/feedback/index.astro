@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Feedback"
+  description="Request widgets, report bugs, and suggest improvements for OpenDock."
+>
+  <header class="page-header container">
+    <h1>Feedback</h1>
+    <p>We read every GitHub issue and discussion. No account wall, no hidden inbox.</p>
+  </header>
+  <section class="section">
+    <div class="container prose">
+      <h2>Fastest paths</h2>
+      <ul>
+        <li><a href="https://github.com/isaacobenzy/OpenDock/issues">Bug reports and feature requests</a></li>
+        <li><a href="https://github.com/isaacobenzy/OpenDock/discussions">Show-and-tell and widget ideas</a></li>
+        <li><a href="/docs/#security">Security disclosures</a> (private, see SECURITY.md)</li>
+      </ul>
+      <form class="form-grid" action="https://github.com/isaacobenzy/OpenDock/issues/new" method="get">
+        <label>
+          Topic
+          <select name="labels">
+            <option value="enhancement">Feature idea</option>
+            <option value="bug">Bug report</option>
+            <option value="widget">Widget request</option>
+          </select>
+        </label>
+        <label>
+          Summary (prefill GitHub title)
+          <input name="title" required minlength="8" maxlength="120" placeholder="Describe the change in one line" />
+        </label>
+        <button class="btn btn-primary" type="submit">Open GitHub issue composer</button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>

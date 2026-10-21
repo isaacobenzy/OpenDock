@@ -1,0 +1,29 @@
+[[permission]]
+identifier = "allow-get-settings"
+description = "Allows reading persisted OpenDock settings."
+commands.allow = ["get_settings"]
+
+[[permission]]
+identifier = "allow-save-settings"
+description = "Allows saving OpenDock settings."
+commands.allow = ["save_settings"]
+
+[[permission]]
+identifier = "allow-apply-dock-layout"
+description = "Allows applying dock geometry to the main window."
+commands.allow = ["apply_dock_layout_command"]
+
+[[permission]]
+identifier = "allow-get-current-monitor-id"
+description = "Allows reading the current monitor identifier."
+commands.allow = ["get_current_monitor_id"]
+
+[[permission]]
+identifier = "allow-quit-app"
+description = "Allows exiting the application."
+commands.allow = ["quit_app"]
+
+[[permission]]
+identifier = "allow-set-launch-at-startup"
+description = "Allows toggling launch at startup."
+commands.allow = ["set_launch_at_startup"]

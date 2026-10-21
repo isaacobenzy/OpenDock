@@ -1,0 +1,40 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const releases = [
+  {
+    version: "0.1.0-milestone-2",
+    date: "2026-10-21",
+    notes: [
+      "Tauri 2 + React monorepo scaffold",
+      "Floating dock prototype with persisted layout",
+      "Live clock widget and context menu controls",
+      "Marketing site on Cloudflare Pages",
+    ],
+  },
+];
+---
+
+<BaseLayout title="Changelog" description="OpenDock release notes and milestone history.">
+  <header class="page-header container">
+    <h1>Changelog</h1>
+    <p>Newest releases first. Pre-1.0 versions are milestone tags.</p>
+  </header>
+  <section class="section">
+    <div class="container prose">
+      {
+        releases.map((release) => (
+          <article>
+            <h2>{release.version}</h2>
+            <p><time datetime={release.date}>{release.date}</time></p>
+            <ul>
+              {release.notes.map((note) => (
+                <li>{note}</li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
