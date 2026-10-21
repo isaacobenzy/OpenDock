@@ -1,0 +1,22 @@
+# OpenDock — extended context for agents
+
+OpenDock is a Tauri 2 + React + Rust desktop shell with a static Astro marketing site on Cloudflare Pages.
+
+## Stack
+
+- Desktop: `apps/desktop` (Tauri 2, React 19, Vite)
+- Shared config: `packages/config-schema` (Zod)
+- Web: `apps/web` (Astro, static export)
+
+## Downloads
+
+- Windows installer: GitHub Releases tag `v0.1.0-milestone-2` (NSIS `.exe` when published)
+- macOS `.dmg` and Linux `.AppImage` / `.deb`: planned; same codebase, not yet shipped for Milestone 2
+
+## Privacy
+
+No account required. No telemetry by default. Settings stored locally with atomic writes and invalid-config recovery.
+
+## License
+
+MIT — https://github.com/isaacobenzy/OpenDock/blob/main/LICENSE

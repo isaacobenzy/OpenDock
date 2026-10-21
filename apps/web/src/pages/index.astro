@@ -1,10 +1,13 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const releaseTag = "v0.1.0-milestone-2";
+const releaseBase = `https://github.com/isaacobenzy/OpenDock/releases/download/${releaseTag}`;
 ---
 
 <BaseLayout
   title="Overview"
-  description="OpenDock is an open-source, privacy-first smart dock for Windows with live widgets, local automations, and no mandatory account."
+  description="OpenDock is an open-source, privacy-first smart dock for Windows, macOS, and Linux with live widgets, local automations, and no mandatory account."
 >
   <section class="hero">
     <div class="container hero-grid">
@@ -12,26 +15,54 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <div class="hero-badges">
           <span class="badge">MIT licensed</span>
           <span class="badge">Runs locally</span>
-          <span class="badge">No account</span>
+          <span class="badge">Cross-platform roadmap</span>
         </div>
         <h1>Not another taskbar clone. A dock you own.</h1>
         <p class="lead">
-          OpenDock brings live widgets, layout persistence, and programmable automations to
-          Windows—without a subscription, license server, or hidden telemetry.
+          OpenDock brings live widgets, layout persistence, and programmable automations to your
+          desktop—without a subscription, license server, or hidden telemetry. Built with Tauri for
+          Windows today; macOS and Linux builds follow the same open core.
         </p>
         <div class="hero-cta">
-          <a class="btn btn-primary" href="/docs/#download">Download for Windows</a>
+          <a class="btn btn-primary" href="/docs/#download">Download builds</a>
           <a class="btn btn-secondary" href="https://github.com/isaacobenzy/OpenDock">View on GitHub</a>
         </div>
       </div>
-      <div class="dock-preview" aria-hidden="true">
-        <div class="dock-bar">
-          <div class="dock-pill accent">16:42</div>
-          <div class="dock-pill">CPU 12%</div>
-          <div class="dock-pill">Tasks 3</div>
-          <div class="dock-pill">Weather</div>
-          <div class="dock-pill">+</div>
-        </div>
+      <figure class="dock-preview">
+        <img
+          src="/screenshots/dock-windows.png"
+          width="640"
+          height="360"
+          alt="OpenDock floating dock on Windows with clock and widget placeholders"
+          loading="eager"
+          decoding="async"
+        />
+        <figcaption class="screenshot-caption">Milestone 2 prototype on Windows</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>One project, every desktop</h2>
+      <p class="section-intro">
+        Installers are platform-specific; the product vision is not. OpenDock targets bundled
+        <strong>.exe</strong>, <strong>.dmg</strong>, and Linux packages from the same repository.
+      </p>
+      <div class="card-grid">
+        <article class="card">
+          <h3>Windows</h3>
+          <p>Milestone 2 prototype: floating dock, clock, persisted layout, fullscreen hide.</p>
+          <a href={`${releaseBase}/OpenDock_0.1.0_x64-setup.exe`}>Download .exe installer</a>
+        </article>
+        <article class="card">
+          <h3>macOS</h3>
+          <p>.dmg packaging planned with Tauri bundler; not yet published for this milestone.</p>
+        </article>
+        <article class="card">
+          <h3>Linux</h3>
+          <p>.AppImage / .deb targets on the roadmap; build from source today.</p>
+        </article>
       </div>
     </div>
   </section>
@@ -79,6 +110,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             <td>Paid lifetime or subscription</td>
           </tr>
           <tr>
+            <th scope="row">Platforms</th>
+            <td>Windows (now); macOS/Linux (roadmap)</td>
+            <td>Often single OS</td>
+          </tr>
+          <tr>
             <th scope="row">Account</th>
             <td>Not required</td>
             <td>Often required for activation</td>
@@ -88,29 +124,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             <td>None by default</td>
             <td>Often unclear or bundled</td>
           </tr>
-          <tr>
-            <th scope="row">Automation rules</th>
-            <td>User-defined ECA engine</td>
-            <td>Fixed preset toggles</td>
-          </tr>
-          <tr>
-            <th scope="row">Extension model</th>
-            <td>Manifest + permissions</td>
-            <td>Closed ecosystem</td>
-          </tr>
         </tbody>
       </table>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container cta-band">
-      <h2>Ready to try the Milestone 2 prototype?</h2>
-      <p class="section-intro">
-        The desktop app includes a floating dock, live clock, persisted layout, and Windows fullscreen
-        behavior. Widget gallery and SQLite land in the next milestones.
-      </p>
-      <a class="btn btn-primary" href="/docs/">Read the docs</a>
     </div>
   </section>
 </BaseLayout>

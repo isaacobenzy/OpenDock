@@ -9,7 +9,14 @@ const isActive = (href: string) =>
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand" href="/" aria-label="OpenDock home">
-      <span class="brand-mark" aria-hidden="true"></span>
+      <img
+        class="brand-icon"
+        src="/icons/icon-32.png"
+        width="32"
+        height="32"
+        alt=""
+        decoding="async"
+      />
       <span>OpenDock</span>
     </a>
 
@@ -53,7 +60,12 @@ const isActive = (href: string) =>
         <div class="nav-panel" role="menu" aria-label="More">
           {
             moreNav.map((link) => (
-              <a href={link.href} role="menuitem" target={link.href.startsWith("http") ? "_blank" : undefined} rel={link.href.startsWith("http") ? "noreferrer" : undefined}>
+              <a
+                href={link.href}
+                role="menuitem"
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+              >
                 {link.label}
                 {link.description ? <small>{link.description}</small> : null}
               </a>
@@ -66,54 +78,29 @@ const isActive = (href: string) =>
     <div class="header-actions">
       <a class="btn btn-secondary" href="/docs/">Docs</a>
       <a class="btn btn-primary" href="/docs/#download">Download</a>
-      <button
-        type="button"
-        class="menu-toggle"
-        aria-expanded="false"
-        aria-controls="mobile-nav"
-        id="menu-toggle"
-      >
-        Menu
-      </button>
+      <details class="mobile-menu">
+        <summary class="menu-toggle">Menu</summary>
+        <nav class="mobile-nav" aria-label="Mobile">
+          {
+            primaryNav.map((group) => (
+              <section>
+                <h2>{group.label}</h2>
+                {group.links.map((link) => (
+                  <a href={link.href} aria-current={isActive(link.href) ? "page" : undefined}>
+                    {link.label}
+                  </a>
+                ))}
+              </section>
+            ))
+          }
+          <section>
+            <h2>More</h2>
+            {moreNav.map((link) => (
+              <a href={link.href}>{link.label}</a>
+            ))}
+          </section>
+        </nav>
+      </details>
     </div>
   </div>
-
-  <nav
-    id="mobile-nav"
-    class="mobile-nav container"
-    aria-label="Mobile"
-    data-open="false"
-  >
-    {
-      primaryNav.map((group) => (
-        <section>
-          <h2>{group.label}</h2>
-          {group.links.map((link) => (
-            <a href={link.href} aria-current={isActive(link.href) ? "page" : undefined}>
-              {link.label}
-            </a>
-          ))}
-        </section>
-      ))
-    }
-    <section>
-      <h2>More</h2>
-      {
-        moreNav.map((link) => (
-          <a href={link.href}>{link.label}</a>
-        ))
-      }
-    </section>
-  </nav>
 </header>
-
-<script>
-  const toggle = document.getElementById("menu-toggle");
-  const mobileNav = document.getElementById("mobile-nav");
-
-  toggle?.addEventListener("click", () => {
-    const open = mobileNav?.getAttribute("data-open") === "true";
-    mobileNav?.setAttribute("data-open", open ? "false" : "true");
-    toggle.setAttribute("aria-expanded", open ? "false" : "true");
-  });
-</script>

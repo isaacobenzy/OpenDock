@@ -1,0 +1,15 @@
+# OpenDock
+
+> Open-source, privacy-first smart dock and widget platform for Windows, macOS, and Linux. Runs locally without a mandatory account; MIT licensed.
+
+## Links
+
+- [Homepage](https://opendock.pages.dev/): Overview, comparison, and real product screenshots
+- [Documentation](https://opendock.pages.dev/docs/): Install, download builds, and developer setup
+- [GitHub](https://github.com/isaacobenzy/OpenDock): Source, issues, and releases (.exe today; .dmg / Linux packages on roadmap)
+- [Roadmap](https://opendock.pages.dev/roadmap/): Cross-platform bundling and widget SDK milestones
+- [Feedback](https://opendock.pages.dev/feedback/): Feature requests and bug reports
+
+## Optional
+
+- [Extended agent context](https://opendock.pages.dev/llms-full.txt): Architecture, stack, and milestone status

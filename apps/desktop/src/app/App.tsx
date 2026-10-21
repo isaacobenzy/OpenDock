@@ -1,4 +1,5 @@
 import { defaultAppSettings, type AppSettings } from "@opendock/config-schema";
+import { isTauri } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { useEffect, useState } from "react";
 import { DockBar } from "../features/dock/DockBar";
@@ -36,10 +37,12 @@ export function App() {
     void bootstrap();
 
     const unsubs: Array<() => void> = [];
-    void listen("dock:fullscreen-hidden", () => undefined).then((u) => unsubs.push(u));
-    void listen("dock:fullscreen-visible", () => {
-      void applyDockLayout();
-    }).then((u) => unsubs.push(u));
+    if (isTauri()) {
+      void listen("dock:fullscreen-hidden", () => undefined).then((u) => unsubs.push(u));
+      void listen("dock:fullscreen-visible", () => {
+        void applyDockLayout();
+      }).then((u) => unsubs.push(u));
+    }
 
     return () => {
       cancelled = true;

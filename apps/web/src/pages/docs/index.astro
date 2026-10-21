@@ -1,10 +1,13 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const releaseTag = "v0.1.0-milestone-2";
+const releaseUrl = `https://github.com/isaacobenzy/OpenDock/releases/tag/${releaseTag}`;
 ---
 
 <BaseLayout
   title="Docs"
-  description="Install OpenDock, configure the dock, and contribute widgets."
+  description="Install OpenDock on Windows, macOS, or Linux; configure the dock; download bundled installers."
 >
   <header class="page-header container">
     <h1>Documentation</h1>
@@ -14,13 +17,27 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
     <div class="container prose">
       <h2 id="download">Download</h2>
       <p>
-        Milestone 2 builds from source. Windows installer packaging arrives in Milestone 7. Requirements:
-        Node 20+, pnpm 9+, Rust stable (MSVC), WebView2, and Visual Studio 2022 Build Tools (C++).
+        OpenDock is an open desktop platform: one codebase, platform-specific installers. Milestone 2
+        ships a <strong>Windows x64 installer</strong> built locally and attached to GitHub Releases
+        (no GitHub Actions minutes required for this drop).
       </p>
+      <ul>
+        <li>
+          <a href={releaseUrl}>GitHub Release {releaseTag}</a> — Windows <code>.exe</code> (when published)
+        </li>
+        <li>macOS <code>.dmg</code> — planned; not yet published</li>
+        <li>Linux <code>.AppImage</code> / <code>.deb</code> — planned; build from source</li>
+      </ul>
+
+      <h3>Build from source (all platforms)</h3>
       <pre><code>git clone https://github.com/isaacobenzy/OpenDock.git
 cd OpenDock
 pnpm install
 pnpm dev</code></pre>
+      <p>
+        Windows builds need Rust (MSVC), WebView2, and VS 2022 Build Tools (C++). See
+        <a href="https://github.com/isaacobenzy/OpenDock/blob/main/docs/installation.md">installation.md</a>.
+      </p>
 
       <h2>Configure the dock</h2>
       <ul>
