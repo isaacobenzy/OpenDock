@@ -12,6 +12,14 @@ import {
 import { repoLinks, site } from "../../data/site";
 
 const setup = currentRelease.files.find((file) => file.kind === "setup")!;
+const rows = [
+  ...currentRelease.files.map((file) => ({ label: file.label, name: file.name, note: file.note })),
+  {
+    label: "Checksums",
+    name: checksumsFile,
+    note: "You want to confirm your download is exactly the file we published.",
+  },
+];
 ---
 
 <BaseLayout
@@ -45,25 +53,17 @@ const setup = currentRelease.files.find((file) => file.kind === "setup")!;
           </thead>
           <tbody>
             {
-              currentRelease.files.map((file) => (
+              rows.map((row) => (
                 <tr>
                   <td>
-                    <a href={downloadUrl(currentRelease, file.name)}>{file.label}</a>
+                    <a href={downloadUrl(currentRelease, row.name)}>{row.label}</a>
                     <br />
-                    <code>{file.name}</code>
+                    <code>{row.name}</code>
                   </td>
-                  <td>{file.note}</td>
+                  <td>{row.note}</td>
                 </tr>
               ))
             }
-            <tr>
-              <td>
-                <a href={downloadUrl(currentRelease, checksumsFile)}>Checksums</a>
-                <br />
-                <code>{checksumsFile}</code>
-              </td>
-              <td>You want to confirm your download is exactly the file we published.</td>
-            </tr>
           </tbody>
         </table>
       </div>

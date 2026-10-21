@@ -893,8 +893,9 @@ button.dk-cell:focus-visible {
   --dock-font: clamp(10px, 1.32cqi, 15px);
   position: relative;
   container: stage / inline-size;
-  aspect-ratio: 16 / 9.2;
-  min-height: 31rem;
+  /* 16:9.2 of the container width, but never shorter than 31rem. An aspect-ratio with a
+     min-height would instead force a minimum width and widen the page on tablets. */
+  height: max(31rem, min(var(--max), 100vw - 2 * var(--gutter)) * 0.575);
   overflow: hidden;
   isolation: isolate;
   border-radius: var(--radius-xl);

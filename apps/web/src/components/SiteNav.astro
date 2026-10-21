@@ -29,10 +29,15 @@ const pathname = Astro.url.pathname;
     </nav>
 
     <div class="header-actions">
-      <a class="icon-link" href={site.repo} aria-label="OpenDock on GitHub">
+      <button class="icon-link theme-toggle" type="button" data-theme-toggle data-choice="system" hidden>
+        <Icon name="desktop" size={19} class="theme-icon theme-icon-system" />
+        <Icon name="sun" size={19} class="theme-icon theme-icon-light" />
+        <Icon name="moon" size={19} class="theme-icon theme-icon-dark" />
+      </button>
+      <a class="icon-link repo-link" href={site.repo} aria-label="OpenDock on GitHub">
         <Icon name="github" size={20} />
       </a>
-      <a class="btn btn-primary btn-small" href="/download/">
+      <a class="btn btn-primary btn-small header-download" href="/download/">
         <Icon name="download" size={16} />
         Download
       </a>
@@ -50,6 +55,7 @@ const pathname = Astro.url.pathname;
               ))
             }
             <li><a href="/download/">Download</a></li>
+            <li><a href={site.repo}>GitHub</a></li>
           </ul>
         </nav>
       </details>

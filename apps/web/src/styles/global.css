@@ -1,22 +1,26 @@
-/* Site design tokens. Pages and components use these variables only. */
+/* Site design tokens. Pages and components use these variables only.
+   Page tokens take a light and a dark value; `color-scheme` picks one. It follows the
+   system unless public/theme.js sets data-theme from the visitor's saved choice. */
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
 
   /* Page */
-  --paper: #f3f5f9;
-  --paper-sunk: #e9edf3;
-  --card: #ffffff;
-  --ink: #10141c;
-  --ink-soft: #2b3340;
-  --muted: #566174;
-  --line: rgba(16, 20, 28, 0.1);
-  --line-strong: rgba(16, 20, 28, 0.18);
-  --accent: #0a7a59;
-  --accent-hover: #086a4d;
-  --accent-soft: rgba(14, 158, 116, 0.12);
-  --accent-ink: #ffffff;
-  --on-ink: #f3f5f9;
-  --on-ink-muted: #b4bdcc;
+  --paper: light-dark(#f3f5f9, #0b0e14);
+  --paper-sunk: light-dark(#e9edf3, #121620);
+  --card: light-dark(#ffffff, #151a24);
+  --ink: light-dark(#10141c, #eef1f6);
+  --ink-soft: light-dark(#2b3340, #c9d0dc);
+  --muted: light-dark(#566174, #9aa5b8);
+  --line: light-dark(rgba(16, 20, 28, 0.1), rgba(255, 255, 255, 0.09));
+  --line-strong: light-dark(rgba(16, 20, 28, 0.18), rgba(255, 255, 255, 0.2));
+  --accent: light-dark(#0a7a59, #6be8bd);
+  --accent-hover: light-dark(#086a4d, #8af5cf);
+  --accent-soft: light-dark(rgba(14, 158, 116, 0.12), rgba(124, 242, 200, 0.14));
+  --accent-ink: light-dark(#ffffff, #052419);
+  /* Text and icons on an --ink background */
+  --on-ink: light-dark(#f3f5f9, #10141c);
+  --on-ink-accent: light-dark(#7cf2c8, #0a7a59);
+  --artifact-ring: light-dark(transparent, rgba(255, 255, 255, 0.1));
 
   /* Product surfaces, matching the desktop app's dark theme */
   --glass: #161a24;
@@ -58,8 +62,12 @@
   --code-3: #ffc56b;
   --code-4: #c3cad6;
 
-  --shadow-artifact: 0 34px 70px -28px rgba(10, 14, 22, 0.55), 0 14px 28px -14px rgba(10, 14, 22, 0.35);
-  --shadow-card: 0 1px 2px rgba(16, 20, 28, 0.05), 0 10px 30px -16px rgba(16, 20, 28, 0.16);
+  --shadow-artifact:
+    0 0 0 1px var(--artifact-ring), 0 34px 70px -28px rgba(10, 14, 22, 0.55),
+    0 14px 28px -14px rgba(10, 14, 22, 0.35);
+  --shadow-card:
+    0 1px 2px light-dark(rgba(16, 20, 28, 0.05), rgba(0, 0, 0, 0.3)),
+    0 10px 30px -16px light-dark(rgba(16, 20, 28, 0.16), rgba(0, 0, 0, 0.5));
   --radius-sm: 10px;
   --radius-md: 14px;
   --radius-lg: 22px;
@@ -74,6 +82,14 @@
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --max: 1180px;
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 /* Base */
@@ -265,7 +281,7 @@ pre {
 }
 
 .btn-primary .icon {
-  color: var(--mint);
+  color: var(--on-ink-accent);
 }
 
 .btn-secondary {
@@ -282,12 +298,6 @@ pre {
   min-height: 2.35rem;
   padding: 0.4rem 0.95rem;
   font-size: 0.92rem;
-}
-
-.btn-meta {
-  font-weight: 400;
-  color: var(--on-ink-muted);
-  font-size: 0.85rem;
 }
 
 .link-arrow {
@@ -325,7 +335,7 @@ pre {
 .header-inner {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.75rem;
   min-height: 4rem;
 }
 
@@ -377,8 +387,16 @@ pre {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.35rem;
   margin-left: auto;
+}
+
+/* Phones: Download and GitHub move into the menu. */
+@media (max-width: 479px) {
+  .repo-link,
+  .header-download {
+    display: none;
+  }
 }
 
 .icon-link {
@@ -393,6 +411,25 @@ pre {
 .icon-link:hover {
   color: var(--ink);
   background: var(--paper-sunk);
+}
+
+.theme-toggle {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.theme-toggle[hidden],
+.theme-icon {
+  display: none;
+}
+
+.theme-toggle[data-choice="system"] .theme-icon-system,
+.theme-toggle[data-choice="light"] .theme-icon-light,
+.theme-toggle[data-choice="dark"] .theme-icon-dark {
+  display: block;
 }
 
 .mobile-menu {
@@ -533,6 +570,10 @@ pre {
 }
 
 /* Home: feature rows */
+
+.feature > * {
+  min-width: 0;
+}
 
 .feature {
   display: grid;
@@ -728,16 +769,17 @@ pre {
 
 .band {
   padding-block: clamp(4rem, 8vw, 6rem);
+  border-block: 1px solid var(--artifact-ring);
   background: var(--glass);
-  color: var(--on-ink);
+  color: var(--glass-text);
 }
 
 .band h2 {
-  color: var(--on-ink);
+  color: var(--glass-text);
 }
 
 .band .lead {
-  color: var(--on-ink-muted);
+  color: var(--glass-muted);
 }
 
 .band-inner {
@@ -752,7 +794,7 @@ pre {
 }
 
 .band .btn-primary:hover {
-  background: var(--on-ink);
+  background: var(--glass-text);
 }
 
 .band .btn-primary .icon {
@@ -762,20 +804,20 @@ pre {
 .band .btn-secondary {
   background: transparent;
   border-color: var(--glass-line-strong);
-  color: var(--on-ink);
+  color: var(--glass-text);
 }
 
 .band .btn-secondary:hover {
-  border-color: var(--on-ink);
+  border-color: var(--glass-text);
 }
 
 .band-note {
   font-size: 0.9rem;
-  color: var(--on-ink-muted);
+  color: var(--glass-muted);
 }
 
 .band-note a {
-  color: var(--on-ink);
+  color: var(--glass-text);
 }
 
 /* Cards and lists used across pages */
@@ -1009,6 +1051,14 @@ pre {
 }
 
 @media (min-width: 960px) {
+  .header-inner {
+    gap: 1.5rem;
+  }
+
+  .header-actions {
+    gap: 0.5rem;
+  }
+
   .primary-nav {
     display: block;
   }
