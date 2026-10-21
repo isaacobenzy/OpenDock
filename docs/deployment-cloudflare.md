@@ -6,9 +6,9 @@ The static site lives in `apps/web` (Astro, `output: "static"`). Production URL:
 
 The Cloudflare Pages project **`opendock`** is created on account `784d1d98594f9536a96697f4f959dbd6`.
 
-1. Push this repository to GitHub (`main` branch).
-2. In [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **opendock** → **Settings** → **Builds & deployments** → **Connect to Git** (if not already linked).
-3. Select the GitHub repo and use these build settings:
+1. Repository: [github.com/isaacobenzy/OpenDock](https://github.com/isaacobenzy/OpenDock) on branch `main`.
+2. Cloudflare Pages project **`opendock`** is connected to that repo (GitHub integration).
+3. Build settings (already applied via API; verify in the dashboard if needed):
 
 | Setting | Value |
 | --- | --- |
