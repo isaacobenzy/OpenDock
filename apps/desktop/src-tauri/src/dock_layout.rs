@@ -1,6 +1,6 @@
 use tauri::{PhysicalPosition, PhysicalSize, WebviewWindow};
 
-use crate::geometry::{compute_dock_rect, DockMode, DockPosition, DockSize};
+use crate::geometry::compute_dock_rect;
 use crate::platform::{ensure_monitor, work_area_from_window};
 use crate::settings::types::{AppSettings, DockSettings};
 
@@ -26,7 +26,7 @@ pub fn apply_dock_layout(window: &WebviewWindow, settings: &DockSettings) -> Res
 
 pub fn sync_autostart(app: &tauri::AppHandle, settings: &AppSettings) -> Result<(), String> {
     use tauri_plugin_autostart::ManagerExt;
-    let autostart = app.autostart();
+    let autostart = app.autolaunch();
     if settings.dock.launch_at_startup {
         autostart.enable().map_err(|e| e.to_string())
     } else {

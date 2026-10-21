@@ -28,10 +28,11 @@ impl DockPlatform for NativePlatform {
 mod windows_impl {
     use super::*;
     use windows::Win32::Foundation::RECT;
-    use windows::Win32::Graphics::Gdi::{MonitorFromWindow, MONITOR_DEFAULTTONEAREST};
-    use windows::Win32::UI::WindowsAndMessaging::{
-        GetForegroundWindow, GetMonitorInfoW, GetWindowRect, MONITORINFO,
+    use windows::Win32::Foundation::HWND;
+    use windows::Win32::Graphics::Gdi::{
+        GetMonitorInfoW, MonitorFromWindow, MONITOR_DEFAULTTONEAREST, MONITORINFO,
     };
+    use windows::Win32::UI::WindowsAndMessaging::{GetForegroundWindow, GetWindowRect};
 
     pub fn start_fullscreen_watcher(app: AppHandle, window_label: String) {
         thread::spawn(move || {
@@ -60,7 +61,7 @@ mod windows_impl {
     fn is_foreign_fullscreen(dock_hwnd: Option<isize>) -> bool {
         unsafe {
             let fg = GetForegroundWindow();
-            if fg.0 == 0 {
+            if fg == HWND::default() {
                 return false;
             }
             if dock_hwnd.is_some_and(|h| fg.0 as isize == h) {
@@ -75,7 +76,7 @@ mod windows_impl {
                 cbSize: std::mem::size_of::<MONITORINFO>() as u32,
                 ..Default::default()
             };
-            if GetMonitorInfoW(monitor, &mut info).is_err() {
+            if !GetMonitorInfoW(monitor, &mut info).as_bool() {
                 return false;
             }
             rects_equal(window_rect, info.rcMonitor)

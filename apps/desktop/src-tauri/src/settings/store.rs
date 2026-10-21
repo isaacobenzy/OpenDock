@@ -91,8 +91,6 @@ impl SettingsStore {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::settings::types::DockSettings;
-
     #[test]
     fn round_trip_and_recovery() {
         let dir = std::env::temp_dir().join(format!("opendock-test-{}", uuid_simple()));

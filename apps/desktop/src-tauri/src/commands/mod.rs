@@ -1,6 +1,6 @@
 use std::sync::Mutex;
 
-use tauri::{AppHandle, Manager, State, WebviewWindow};
+use tauri::{AppHandle, State, WebviewWindow};
 
 use crate::dock_layout::{apply_dock_layout, sync_autostart};
 use crate::platform::monitor_id;
