@@ -1,9 +1,11 @@
 import type { DockSize } from "@opendock/config-schema";
 import type React from "react";
+import { useEffect, useState } from "react";
 import { launchApp, windowAction } from "../../services/ipc";
 import { useLive } from "../../services/liveContext";
 import { useSettings } from "../../services/settingsContext";
 import { anchorOf, useDockActions } from "../dock/dockActions";
+import { pageScroll, scrollEdges, wheelDelta } from "../dock/overflow";
 import { Icon } from "../widgets/icons";
 import { Skeleton } from "../widgets/visuals";
 import { AppIcon } from "./AppIcon";
@@ -79,6 +81,9 @@ function AppButton({
           panel(event.currentTarget);
         }
       }}
+      onFocus={(event) =>
+        event.currentTarget.scrollIntoView({ inline: "nearest", block: "nearest", behavior: "smooth" })
+      }
     >
       <span className="app-glyph">
         <AppIcon path={entry.iconPath} name={entry.name} window={entry.windows[0]?.id} size={ICON_PX[size]} />
@@ -93,6 +98,57 @@ function AppButton({
 export function AppsTile({ size, compact }: { size: DockSize; compact: boolean }) {
   const { windows } = useLive();
   const { settings } = useSettings();
+  const { vertical } = useDockActions();
+  const [scroller, setScroller] = useState<HTMLSpanElement | null>(null);
+  const [edges, setEdges] = useState({ start: false, end: false });
+
+  useEffect(() => {
+    if (!scroller) return;
+    const read = () => {
+      const offset = vertical ? scroller.scrollTop : scroller.scrollLeft;
+      const max = vertical
+        ? scroller.scrollHeight - scroller.clientHeight
+        : scroller.scrollWidth - scroller.clientWidth;
+      const next = scrollEdges(offset, max);
+      setEdges((current) => (current.start === next.start && current.end === next.end ? current : next));
+    };
+    read();
+    scroller.addEventListener("scroll", read, { passive: true });
+    const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(read);
+    observer?.observe(scroller);
+    return () => {
+      scroller.removeEventListener("scroll", read);
+      observer?.disconnect();
+    };
+  }, [scroller, vertical, windows]);
+
+  useEffect(() => {
+    if (!scroller) return;
+    const onWheel = (event: WheelEvent) => {
+      const max = vertical
+        ? scroller.scrollHeight - scroller.clientHeight
+        : scroller.scrollWidth - scroller.clientWidth;
+      const delta = wheelDelta(event.deltaX, event.deltaY, vertical);
+      if (max <= 2 || delta === 0) return;
+      event.preventDefault();
+      event.stopPropagation();
+      // Wheel ticks are frequent, so they move directly. The buttons animate.
+      if (vertical) scroller.scrollTop += delta;
+      else scroller.scrollLeft += delta;
+    };
+    scroller.addEventListener("wheel", onWheel, { passive: false });
+    return () => scroller.removeEventListener("wheel", onWheel);
+  }, [scroller, vertical]);
+
+  const nudge = (direction: -1 | 1) => {
+    if (!scroller) return;
+    const distance = pageScroll(vertical ? scroller.clientHeight : scroller.clientWidth, ICON_PX[size] + 12);
+    scroller.scrollBy({
+      left: vertical ? 0 : distance * direction,
+      top: vertical ? distance * direction : 0,
+      behavior: "smooth",
+    });
+  };
 
   if (windows.status === "loading") {
     return (
@@ -125,17 +181,46 @@ export function AppsTile({ size, compact }: { size: DockSize; compact: boolean }
       </span>
     );
   }
+  const overflow = edges.start || edges.end;
   return (
-    <span className="tile tile-apps is-ready" role="group" aria-label="Apps">
-      {entries.map((entry) => (
-        <AppButton
-          key={entry.key}
-          entry={entry}
-          active={windows.data.active}
-          size={size}
-          showTitle={settings.apps.showTitles && !compact}
-        />
-      ))}
+    <span className="tile tile-apps is-ready" role="group" aria-label="Apps" data-overflow={overflow || undefined}>
+      <button
+        type="button"
+        className="apps-nudge is-start"
+        aria-label={vertical ? "Show apps above" : "Show apps to the left"}
+        hidden={!edges.start}
+        onPointerDown={(event) => event.stopPropagation()}
+        onClick={(event) => {
+          event.stopPropagation();
+          nudge(-1);
+        }}
+      >
+        <Icon name="chevron" size={14} />
+      </button>
+      <span className="apps-scroller" ref={setScroller}>
+        {entries.map((entry) => (
+          <AppButton
+            key={entry.key}
+            entry={entry}
+            active={windows.data.active}
+            size={size}
+            showTitle={settings.apps.showTitles && !compact}
+          />
+        ))}
+      </span>
+      <button
+        type="button"
+        className="apps-nudge is-end"
+        aria-label={vertical ? "Show apps below" : "Show apps to the right"}
+        hidden={!edges.end}
+        onPointerDown={(event) => event.stopPropagation()}
+        onClick={(event) => {
+          event.stopPropagation();
+          nudge(1);
+        }}
+      >
+        <Icon name="chevron" size={14} />
+      </button>
     </span>
   );
 }

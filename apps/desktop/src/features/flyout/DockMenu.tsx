@@ -2,6 +2,7 @@ import { removeDockItem, type AppSettings } from "@opendock/config-schema";
 import { useState } from "react";
 import { openHub, quitApp, type HubPage } from "../../services/ipc";
 import { useSettings } from "../../services/settingsContext";
+import { StylePicker } from "../dock/StylePicker";
 import { ADD_WIDGET_ID, findWidget } from "../widgets/catalog";
 import { Icon, type IconName } from "../widgets/icons";
 
@@ -114,14 +115,10 @@ export function DockMenu({ target, onDone }: { target: string | null; onDone: ()
           ]}
           onChange={(theme) => change((s) => ({ ...s, dock: { ...s.dock, theme } }))}
         />
-        <Segmented
-          label="Style"
+        <span className="menu-row-label menu-row-label--block">Style</span>
+        <StylePicker
+          compact
           value={settings.dock.style}
-          options={[
-            { value: "glass", label: "Glass" },
-            { value: "solid", label: "Solid" },
-            { value: "midnight", label: "Midnight" },
-          ]}
           onChange={(style) => change((s) => ({ ...s, dock: { ...s.dock, style } }))}
         />
         <Segmented

@@ -5,6 +5,7 @@ import { failed, loading, ready, type Loadable } from "../../services/loadable";
 import { useSettings } from "../../services/settingsContext";
 import { AppIcon } from "../apps/AppIcon";
 import { toPinned } from "../apps/model";
+import { StylePicker } from "../dock/StylePicker";
 import { Icon } from "../widgets/icons";
 import { Choice, Row, TaskbarOptions, Toggle } from "./controls";
 
@@ -123,21 +124,7 @@ export function WelcomePage({ onNavigate }: { onNavigate: (page: HubPage) => voi
           <>
             <h2>Make it yours</h2>
             <Row label="Style">
-              <div className="style-swatches" role="radiogroup" aria-label="Style">
-                {(["glass", "solid", "midnight"] as const).map((option) => (
-                  <button
-                    key={option}
-                    type="button"
-                    role="radio"
-                    aria-checked={style === option}
-                    className={`style-swatch style-${option} ${style === option ? "is-active" : ""}`}
-                    onClick={() => setStyle(option)}
-                  >
-                    <span className="style-swatch-art" aria-hidden />
-                    {option.charAt(0).toUpperCase() + option.slice(1)}
-                  </button>
-                ))}
-              </div>
+              <StylePicker value={style} onChange={setStyle} />
             </Row>
             <Row label="Theme">
               <Choice

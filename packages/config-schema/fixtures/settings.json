@@ -1,7 +1,7 @@
 {
   "valid": [
     {
-      "version": 3,
+      "version": 4,
       "dock": {
         "position": "bottom",
         "size": "m",
@@ -32,7 +32,7 @@
       "onboarded": true
     },
     {
-      "version": 3,
+      "version": 4,
       "dock": {
         "position": "top",
         "size": "l",
@@ -56,7 +56,7 @@
       "onboarded": false
     },
     {
-      "version": 3,
+      "version": 4,
       "dock": {
         "position": "left",
         "size": "s",
@@ -68,11 +68,53 @@
         "clock24h": false,
         "launchAtStartup": false
       }
+    },
+    {
+      "version": 4,
+      "dock": {
+        "position": "bottom",
+        "size": "m",
+        "mode": "pill",
+        "theme": "dark",
+        "style": "neon",
+        "monitorId": null,
+        "itemOrder": ["start", "apps", "clock"],
+        "clock24h": false,
+        "launchAtStartup": false
+      }
+    },
+    {
+      "version": 4,
+      "dock": {
+        "position": "right",
+        "size": "s",
+        "mode": "pill",
+        "theme": "light",
+        "style": "minimal",
+        "monitorId": null,
+        "itemOrder": ["apps"],
+        "clock24h": true,
+        "launchAtStartup": false
+      }
+    },
+    {
+      "version": 4,
+      "dock": {
+        "position": "bottom",
+        "size": "l",
+        "mode": "full",
+        "theme": "dark",
+        "style": "ink",
+        "monitorId": null,
+        "itemOrder": ["clock"],
+        "clock24h": false,
+        "launchAtStartup": false
+      }
     }
   ],
   "invalid": [
     {
-      "version": 3,
+      "version": 4,
       "dock": {
         "position": "bottom",
         "size": "m",
@@ -93,7 +135,7 @@
       "automation": { "enabled": true, "quietHours": { "enabled": false, "start": "22:00", "end": "07:00" } }
     },
     {
-      "version": 3,
+      "version": 4,
       "dock": {
         "position": "bottom",
         "size": "m",
@@ -114,7 +156,7 @@
       "automation": { "enabled": true, "quietHours": { "enabled": false, "start": "22:00", "end": "07:00" } }
     },
     {
-      "version": 3,
+      "version": 4,
       "dock": {
         "position": "bottom",
         "size": "m",
@@ -135,7 +177,7 @@
       "automation": { "enabled": true, "quietHours": { "enabled": false, "start": "22:00", "end": "07:00" } }
     },
     {
-      "version": 3,
+      "version": 4,
       "dock": {
         "position": "bottom",
         "size": "m",
@@ -177,7 +219,7 @@
       "automation": { "enabled": true, "quietHours": { "enabled": false, "start": "22:00", "end": "07:00" } }
     },
     {
-      "version": 3,
+      "version": 4,
       "dock": {
         "position": "bottom",
         "size": "m",
@@ -192,7 +234,7 @@
       }
     },
     {
-      "version": 3,
+      "version": 4,
       "dock": {
         "position": "bottom",
         "size": "m",
@@ -212,7 +254,7 @@
       }
     },
     {
-      "version": 3,
+      "version": 4,
       "dock": {
         "position": "bottom",
         "size": "m",
@@ -227,7 +269,7 @@
       "apps": { "pinned": [{ "name": "", "path": "C:\\Apps\\Nameless.exe", "target": null }] }
     },
     {
-      "version": 3,
+      "version": 4,
       "dock": {
         "position": "bottom",
         "size": "m",
@@ -240,6 +282,34 @@
         "launchAtStartup": false
       },
       "taskbar": { "mode": "vanish" }
+    },
+    {
+      "version": 4,
+      "dock": {
+        "position": "bottom",
+        "size": "m",
+        "mode": "pill",
+        "theme": "dark",
+        "style": "chrome",
+        "monitorId": null,
+        "itemOrder": ["start"],
+        "clock24h": false,
+        "launchAtStartup": false
+      }
+    },
+    {
+      "version": 3,
+      "dock": {
+        "position": "bottom",
+        "size": "m",
+        "mode": "pill",
+        "theme": "dark",
+        "style": "glass",
+        "monitorId": null,
+        "itemOrder": ["start"],
+        "clock24h": false,
+        "launchAtStartup": false
+      }
     }
   ]
 }

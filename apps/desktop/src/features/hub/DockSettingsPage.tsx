@@ -10,6 +10,7 @@ import {
   type TaskbarStatus,
 } from "../../services/ipc";
 import { useSettings } from "../../services/settingsContext";
+import { StylePicker } from "../dock/StylePicker";
 import { Icon } from "../widgets/icons";
 import { Choice, Row, TaskbarOptions, Toggle } from "./controls";
 import { PageHeader } from "./PageHeader";
@@ -201,21 +202,7 @@ export function DockSettingsPage() {
       <section className="settings-card">
         <h2>Appearance</h2>
         <Row label="Style">
-          <div className="style-swatches" role="radiogroup" aria-label="Style">
-            {(["glass", "solid", "midnight"] as const).map((style) => (
-              <button
-                key={style}
-                type="button"
-                role="radio"
-                aria-checked={dock.style === style}
-                className={`style-swatch style-${style} ${dock.style === style ? "is-active" : ""}`}
-                onClick={() => setDock({ style })}
-              >
-                <span className="style-swatch-art" aria-hidden />
-                {style.charAt(0).toUpperCase() + style.slice(1)}
-              </button>
-            ))}
-          </div>
+          <StylePicker value={dock.style} onChange={(style) => setDock({ style })} />
         </Row>
         <Row label="Theme">
           <Choice

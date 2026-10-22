@@ -21,7 +21,8 @@
   animation: toast-in var(--od-slow) var(--od-ease);
 }
 
-html[data-style="glass"] .toast {
+html[data-style="glass"] .toast,
+html[data-style="minimal"] .toast {
   background: var(--od-surface);
   backdrop-filter: blur(var(--od-blur)) saturate(1.4);
 }
@@ -29,6 +30,17 @@ html[data-style="glass"] .toast {
 html[data-style="midnight"] .toast {
   background: var(--od-midnight);
   border-color: var(--od-midnight-edge);
+}
+
+html[data-style="neon"] .toast {
+  background: var(--od-neon-ground);
+  border-color: var(--od-neon-edge);
+  box-shadow: var(--od-neon-glow);
+}
+
+html[data-style="ink"] .toast {
+  background: var(--od-ink-ground);
+  border: 1.5px solid var(--od-ink-edge);
 }
 
 @keyframes toast-in {

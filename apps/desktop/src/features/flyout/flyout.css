@@ -14,7 +14,8 @@
   scrollbar-width: thin;
 }
 
-html[data-style="glass"] .flyout-panel {
+html[data-style="glass"] .flyout-panel,
+html[data-style="minimal"] .flyout-panel {
   background: var(--od-surface);
   backdrop-filter: blur(var(--od-blur)) saturate(1.4);
 }
@@ -22,6 +23,17 @@ html[data-style="glass"] .flyout-panel {
 html[data-style="midnight"] .flyout-panel {
   background: var(--od-midnight);
   border-color: var(--od-midnight-edge);
+}
+
+html[data-style="neon"] .flyout-panel {
+  background: var(--od-neon-ground);
+  border-color: var(--od-neon-edge);
+  box-shadow: var(--od-neon-glow);
+}
+
+html[data-style="ink"] .flyout-panel {
+  background: var(--od-ink-ground);
+  border: 1.5px solid var(--od-ink-edge);
 }
 
 @keyframes flyout-in {
@@ -157,6 +169,10 @@ html[data-style="midnight"] .flyout-panel {
 .menu-row-label {
   font-size: 13px;
   color: var(--od-muted);
+}
+
+.menu-row-label--block {
+  padding: 3px 8px 0;
 }
 
 .menu-row .segmented button {
