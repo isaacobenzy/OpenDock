@@ -57,7 +57,7 @@ OpenDock restores the taskbar when it quits, when it crashes (a small guard proc
 
 If the taskbar is still hidden, try these in order:
 
-1. **Restart OpenDock and quit it properly:** right-click the dock and choose **Quit OpenDock**.
+1. **Restore it from OpenDock:** right-click the dock and choose **Restore the Windows taskbar**, or use the same button in the quick-actions tray. Then choose **Quit OpenDock** if you want the app to exit.
 2. **Run the restore command:** press `Win+R` and run:
 
    ```

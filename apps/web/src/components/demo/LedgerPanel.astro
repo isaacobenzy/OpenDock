@@ -33,7 +33,7 @@ const rows = [
         {
           rows.map((r) => (
             <tr>
-              <td>{r.widget}</td>
+              <td><button type="button" data-ledger-row aria-pressed="false">{r.widget}</button></td>
               <td><code>{r.host}</code></td>
               <td class="num">{r.requests}</td>
               <td class="num">{r.failed}</td>
@@ -48,4 +48,23 @@ const rows = [
     <Icon name="lock" size={14} />
     {offlineWidgetCount} of {widgets.length} widgets never touch the network.
   </figcaption>
+  <p class="ledger-detail" data-ledger-detail hidden>Sample entry. The real ledger is on your PC.</p>
 </figure>
+
+<script>
+  for (const panel of document.querySelectorAll<HTMLElement>(".panel--ledger")) {
+    const detail = panel.querySelector<HTMLElement>("[data-ledger-detail]");
+    for (const row of panel.querySelectorAll<HTMLButtonElement>("[data-ledger-row]")) {
+      row.addEventListener("click", () => {
+        const on = row.getAttribute("aria-pressed") !== "true";
+        for (const other of panel.querySelectorAll<HTMLButtonElement>("[data-ledger-row]")) {
+          other.setAttribute("aria-pressed", other === row && on ? "true" : "false");
+        }
+        if (detail) {
+          detail.hidden = !on;
+          detail.textContent = on ? `${row.textContent} is sample data. The real ledger stays on your PC.` : "";
+        }
+      });
+    }
+  }
+</script>

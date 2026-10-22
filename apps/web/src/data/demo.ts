@@ -1,4 +1,5 @@
 import type { IconName } from "./icons";
+import { previewTrack } from "./track";
 
 /** Generic demo content for product mockups. Never use real people, files or brands here. */
 
@@ -58,7 +59,7 @@ export const heroDock: DockItem[] = [
   { kind: "app", app: mail, narrow: "hide" },
   { kind: "app", app: music, narrow: "hide" },
   { kind: "divider" },
-  { kind: "media", title: "Morning Light", artist: "Field Recordings", narrow: "hide" },
+  { kind: "media", title: previewTrack.title, artist: previewTrack.artist, narrow: "hide" },
   { kind: "weather", temperature: 18, condition: "sun", narrow: "hide" },
   { kind: "system", cpu: 23, narrow: "hide" },
   { kind: "volume" },
@@ -122,7 +123,7 @@ export const exampleLayouts: DockLayout[] = [
       { kind: "app", app: { ...files, state: "running" } },
       { kind: "app", app: { ...music, state: "running" } },
       { kind: "divider" },
-      { kind: "media", title: "Slow Tide", artist: "Harbour Lights" },
+      { kind: "media", title: previewTrack.title, artist: previewTrack.artist },
       { kind: "system", cpu: 67 },
       { kind: "weather", temperature: 12, condition: "cloud" },
       { kind: "progress", percent: 64 },

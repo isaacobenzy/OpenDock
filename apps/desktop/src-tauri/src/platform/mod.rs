@@ -106,6 +106,13 @@ pub enum PowerAction {
     ShutDown,
 }
 
+impl PowerAction {
+    /// Sign-out, restart and shut down can kill OpenDock before it exits normally.
+    pub fn ends_session(self) -> bool {
+        matches!(self, Self::SignOut | Self::Restart | Self::ShutDown)
+    }
+}
+
 /// Where a live window preview goes inside a popup, in CSS pixels.
 #[derive(Debug, Clone, Copy, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -398,6 +405,15 @@ mod tests {
             edge_band(DockPosition::Right, monitor, 76),
             [1844, 0, 1920, 1080]
         );
+    }
+
+    #[test]
+    fn only_session_ending_power_actions_restore_the_taskbar_first() {
+        assert!(!PowerAction::Lock.ends_session());
+        assert!(!PowerAction::Sleep.ends_session());
+        assert!(PowerAction::SignOut.ends_session());
+        assert!(PowerAction::Restart.ends_session());
+        assert!(PowerAction::ShutDown.ends_session());
     }
 
     #[test]

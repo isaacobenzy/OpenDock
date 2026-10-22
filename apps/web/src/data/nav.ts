@@ -25,7 +25,7 @@ export const footerNav: NavGroup[] = [
       { label: "Download", href: "/download/" },
       { label: "Widgets", href: "/widgets/" },
       { label: "Example layouts", href: "/showcase/" },
-      { label: "Pricing", href: "/pricing/" },
+      { label: "Free", href: "/pricing/" },
     ],
   },
   {

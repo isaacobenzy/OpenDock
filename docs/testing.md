@@ -51,6 +51,8 @@ mod tests {
 
 Run one test while working: `pnpm --filter @opendock/desktop exec vitest run model` or `cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml --offline rules`.
 
+The taskbar restore rows, and what has actually been tested, are written out in [testing-matrix.md](testing-matrix.md).
+
 ## Manual Windows matrix
 
 Run this on a physical Windows machine with the **installed release build** (not `pnpm dev`) before tagging a release. Record the Windows version and build, display scale, and monitor setup in the release pull request.

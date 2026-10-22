@@ -578,6 +578,10 @@
   height: calc(var(--tile-h) - 6px);
   min-width: calc(var(--tile-h) - 6px);
   padding: 0 6px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
   border-radius: var(--od-radius-sm);
   cursor: pointer;
   scroll-snap-align: start;

@@ -5,6 +5,7 @@ import LauncherPanel from "../components/demo/LauncherPanel.astro";
 import LedgerPanel from "../components/demo/LedgerPanel.astro";
 import RuleCard from "../components/demo/RuleCard.astro";
 import Icon from "../components/Icon.astro";
+import StatusBadge from "../components/StatusBadge.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { currentRelease, downloadUrl, releasePageUrl } from "../data/releases";
 import { repoLinks, site } from "../data/site";
@@ -34,7 +35,10 @@ const restore = [
     when: "You sign out, restart or shut down from the launcher",
     then: "Restored before Windows starts closing apps.",
   },
-  { when: "Windows ends the session another way", then: "Repaired the next time OpenDock starts." },
+  {
+    when: "Windows ends the session and kills OpenDock and its guard together",
+    then: "Auto-hide can stay on until the next time OpenDock starts. The taskbar is still reachable at the screen edge. OpenDock repairs it on that next start.",
+  },
   { when: "You uninstall OpenDock", then: "The uninstaller restores the taskbar and removes OpenDock from startup." },
 ];
 
@@ -96,7 +100,7 @@ function networkNote(network: string[]): string {
 
       <article class="feature">
         <div class="feature-copy">
-          <p class="eyebrow"><Icon name="window" size={14} />Apps widget</p>
+          <p class="eyebrow"><Icon name="window" size={14} />Apps widget <StatusBadge status="shipped" /></p>
           <h3>Every window, one click away</h3>
           <p class="muted">
             Pinned apps and open windows share one row, grouped by app with a window count. Right-click an app for a
@@ -117,7 +121,7 @@ function networkNote(network: string[]): string {
 
       <article class="feature is-flipped">
         <div class="feature-copy">
-          <p class="eyebrow"><Icon name="grid" size={14} />Start widget</p>
+          <p class="eyebrow"><Icon name="grid" size={14} />Start widget <StatusBadge status="shipped" /></p>
           <h3>A launcher that finds things as you type</h3>
           <p class="muted">
             Start searches every installed app instantly and keeps your favourites pinned. Power options are there too,
@@ -137,7 +141,7 @@ function networkNote(network: string[]): string {
 
       <article class="feature">
         <div class="feature-copy">
-          <p class="eyebrow"><Icon name="spark" size={14} />Automation Studio</p>
+          <p class="eyebrow"><Icon name="spark" size={14} />Automation Studio <StatusBadge status="shipped" /></p>
           <h3>Rules that act, with an Undo for when they shouldn't have</h3>
           <p class="muted">
             Tell the dock what to do when something happens: pause the music before a meeting, warn about a low
@@ -158,7 +162,7 @@ function networkNote(network: string[]): string {
 
       <article class="feature is-flipped">
         <div class="feature-copy">
-          <p class="eyebrow"><Icon name="shield" size={14} />Privacy Ledger</p>
+          <p class="eyebrow"><Icon name="shield" size={14} />Privacy Ledger <StatusBadge status="shipped" /></p>
           <h3>See every request it makes</h3>
           <p class="muted">
             OpenDock has no servers and sends no telemetry. The two widgets that need the internet, weather and
@@ -216,15 +220,17 @@ function networkNote(network: string[]): string {
   <section class="section" aria-labelledby="restore-title">
     <div class="container guarantee">
       <header class="stack">
-        <p class="eyebrow">Safe to try</p>
-        <h2 class="title" id="restore-title">Your taskbar always comes back.</h2>
+        <p class="eyebrow">Safe to try <StatusBadge status="shipped" /></p>
+        <h2 class="title" id="restore-title">The taskbar is put back on every exit OpenDock can see.</h2>
         <p class="lead">
-          Replacing part of Windows should never be a one-way door. OpenDock saves your taskbar settings before it
-          changes anything, and puts them back on every way out.
+          Before OpenDock hides the taskbar it saves your auto-hide setting. Quit, the crash guard, launcher power
+          actions, the next start, and the uninstaller all use that file. If Windows ends the session and kills
+          OpenDock and the guard together, auto-hide can stay on until OpenDock starts again. You can also choose
+          Restore the Windows taskbar in the dock menu or the quick-actions tray.
         </p>
         <p>
-          <a class="link-arrow" href={`${repoLinks.docs("installation.md")}#recovering-the-windows-taskbar`}>
-            Recovery steps, just in case <Icon name="arrow" size={16} />
+          <a class="link-arrow" href={`${repoLinks.docs("testing-matrix.md")}`}>
+            What is tested, and what is not <Icon name="arrow" size={16} />
           </a>
         </p>
       </header>

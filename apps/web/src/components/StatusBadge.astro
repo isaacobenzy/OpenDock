@@ -1,0 +1,13 @@
+---
+type Props = { status: "shipped" | "in-progress" | "planned" };
+
+const labels = {
+  shipped: "Shipped",
+  "in-progress": "In progress",
+  planned: "Planned",
+} as const;
+
+const { status } = Astro.props;
+---
+
+<span class:list={["status", `is-${status}`]}>{labels[status]}</span>

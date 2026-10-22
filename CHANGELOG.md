@@ -7,7 +7,14 @@ All notable changes to OpenDock are documented here. The format is based on [Kee
 ### Added
 
 - The homepage has a dock you can use in the browser: open apps, search from Start, change the volume, switch skins, and turn widgets on and off.
+- Now playing opens from the dock, not a separate block. Previous and next switch between *Just 2 Minutes of Fusion Jazz!* by Giulio Carmassi and *Tokyo* by Toshiki Soejima. YouTube loads only while that widget is open.
 - Contributor branches now run `develop` → `staging` → `main`.
+- **Restore the Windows taskbar** in the dock menu and the quick-actions tray. It puts the taskbar back without waiting for the guard process.
+
+### Changed
+
+- The website and the README describe taskbar restore as the exits OpenDock can see, including the gap when Windows kills OpenDock and the guard together. The manual results are in `docs/testing-matrix.md`.
+- The footer link that said Pricing now says Free. There is no paid plan.
 
 ## [0.2.0] - 2026-10-21
 

@@ -13,15 +13,15 @@ const results = [
 ---
 
 <div class="panel panel--launcher" id={id} hidden={hidden} role={id ? "dialog" : undefined} aria-label={id ? "Start" : undefined}>
-  <div class="search-field" aria-hidden="true">
+  <label class="search-field">
     <Icon name="search" size={16} />
-    <span class="search-query">no<span class="caret"></span></span>
-  </div>
+    <input type="search" data-launcher-search placeholder="Search apps" aria-label="Search apps" autocomplete="off" />
+  </label>
   <p class="panel-label">Pinned</p>
   <ul class="pin-grid" aria-label="Pinned apps">
     {
       pinnedDemoApps.map((app) => (
-        <li>
+        <li data-launcher-item={app.name}>
           <span class="dk-tile" data-tone={app.tone}>
             <Icon name={app.icon} size={18} />
           </span>
@@ -34,7 +34,7 @@ const results = [
   <ul class="result-list" aria-label="Search results">
     {
       results.map((r, i) => (
-        <li class:list={{ "is-selected": i === 0 }}>
+        <li data-launcher-item={r.name} class:list={{ "is-selected": i === 0 }}>
           <span class="dk-tile is-small" data-tone={r.tone}>
             <Icon name={r.icon} size={14} />
           </span>
@@ -48,6 +48,29 @@ const results = [
     <span title="Lock"><Icon name="lock" size={15} /></span>
     <span title="Sleep"><Icon name="moon" size={15} /></span>
     <span title="Restart"><Icon name="restart" size={15} /></span>
-    <span class="is-confirm"><Icon name="power" size={15} />Click again to shut down</span>
+    <button type="button" class="is-confirm" data-power>
+      <Icon name="power" size={15} />
+      <span data-power-label>Shut down</span>
+    </button>
   </div>
 </div>
+
+<script>
+  for (const panel of document.querySelectorAll<HTMLElement>(".panel--launcher")) {
+    const search = panel.querySelector<HTMLInputElement>("[data-launcher-search]");
+    const power = panel.querySelector<HTMLButtonElement>("[data-power]");
+    const label = panel.querySelector<HTMLElement>("[data-power-label]");
+    search?.addEventListener("input", () => {
+      const needle = search.value.trim().toLowerCase();
+      for (const item of panel.querySelectorAll<HTMLElement>("[data-launcher-item]")) {
+        const name = (item.dataset.launcherItem ?? "").toLowerCase();
+        item.hidden = needle.length > 0 && !name.includes(needle);
+      }
+    });
+    power?.addEventListener("click", () => {
+      const armed = power.getAttribute("aria-pressed") === "true";
+      power.setAttribute("aria-pressed", armed ? "false" : "true");
+      if (label) label.textContent = armed ? "Shut down" : "Click again to shut down";
+    });
+  }
+</script>

@@ -141,6 +141,14 @@ export function DockMenu({ target, onDone }: { target: string | null; onDone: ()
       </section>
 
       <section className="menu-section">
+        <MenuItem
+          icon="windows"
+          label="Restore the Windows taskbar"
+          onClick={() => {
+            change((s) => ({ ...s, taskbar: { mode: "normal" } }));
+            onDone();
+          }}
+        />
         <MenuItem icon="power" label="Quit OpenDock" danger onClick={() => void quitApp()} />
       </section>
       {error ? (

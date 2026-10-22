@@ -8,7 +8,9 @@ import Icon from "../Icon.astro";
       <Icon name="spark" size={16} />
       <strong>Meeting mode</strong>
     </span>
-    <span class="switch is-on" aria-hidden="true"><span></span></span>
+    <button type="button" class="switch is-on" data-rule-switch aria-pressed="true" aria-label="Meeting mode, on">
+      <span></span>
+    </button>
   </header>
   <dl class="rule-body">
     <div>
@@ -34,6 +36,24 @@ import Icon from "../Icon.astro";
       <strong>Team standup in 5 min</strong>
       <small>Meeting mode paused your music</small>
     </span>
-    <span class="toast-action"><Icon name="undo" size={14} />Undo</span>
+    <button type="button" class="toast-action" data-undo><Icon name="undo" size={14} />Undo</button>
   </figcaption>
 </figure>
+
+<script>
+  for (const card of document.querySelectorAll<HTMLElement>(".panel--rule")) {
+    const toggle = card.querySelector<HTMLButtonElement>("[data-rule-switch]");
+    const undo = card.querySelector<HTMLButtonElement>("[data-undo]");
+    const toast = card.querySelector<HTMLElement>(".toast");
+    toggle?.addEventListener("click", () => {
+      const on = toggle.getAttribute("aria-pressed") !== "true";
+      toggle.setAttribute("aria-pressed", on ? "true" : "false");
+      toggle.classList.toggle("is-on", on);
+      toggle.setAttribute("aria-label", on ? "Meeting mode, on" : "Meeting mode, off");
+      if (toast) toast.hidden = !on;
+    });
+    undo?.addEventListener("click", () => {
+      if (toast) toast.hidden = true;
+    });
+  }
+</script>

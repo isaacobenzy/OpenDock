@@ -3,6 +3,7 @@ import { useRef } from "react";
 import type React from "react";
 import { sendShortcut, setMuted, setVolume, type Shortcut } from "../../services/ipc";
 import { useLive } from "../../services/liveContext";
+import { useSettings } from "../../services/settingsContext";
 import { Icon, type IconName } from "../widgets/icons";
 import { Skeleton } from "../widgets/visuals";
 import { volumeIcon } from "./volume";
@@ -78,7 +79,12 @@ const TRAY: { shortcut: Shortcut; icon: IconName; label: string }[] = [
 ];
 
 export function TrayTile({ compact }: { compact: boolean }) {
+  const { update } = useSettings();
   const items = compact ? TRAY.slice(0, 1) : TRAY;
+  const restoreTaskbar = (event: React.SyntheticEvent) => {
+    event.stopPropagation();
+    void update((current) => ({ ...current, taskbar: { mode: "normal" } }));
+  };
   const press = (event: React.SyntheticEvent, shortcut: Shortcut) => {
     event.stopPropagation();
     void sendShortcut(shortcut).catch(() => undefined);
@@ -105,6 +111,9 @@ export function TrayTile({ compact }: { compact: boolean }) {
           <Icon name={item.icon} size={17} />
         </span>
       ))}
+      <button type="button" className="tray-button" aria-label="Restore the Windows taskbar" title="Restore the Windows taskbar" onPointerDown={(event) => event.stopPropagation()} onClick={restoreTaskbar}>
+        <Icon name="windows" size={17} />
+      </button>
     </span>
   );
 }
