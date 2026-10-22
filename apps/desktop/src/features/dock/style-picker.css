@@ -1,0 +1,113 @@
+.style-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.style-swatches.is-compact {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  padding: 2px 8px 6px;
+}
+
+.style-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: var(--od-radius-md);
+  border: 1px solid var(--od-border);
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 550;
+  color: var(--od-muted);
+  cursor: pointer;
+  transition:
+    border-color var(--od-fast) var(--od-ease),
+    color var(--od-fast) var(--od-ease);
+}
+
+.style-swatch:hover {
+  color: var(--od-text);
+  border-color: var(--od-border-strong);
+}
+
+.style-swatch:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--od-accent);
+}
+
+.style-swatch.is-active {
+  border-color: var(--od-accent);
+  color: var(--od-text);
+  box-shadow: 0 0 0 3px var(--od-accent-soft);
+}
+
+.is-compact .style-swatch {
+  padding: 6px 4px;
+  font-size: 11.5px;
+}
+
+.style-swatch-art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 72px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid var(--od-border);
+}
+
+.is-compact .style-swatch-art {
+  width: 100%;
+  max-width: 72px;
+}
+
+.style-swatch-art i {
+  width: 7px;
+  height: 7px;
+  border-radius: 3px;
+  background: var(--od-muted);
+}
+
+.style-swatch-art i:nth-child(2) {
+  background: var(--od-accent);
+}
+
+.style-glass .style-swatch-art {
+  background: linear-gradient(90deg, var(--od-accent-soft), var(--od-info-soft)), var(--od-surface);
+}
+
+.style-solid .style-swatch-art {
+  background: var(--od-surface-solid);
+}
+
+.style-midnight .style-swatch-art {
+  background: var(--od-midnight);
+  border-color: var(--od-midnight-edge);
+}
+
+.style-minimal .style-swatch-art {
+  border-style: dashed;
+  border-color: var(--od-border-strong);
+  background: transparent;
+}
+
+.style-neon .style-swatch-art {
+  background: var(--od-neon-ground);
+  border-color: var(--od-neon-edge);
+  box-shadow: var(--od-neon-glow);
+}
+
+.style-ink .style-swatch-art {
+  background: var(--od-ink-ground);
+  border: 1.5px solid var(--od-ink-edge);
+}
+
+.style-ink .style-swatch-art i {
+  background: var(--od-text);
+}

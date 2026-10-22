@@ -4,8 +4,6 @@ All notable changes to OpenDock are documented here. The format is based on [Kee
 
 ## [Unreleased]
 
-Nothing yet.
-
 ## [0.2.0] - 2026-10-21
 
 The first release that can stand in for the Windows taskbar.
@@ -25,10 +23,13 @@ The first release that can stand in for the Windows taskbar.
 - **Calendars.** Read-only iCal subscriptions. Feed links are stored in the OS keychain.
 - **Privacy Ledger.** A record of every network request each widget made, kept on your device.
 - **Guaranteed taskbar restore.** A guard process restores the taskbar if OpenDock crashes, and the uninstaller restores it and removes the sign-in entry.
+- **Three more dock styles.** Minimal, Neon and Ink sit alongside Glass, Solid and Midnight.
+- **A scrolling apps row.** When the dock reaches the edge of the screen, the apps slide sideways. The Start button, volume, tray, clock and system widgets stay put. New app icons animate in, and the motion is skipped when reduced motion is on.
+- The website follows the system colour scheme, with a Light, Dark and System control that is remembered on this device. The homepage and the README show a screenshot of OpenDock running on Windows.
 
 ### Changed
 
-- Settings move to version 3. Older settings files are migrated automatically, and the Apps widget is added after Start.
+- Settings move to version 4. Older settings files are migrated automatically. Version 3 only added the Apps widget after Start; version 4 adds the new dock styles.
 - The Start button opens the OpenDock launcher by default. You can switch back to Windows Start in Dock settings.
 
 ### Fixed

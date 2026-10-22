@@ -15,6 +15,8 @@ OpenDock replaces the Windows taskbar with a dock that shows your apps and windo
 
 [Website](https://opendock.pages.dev) · [Download](https://github.com/isaacobenzy/OpenDock/releases/latest) · [Documentation](docs/README.md) · [Roadmap](ROADMAP.md) · [Contributing](CONTRIBUTING.md)
 
+<img src="apps/web/public/screenshots/dock-windows.png" alt="OpenDock running on Windows, with pinned apps, open windows, volume, the clock and CPU and memory." width="960" />
+
 </div>
 
 ---

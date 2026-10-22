@@ -1,13 +1,13 @@
 import { z } from "zod";
 
-export const SETTINGS_VERSION = 3;
+export const SETTINGS_VERSION = 4;
 export const MAX_PINNED_APPS = 24;
 
 export const dockPositionSchema = z.enum(["top", "bottom", "left", "right"]);
 export const dockSizeSchema = z.enum(["s", "m", "l"]);
 export const dockModeSchema = z.enum(["pill", "full"]);
 export const themeSchema = z.enum(["dark", "light"]);
-export const dockStyleSchema = z.enum(["glass", "solid", "midnight"]);
+export const dockStyleSchema = z.enum(["glass", "solid", "midnight", "minimal", "neon", "ink"]);
 /** "replace" hides the taskbar and lets the dock reserve its screen edge instead. */
 export const taskbarModeSchema = z.enum(["normal", "autohide", "hidden", "replace"]);
 export const startActionSchema = z.enum(["launcher", "windows"]);
@@ -135,6 +135,10 @@ export function migrateAppSettings(input: unknown): AppSettings {
     return parseAppSettings(input);
   }
   const doc = input as { version?: unknown; dock?: { itemOrder?: unknown } };
+  // Version 4 only added dock styles, so version 3 documents are already valid.
+  if (doc.version === 3) {
+    return parseAppSettings({ ...doc, version: SETTINGS_VERSION });
+  }
   if (doc.version !== 1 && doc.version !== 2) {
     return parseAppSettings(input);
   }

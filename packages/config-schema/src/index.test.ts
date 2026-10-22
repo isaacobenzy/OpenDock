@@ -48,7 +48,7 @@ describe("appSettingsSchema", () => {
         launchAtStartup: false,
       },
     });
-    expect(migrated.version).toBe(3);
+    expect(migrated.version).toBe(4);
     expect(migrated.dock.position).toBe("top");
     expect(migrated.dock.style).toBe("glass");
     expect(migrated.taskbar.mode).toBe("normal");
@@ -76,6 +76,12 @@ describe("appSettingsSchema", () => {
     expect(migrated.dock.itemOrder).toEqual(["start", "apps", "clock", "add-widget"]);
     expect(migrated.dock.startAction).toBe("launcher");
     expect(migrated.apps).toEqual({ pinned: [], groupWindows: true, showTitles: false });
+  });
+
+  it("migrates version 3 documents without changing them", () => {
+    const v3 = { ...defaultAppSettings, version: 3, onboarded: false, dock: { ...defaultAppSettings.dock, style: "midnight" } };
+    const migrated = migrateAppSettings(v3);
+    expect(migrated).toEqual({ ...v3, version: 4 });
   });
 
   it("greets new installs", () => {

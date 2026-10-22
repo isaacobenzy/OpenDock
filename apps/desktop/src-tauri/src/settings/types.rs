@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use crate::engine::rules::{is_valid_id, parse_clock};
 use crate::geometry::{DockMode, DockPosition, DockSize};
 
-pub const SETTINGS_VERSION: u32 = 3;
+pub const SETTINGS_VERSION: u32 = 4;
 pub const MAX_PINNED_APPS: usize = 24;
 
 fn default_true() -> bool {
@@ -25,6 +25,11 @@ pub enum DockStyle {
     Glass,
     Solid,
     Midnight,
+    /// No bar behind the items; they float on the wallpaper.
+    Minimal,
+    Neon,
+    /// Opaque and high contrast.
+    Ink,
 }
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Default)]
@@ -251,6 +256,11 @@ impl AppSettings {
     /// Upgrades an older settings document in place. Returns true if anything changed.
     pub fn migrate(value: &mut serde_json::Value) -> bool {
         let version = value.get("version").and_then(|v| v.as_u64());
+        // Version 4 only added dock styles, so version 3 documents are already valid.
+        if version == Some(3) {
+            value["version"] = serde_json::json!(SETTINGS_VERSION);
+            return true;
+        }
         if !matches!(version, Some(1) | Some(2)) {
             return false;
         }
@@ -421,6 +431,22 @@ mod tests {
         );
         assert_eq!(settings.dock.start_action, StartAction::Launcher);
         assert!(settings.apps.group_windows);
+        assert!(!AppSettings::migrate(&mut value));
+    }
+
+    #[test]
+    fn migrates_version_three_without_changing_it() {
+        let mut original = serde_json::to_value(AppSettings::default()).unwrap();
+        original["version"] = serde_json::json!(3);
+        original["dock"]["style"] = serde_json::json!("midnight");
+        let mut value = original.clone();
+        assert!(AppSettings::migrate(&mut value));
+        let settings = parse(&value).unwrap();
+        assert_eq!(settings.version, 4);
+        assert_eq!(settings.dock.style, DockStyle::Midnight);
+        assert!(!settings.onboarded);
+        original["version"] = serde_json::json!(4);
+        assert_eq!(value, original);
         assert!(!AppSettings::migrate(&mut value));
     }
 

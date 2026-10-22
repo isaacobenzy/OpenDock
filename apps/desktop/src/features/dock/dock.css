@@ -47,6 +47,56 @@
     inset 0 0 24px var(--od-accent-soft);
 }
 
+.dock-shell.style-minimal {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  text-shadow: var(--od-float-text);
+}
+
+.dock-shell.style-minimal .tile-icon,
+.dock-shell.style-minimal .app-button.is-active {
+  background: transparent;
+  box-shadow: none;
+}
+
+.dock-shell.style-minimal .od-icon,
+.dock-shell.style-minimal .app-icon,
+.dock-shell.style-minimal .od-ring,
+.dock-shell.style-minimal .battery-glyph {
+  filter: var(--od-float-drop);
+}
+
+.dock-shell.style-neon {
+  background: var(--od-neon-ground);
+  border-color: var(--od-neon-edge);
+  box-shadow: var(--od-neon-glow);
+}
+
+.dock-shell.style-neon .tile-icon {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--od-neon-edge);
+  color: var(--od-accent);
+}
+
+.dock-shell.style-neon .app-button.is-active .app-indicator {
+  box-shadow: 0 0 8px var(--od-accent-glow);
+}
+
+.dock-shell.style-ink {
+  background: var(--od-ink-ground);
+  border: 1.5px solid var(--od-ink-edge);
+  box-shadow: none;
+}
+
+.dock-shell.style-ink .tile-icon {
+  background: var(--od-pressed);
+}
+
+.dock-shell.style-ink .tile-secondary {
+  color: var(--od-text);
+}
+
 .dock-shell.vertical {
   flex-direction: column;
   padding: 8px 0;
@@ -56,11 +106,16 @@
   display: flex;
   align-items: center;
   gap: var(--tile-gap);
+  max-width: 100%;
+  min-width: 0;
   margin: 0 auto;
 }
 
 .dock-shell.vertical .dock-track {
   flex-direction: column;
+  max-width: none;
+  max-height: 100%;
+  min-height: 0;
   margin: auto 0;
 }
 
@@ -372,6 +427,121 @@
   padding: 0 2px;
 }
 
+/* The apps row is the only part that scrolls. Everything else stays put, and
+   the row only gives up space once the dock is as wide as the screen. */
+.tile-apps.is-ready {
+  position: relative;
+  min-width: 0;
+}
+
+.apps-scroller {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.apps-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.dock-item:has(.tile-apps[data-overflow]) {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.tile-apps[data-overflow] {
+  width: 100%;
+}
+
+.tile-apps[data-overflow] .apps-scroller {
+  scroll-padding-inline: 18px;
+}
+
+.apps-nudge {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid var(--od-border-strong);
+  border-radius: 999px;
+  background: var(--od-surface-solid);
+  color: var(--od-text);
+  box-shadow: var(--od-shadow-soft);
+  transform: translateY(-50%);
+  cursor: pointer;
+  animation: app-in var(--od-fast) var(--od-ease);
+}
+
+.apps-nudge[hidden] {
+  display: none;
+}
+
+.apps-nudge:hover {
+  background: var(--od-hover);
+}
+
+.apps-nudge.is-start {
+  left: 1px;
+}
+
+.apps-nudge.is-start .od-icon {
+  transform: rotate(180deg);
+}
+
+.apps-nudge.is-end {
+  right: 1px;
+}
+
+.dock-shell.vertical .apps-scroller {
+  flex-direction: column;
+  max-width: none;
+  max-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-snap-type: y proximity;
+}
+
+.dock-shell.vertical .tile-apps[data-overflow] .apps-scroller {
+  height: 100%;
+  scroll-padding-inline: 0;
+  scroll-padding-block: 18px;
+}
+
+.dock-shell.vertical .apps-nudge.is-start,
+.dock-shell.vertical .apps-nudge.is-end {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+}
+
+.dock-shell.vertical .apps-nudge.is-start {
+  top: 1px;
+}
+
+.dock-shell.vertical .apps-nudge.is-start .od-icon {
+  transform: rotate(-90deg);
+}
+
+.dock-shell.vertical .apps-nudge.is-end {
+  top: auto;
+  bottom: 1px;
+}
+
+.dock-shell.vertical .apps-nudge.is-end .od-icon {
+  transform: rotate(90deg);
+}
+
 .dock-shell.vertical .tile-apps.is-ready,
 .dock-shell.vertical .tile-tray {
   flex-direction: column;
@@ -379,9 +549,23 @@
   padding: 2px 0;
 }
 
+.dock-shell.vertical .tile-apps[data-overflow] {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .dock-shell.vertical .dock-item:has(.tile-apps.is-ready),
 .dock-shell.vertical .dock-item:has(.tile-tray) {
   height: auto;
+}
+
+.dock-shell.vertical .dock-item:has(.tile-apps[data-overflow]) {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .app-button,
@@ -396,9 +580,18 @@
   padding: 0 6px;
   border-radius: var(--od-radius-sm);
   cursor: pointer;
+  scroll-snap-align: start;
+  animation: app-in var(--od-slow) var(--od-ease);
   transition:
     background var(--od-fast) var(--od-ease),
     transform var(--od-fast) var(--od-ease);
+}
+
+@keyframes app-in {
+  from {
+    opacity: 0;
+    transform: translateY(7px) scale(0.92);
+  }
 }
 
 .app-button:hover,

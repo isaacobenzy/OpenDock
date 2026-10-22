@@ -134,7 +134,24 @@ export function DockBar() {
             ? shell.offsetHeight - shell.clientHeight + 16
             : shell.offsetWidth - shell.clientWidth + 16
           : 16;
-        const length = (vertical ? track.scrollHeight : track.scrollWidth) + padding;
+        // The apps strip shrinks and scrolls once the dock reaches the screen
+        // edge, so its box is smaller than the icons it holds. Add that hidden
+        // part back, or the dock would stop growing while space remains.
+        const scroller = track.querySelector(".apps-scroller");
+        const hidden = scroller
+          ? Math.max(
+              0,
+              vertical
+                ? scroller.scrollHeight - scroller.clientHeight
+                : scroller.scrollWidth - scroller.clientWidth,
+            )
+          : 0;
+        const box = Array.from(track.children).reduce(
+          (sum, child) => sum + (vertical ? (child as HTMLElement).offsetHeight : (child as HTMLElement).offsetWidth),
+          0,
+        );
+        const gap = Number.parseFloat(getComputedStyle(track).gap) || 0;
+        const length = box + gap * Math.max(0, track.children.length - 1) + hidden + padding;
         void setDockLength(length).catch(() => undefined);
       });
     };
