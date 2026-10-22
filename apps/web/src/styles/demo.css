@@ -1171,3 +1171,251 @@ button.dk-cell:focus-visible {
 .layout-frame .dock--bar {
   min-width: 44em;
 }
+
+/* Skins shared by the playground and the example layouts. */
+
+.dock.is-solid,
+.stage[data-skin="solid"] .dock {
+  background: var(--skin-solid);
+  backdrop-filter: none;
+}
+
+.dock.is-midnight,
+.stage[data-skin="midnight"] .dock {
+  background: linear-gradient(180deg, var(--skin-midnight-top), var(--skin-midnight-bottom));
+  border-color: var(--mint-glow);
+}
+
+.dock.is-minimal,
+.stage[data-skin="minimal"] .dock {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.dock.is-neon,
+.stage[data-skin="neon"] .dock {
+  background: var(--skin-neon);
+  border-color: var(--mint);
+  box-shadow: 0 0 0 1px var(--mint), 0 0 1.4em var(--mint-glow);
+}
+
+.dock.is-ink,
+.stage[data-skin="ink"] .dock {
+  background: var(--skin-ink);
+  border-color: var(--skin-ink-line);
+  color: var(--skin-ink-line);
+}
+
+.dk-cell[hidden],
+.stage-win[hidden],
+.studio-tray[hidden],
+.result-list li[hidden] {
+  display: none !important;
+}
+
+/* Browser playground */
+
+.studio {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.studio-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.studio-head h2 {
+  margin: 0.2rem 0 0;
+  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+  letter-spacing: -0.03em;
+}
+
+.studio-tabs,
+.studio-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.studio-tabs button,
+.studio-choices button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+
+.studio-tabs button[aria-selected="true"],
+.studio-choices button[aria-pressed="true"] {
+  border-color: transparent;
+  background: var(--ink);
+  color: var(--on-ink);
+}
+
+.studio-tabs button:focus-visible,
+.studio-choices button:focus-visible,
+.search-field input:focus-visible,
+.volume-field input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.studio-hint,
+.studio-tray p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.studio .stage-dock,
+.studio .legacy-taskbar,
+.studio .win--front {
+  animation: none;
+}
+
+.studio .stage-dock {
+  justify-content: safe center;
+  overflow-x: auto;
+  padding-inline: 0.4rem;
+}
+
+.stage[data-mode="replace"] .legacy-taskbar {
+  transform: translateY(105%);
+}
+
+.stage[data-mode="replace"] .stage-dock {
+  right: 0.4rem;
+  left: 0.4rem;
+  bottom: 0.35rem;
+}
+
+.stage[data-mode="replace"] .dock {
+  width: 100%;
+  border-radius: 0.9em;
+}
+
+.stage[data-active=""] .stage-win {
+  display: none;
+}
+
+.studio .stage-win {
+  top: 8%;
+  left: 4%;
+  width: min(28rem, 70%);
+  height: auto;
+  bottom: auto;
+  min-height: 11rem;
+}
+
+.file-list {
+  display: grid;
+  margin: 0;
+  padding: 0.4rem;
+  list-style: none;
+}
+
+.file-list li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.55rem;
+  color: var(--glass-text);
+}
+
+.file-list small,
+.win-page small {
+  color: var(--glass-muted);
+}
+
+.term-body {
+  margin: 0;
+  padding: 1rem;
+  color: var(--mint);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.search-field input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--glass-text);
+  font: inherit;
+  font-size: 0.92em;
+}
+
+.search-field input:focus {
+  outline: none;
+}
+
+.studio .result-list li {
+  padding: 0;
+}
+
+.studio .result-list button {
+  display: flex;
+  align-items: center;
+  gap: 0.65em;
+  width: 100%;
+  padding: 0.42em 0.55em;
+  border: 0;
+  border-radius: 0.6em;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.studio .result-list button:hover,
+.studio .result-list button:focus-visible {
+  background: var(--glass-hover);
+}
+
+.panel--volume {
+  --panel-w: 16em;
+}
+
+.volume-field {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.35rem 0.8rem;
+  align-items: center;
+}
+
+.volume-field input {
+  grid-column: 1 / -1;
+  width: 100%;
+  accent-color: var(--mint);
+}
+
+.studio-tray {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.studio-tray-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.win-page strong {
+  color: var(--glass-text);
+}

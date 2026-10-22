@@ -1,0 +1,375 @@
+---
+import Icon from "../Icon.astro";
+import { dockSkins, studioApps, studioWidgets } from "../../data/studio";
+
+const files = [
+  { name: "Documents", meta: "Folder" },
+  { name: "Pictures", meta: "Folder" },
+  { name: "Downloads", meta: "Folder" },
+];
+
+const hints = {
+  dock: "Click an app to open it. Click it again to minimise. Search from Start, or change the volume.",
+  skins: "Pick a skin. The same six styles ship in the Windows app.",
+  widgets: "Turn widgets on and off. The Start button and your apps stay.",
+};
+---
+
+<section class="studio" data-studio aria-labelledby="studio-title">
+  <div class="studio-head">
+    <div>
+      <p class="eyebrow">Live dock</p>
+      <h2 id="studio-title">Try OpenDock in the browser.</h2>
+    </div>
+    <div class="studio-tabs" role="tablist" aria-label="What to try">
+      <button type="button" role="tab" id="tab-dock" aria-selected="true" aria-controls="studio-stage" data-tab="dock">
+        Live dock
+      </button>
+      <button type="button" role="tab" id="tab-skins" aria-selected="false" aria-controls="studio-stage" data-tab="skins">
+        Skins
+      </button>
+      <button type="button" role="tab" id="tab-widgets" aria-selected="false" aria-controls="studio-stage" data-tab="widgets">
+        Widgets
+      </button>
+    </div>
+  </div>
+  <p class="studio-hint" data-hint aria-live="polite">{hints.dock}</p>
+
+  <div class="stage" id="studio-stage" data-stage data-mode="keep" data-skin="glass" data-active="files">
+    <div class="wallpaper" aria-hidden="true"></div>
+
+    <div class="win win--front stage-win" data-window="files">
+      <div class="win-bar"><span class="win-title">Files</span><span class="win-ctrl"></span></div>
+      <ul class="file-list">
+        {files.map((file) => (
+          <li><Icon name="folder" size={16} /><span>{file.name}</span><small>{file.meta}</small></li>
+        ))}
+      </ul>
+    </div>
+    <div class="win win--front stage-win" data-window="browser" hidden>
+      <div class="win-bar"><span class="win-title">Browser</span><span class="win-ctrl"></span></div>
+      <div class="win-page">
+        <span class="page-hero"></span>
+        <strong>Pinned page</strong>
+        <span class="page-line" style="--w: 72%"></span>
+        <span class="page-line" style="--w: 48%"></span>
+      </div>
+    </div>
+    <div class="win win--front stage-win" data-window="notes" hidden>
+      <div class="win-bar"><span class="win-title">Notes</span><span class="win-ctrl"></span></div>
+      <div class="win-page">
+        <strong>Today</strong>
+        <p>Ship the dock. Keep the taskbar recoverable.</p>
+      </div>
+    </div>
+    <div class="win win--front stage-win" data-window="music" hidden>
+      <div class="win-bar"><span class="win-title">Music</span><span class="win-ctrl"></span></div>
+      <div class="win-page">
+        <span class="dk-art"></span>
+        <strong>Slow Tide</strong>
+        <small>Harbour Lights</small>
+      </div>
+    </div>
+    <div class="win win--front stage-win" data-window="mail" hidden>
+      <div class="win-bar"><span class="win-title">Mail</span><span class="win-ctrl"></span></div>
+      <div class="win-page">
+        <strong>Inbox</strong>
+        <p>No new mail.</p>
+      </div>
+    </div>
+    <div class="win win--front stage-win" data-window="terminal" hidden>
+      <div class="win-bar"><span class="win-title">Terminal</span><span class="win-ctrl"></span></div>
+      <pre class="term-body"><span class="prompt">&gt; </span>pnpm dev</pre>
+    </div>
+
+    <div class="legacy-taskbar" aria-hidden="true">
+      <span class="legacy-icons"><span></span><span></span><span></span><span></span><span></span></span>
+      <span class="legacy-tray"><span></span><span></span></span>
+    </div>
+
+    <div class="stage-dock">
+      <div class="dock dock--pill" data-dock role="group" aria-label="OpenDock, try it here">
+        <button type="button" class="dk-cell dk-start" data-flyout="studio-start" aria-expanded="false" aria-controls="studio-start" aria-label="Start">
+          <img class="dk-logo" src="/favicon.svg" alt="" width="24" height="24" />
+        </button>
+        <span class="dk-divider" aria-hidden="true"></span>
+        {
+          studioApps.map((app, index) => (
+            <button
+              type="button"
+              class:list={["dk-cell", "dk-app", index === 0 ? "is-active" : "is-running", index > 2 ? "narrow-hide" : undefined]}
+              data-app={app.id}
+              aria-pressed={index === 0 ? "true" : "false"}
+              aria-label={app.name}
+            >
+              <span class="dk-tile" data-tone={app.tone}><Icon name={app.icon} size={18} /></span>
+              <span class="dk-run"></span>
+            </button>
+          ))
+        }
+        <span class="dk-divider" aria-hidden="true"></span>
+        <span class="dk-cell dk-media narrow-hide" data-widget="media">
+          <span class="dk-art"></span>
+          <span class="dk-text"><strong>Slow Tide</strong><small>Harbour Lights</small></span>
+        </span>
+        <span class="dk-cell dk-weather narrow-hide" data-widget="weather">
+          <Icon name="sun" size={18} /><strong>18°</strong>
+        </span>
+        <span class="dk-cell dk-meter narrow-hide" data-widget="system">
+          <span class="dk-ring" style="--p: 23"><Icon name="cpu" size={12} /></span>
+          <span class="dk-text"><strong>23%</strong><small>CPU</small></span>
+        </span>
+        <span class="dk-cell dk-meter narrow-hide" data-widget="focus" hidden>
+          <span class="dk-ring is-focus" style="--p: 38"><Icon name="timer" size={12} /></span>
+          <span class="dk-text"><strong>18:42</strong><small>Focus</small></span>
+        </span>
+        <button type="button" class="dk-cell dk-icon" data-widget="volume" data-flyout="studio-volume" aria-expanded="false" aria-controls="studio-volume" aria-label="Volume, 64 percent">
+          <Icon name="volume" size={18} />
+        </button>
+        <button type="button" class="dk-cell dk-clock" data-widget="clock" data-flyout="studio-clock" aria-expanded="false" aria-controls="studio-clock" aria-label="Clock">
+          <strong>09:41</strong>
+          <small>Wed 21 Oct</small>
+        </button>
+      </div>
+    </div>
+
+    <div class="panel panel--launcher" id="studio-start" hidden role="dialog" aria-label="Start">
+      <label class="search-field">
+        <Icon name="search" size={16} />
+        <input type="search" data-search placeholder="Search apps" aria-label="Search apps" autocomplete="off" />
+      </label>
+      <p class="panel-label">Apps</p>
+      <ul class="result-list" data-results>
+        {
+          studioApps.map((app) => (
+            <li>
+              <button type="button" data-open={app.id}>
+                <span class="dk-tile is-small" data-tone={app.tone}><Icon name={app.icon} size={14} /></span>
+                {app.name}
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="panel-label" data-empty hidden>No matching apps.</p>
+    </div>
+
+    <div class="panel panel--volume" id="studio-volume" hidden role="dialog" aria-label="Volume">
+      <label class="volume-field">
+        <span>Volume</span>
+        <strong data-volume-readout>64%</strong>
+        <input type="range" min="0" max="100" value="64" data-volume aria-valuemin={0} aria-valuemax={100} aria-valuenow={64} />
+      </label>
+    </div>
+
+    <div class="panel panel--clock" id="studio-clock" hidden role="dialog" aria-label="Clock">
+      <header class="clock-head">
+        <strong>09:41</strong>
+        <small>Wednesday 21 October</small>
+      </header>
+      <p class="panel-label">Today</p>
+      <ul class="agenda">
+        <li class="is-soon"><span class="agenda-time">10:00</span><span class="agenda-title"><strong>Standup</strong><small>in 19 min</small></span></li>
+        <li><span class="agenda-time">14:30</span><span class="agenda-title"><strong>Design review</strong><small>later today</small></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="studio-tray" data-tray="dock">
+    <span class="studio-tray-label">Taskbar</span>
+    <div class="studio-choices" role="group" aria-label="Taskbar mode">
+      <button type="button" data-mode="keep" aria-pressed="true">Keep</button>
+      <button type="button" data-mode="replace" aria-pressed="false">Replace</button>
+    </div>
+    <p>Keep leaves the Windows taskbar in place. Replace hides it and the dock takes the edge.</p>
+  </div>
+  <div class="studio-tray" data-tray="skins" hidden>
+    <span class="studio-tray-label">Skin</span>
+    <div class="studio-choices" role="group" aria-label="Dock skin">
+      {
+        dockSkins.map((skin) => (
+          <button type="button" data-skin={skin.id} aria-pressed={skin.id === "glass"} title={skin.description}>
+            {skin.label}
+          </button>
+        ))
+      }
+    </div>
+    <p data-skin-note>{dockSkins[0].description}</p>
+  </div>
+  <div class="studio-tray" data-tray="widgets" hidden>
+    <span class="studio-tray-label">On the dock</span>
+    <div class="studio-choices" role="group" aria-label="Widgets">
+      {
+        studioWidgets.map((widget) => (
+          <button type="button" data-toggle={widget.id} aria-pressed={widget.initial ? "true" : "false"}>
+            {widget.label}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import { dockSkins, filterApps, nextFrontApp, studioApps } from "../../data/studio";
+
+  const hints: Record<string, string> = {
+    dock: "Click an app to open it. Click it again to minimise. Search from Start, or change the volume.",
+    skins: "Pick a skin. The same six styles ship in the Windows app.",
+    widgets: "Turn widgets on and off. The Start button and your apps stay.",
+  };
+
+  const root = document.querySelector<HTMLElement>("[data-studio]");
+  const stage = root?.querySelector<HTMLElement>("[data-stage]");
+  if (root && stage) {
+    const hint = root.querySelector<HTMLElement>("[data-hint]");
+    const search = root.querySelector<HTMLInputElement>("[data-search]");
+    const empty = root.querySelector<HTMLElement>("[data-empty]");
+    const rows = Array.from(root.querySelectorAll<HTMLElement>("[data-open]"));
+    let openPanel: HTMLElement | null = null;
+
+    const setFront = (next: string | null) => {
+      stage.dataset.active = next ?? "";
+      for (const window of stage.querySelectorAll<HTMLElement>("[data-window]")) {
+        window.hidden = window.dataset.window !== next;
+      }
+      for (const button of stage.querySelectorAll<HTMLButtonElement>("[data-app]")) {
+        const on = button.dataset.app === next;
+        button.classList.toggle("is-active", on);
+        button.classList.toggle("is-running", !on);
+        button.setAttribute("aria-pressed", on ? "true" : "false");
+      }
+    };
+
+    const closePanels = (returnFocus = false) => {
+      if (!openPanel) return;
+      const trigger = stage.querySelector<HTMLButtonElement>(`[aria-controls="${openPanel.id}"]`);
+      openPanel.hidden = true;
+      trigger?.setAttribute("aria-expanded", "false");
+      if (returnFocus) trigger?.focus();
+      openPanel = null;
+    };
+
+    const place = (trigger: HTMLElement, panel: HTMLElement) => {
+      const bounds = stage.getBoundingClientRect();
+      const anchor = trigger.getBoundingClientRect();
+      const width = panel.offsetWidth;
+      const centre = anchor.left + anchor.width / 2 - bounds.left;
+      panel.style.left = `${Math.min(Math.max(centre - width / 2, 12), Math.max(bounds.width - width - 12, 12))}px`;
+    };
+
+    const showPanel = (trigger: HTMLButtonElement) => {
+      const panel = document.getElementById(trigger.getAttribute("aria-controls") ?? "");
+      if (!panel) return;
+      const same = openPanel === panel;
+      closePanels();
+      if (same) return;
+      panel.hidden = false;
+      place(trigger, panel);
+      trigger.setAttribute("aria-expanded", "true");
+      openPanel = panel;
+      if (panel.id === "studio-start") search?.focus();
+    };
+
+    for (const tab of root.querySelectorAll<HTMLButtonElement>("[data-tab]")) {
+      tab.addEventListener("click", () => {
+        const name = tab.dataset.tab ?? "dock";
+        for (const other of root.querySelectorAll<HTMLButtonElement>("[data-tab]")) {
+          other.setAttribute("aria-selected", other === tab ? "true" : "false");
+        }
+        for (const tray of root.querySelectorAll<HTMLElement>("[data-tray]")) {
+          tray.hidden = tray.dataset.tray !== name;
+        }
+        if (hint) hint.textContent = hints[name] ?? hints.dock;
+      });
+    }
+
+    for (const button of stage.querySelectorAll<HTMLButtonElement>("[data-app]")) {
+      button.addEventListener("click", () => {
+        closePanels();
+        setFront(nextFrontApp(stage.dataset.active || null, button.dataset.app ?? ""));
+      });
+    }
+
+    for (const trigger of stage.querySelectorAll<HTMLButtonElement>("[data-flyout]")) {
+      trigger.addEventListener("click", (event) => {
+        event.stopPropagation();
+        showPanel(trigger);
+      });
+    }
+
+    for (const row of rows) {
+      row.addEventListener("click", () => {
+        setFront(row.dataset.open ?? null);
+        closePanels();
+      });
+    }
+
+    search?.addEventListener("input", () => {
+      const matches = new Set(filterApps(studioApps, search.value).map((app) => app.id));
+      for (const row of rows) {
+        const item = row.closest("li");
+        if (item) item.hidden = !matches.has(row.dataset.open ?? "");
+      }
+      if (empty) empty.hidden = matches.size > 0;
+    });
+
+    const readout = root.querySelector<HTMLElement>("[data-volume-readout]");
+    const slider = root.querySelector<HTMLInputElement>("[data-volume]");
+    const volumeButton = stage.querySelector<HTMLButtonElement>('[aria-controls="studio-volume"]');
+    slider?.addEventListener("input", () => {
+      const value = Number(slider.value);
+      slider.setAttribute("aria-valuenow", String(value));
+      if (readout) readout.textContent = `${value}%`;
+      if (volumeButton) volumeButton.setAttribute("aria-label", `Volume, ${value} percent`);
+    });
+
+    for (const button of root.querySelectorAll<HTMLButtonElement>("[data-mode]")) {
+      button.addEventListener("click", () => {
+        stage.dataset.mode = button.dataset.mode;
+        for (const other of root.querySelectorAll<HTMLButtonElement>("[data-mode]")) {
+          other.setAttribute("aria-pressed", other === button ? "true" : "false");
+        }
+      });
+    }
+
+    const skinNote = root.querySelector<HTMLElement>("[data-skin-note]");
+    for (const button of root.querySelectorAll<HTMLButtonElement>("[data-skin]")) {
+      button.addEventListener("click", () => {
+        const id = button.dataset.skin ?? "glass";
+        stage.dataset.skin = id;
+        for (const other of root.querySelectorAll<HTMLButtonElement>("[data-skin]")) {
+          other.setAttribute("aria-pressed", other === button ? "true" : "false");
+        }
+        if (skinNote) skinNote.textContent = dockSkins.find((skin) => skin.id === id)?.description ?? "";
+      });
+    }
+
+    for (const button of root.querySelectorAll<HTMLButtonElement>("[data-toggle]")) {
+      button.addEventListener("click", () => {
+        const id = button.dataset.toggle ?? "";
+        const on = button.getAttribute("aria-pressed") !== "true";
+        button.setAttribute("aria-pressed", on ? "true" : "false");
+        for (const widget of stage.querySelectorAll<HTMLElement>(`[data-widget="${id}"]`)) {
+          widget.hidden = !on;
+        }
+        if (!on) closePanels();
+      });
+    }
+
+    root.addEventListener("click", (event) => {
+      if (openPanel && !openPanel.contains(event.target as Node)) {
+        const target = event.target as HTMLElement;
+        if (!target.closest("[data-flyout]")) closePanels();
+      }
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closePanels(true);
+    });
+    window.addEventListener("resize", () => {
+      if (!openPanel) return;
+      const trigger = stage.querySelector<HTMLButtonElement>(`[aria-controls="${openPanel.id}"]`);
+      if (trigger) place(trigger, openPanel);
+    });
+  }
+</script>
