@@ -32,7 +32,8 @@ pub fn persist_settings(
 ) -> Result<AppSettings, String> {
     settings.validate()?;
     let previous = state.settings();
-    let taskbar_changed = previous.taskbar.mode != settings.taskbar.mode;
+    let taskbar_changed = previous.taskbar.mode != settings.taskbar.mode
+        || state.taskbar.status().mode != settings.taskbar.mode;
     if taskbar_changed {
         state.taskbar.apply(settings.taskbar.mode)?;
     }
@@ -41,7 +42,12 @@ pub fn persist_settings(
             .store
             .lock()
             .map_err(|_| "store lock poisoned".to_string())?;
-        store.save(&settings).map_err(|e| e.to_string())?;
+        if let Err(error) = store.save(&settings) {
+            if taskbar_changed {
+                let _ = state.taskbar.apply(previous.taskbar.mode);
+            }
+            return Err(error.to_string());
+        }
     }
     if let Ok(mut current) = state.settings.lock() {
         *current = settings.clone();

@@ -76,7 +76,14 @@ fn spawn_system(app: AppHandle) {
             thread::sleep(Duration::from_secs(2));
             tick += 1;
             let state = app.state::<AppState>();
+            let previous_mode = state.taskbar.status().mode;
             state.taskbar.reassert();
+            if state.taskbar.status().mode != previous_mode {
+                if let Some(dock) = app.get_webview_window("main") {
+                    let length = state.live.dock_length.lock().ok().and_then(|v| *v);
+                    let _ = crate::dock_layout::apply_dock_layout(&dock, &state.settings(), length);
+                }
+            }
             let stats = platform::system_stats(&mut sampler);
             let _ = app.emit("system:stats", &stats);
             if let Ok(mut slot) = state.live.stats.lock() {

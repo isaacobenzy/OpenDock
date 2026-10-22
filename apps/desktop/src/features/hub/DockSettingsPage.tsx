@@ -78,6 +78,7 @@ function TaskbarSection({ settings, change }: { settings: AppSettings; change: (
       ) : (
         <TaskbarOptions value={settings.taskbar.mode} onChange={(mode) => change((s) => ({ ...s, taskbar: { mode } }))} />
       )}
+      {status?.error ? <p className="callout is-error" role="alert">{status.error}</p> : null}
       {status && supported ? (
         <p className="muted small">
           Right now: {status.visible === false ? "hidden" : status.autohide ? "auto-hiding" : "showing"}

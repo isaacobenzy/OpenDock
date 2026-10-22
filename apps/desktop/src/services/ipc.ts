@@ -114,6 +114,7 @@ export type TaskbarStatus = {
   autohide: boolean | null;
   visible: boolean | null;
   originalAutohide: boolean | null;
+  error: string | null;
 };
 
 export type FlyoutRequest = { kind: string; target?: string | null; anchor: number };

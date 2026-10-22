@@ -15,4 +15,6 @@ No row below has a recorded pass against an **installed** 0.2.0 build. Run them 
 
 The marker file is `%APPDATA%\com.opendock.app\taskbar-restore.json`. It exists only while OpenDock has changed the taskbar. Restoring deletes it.
 
+For the combined release, fault-injection tests additionally cover guard startup failure, partial apply rollback, failed restoration with retry, corrupted markers, repeated mode changes and a taskbar reappearing. These tests use a fake shell and do not count as installed-build passes. Verify a secondary taskbar reappearing while the primary remains hidden, a failed guard, startup error feedback and both NSIS/MSI uninstall paths on Windows. Failed restoration now retains the marker until the shell accepts the restore.
+
 Recovery steps for someone whose taskbar is still hidden are in [installation.md](installation.md#recovering-the-windows-taskbar).

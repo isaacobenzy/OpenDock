@@ -82,9 +82,12 @@ pub fn run() {
             db.with(|c| store::rules::seed_once(c, &engine::rules::recipes()))?;
             db.with(store::focus::close_abandoned)?;
 
-            if let Err(error) = taskbar.apply(settings.taskbar.mode) {
+            let taskbar_failed = if let Err(error) = taskbar.apply(settings.taskbar.mode) {
                 tracing::warn!(%error, "could not apply the taskbar mode");
-            }
+                true
+            } else {
+                false
+            };
 
             app.manage(AppState {
                 store: Mutex::new(store),
@@ -103,12 +106,14 @@ pub fn run() {
             if let Some(window) = app.get_webview_window("main") {
                 dock_layout::apply_dock_layout(&window, &settings, None)?;
                 dock_layout::sync_autostart(app.handle(), &settings)?;
+                window.show()?;
             }
 
             services::automation::start(app.handle().clone(), automation);
             services::start_all(app.handle());
-            if !settings.onboarded {
-                if let Err(error) = services::windows::open_hub(app.handle(), "welcome") {
+            if taskbar_failed || !settings.onboarded {
+                let page = if taskbar_failed { "dock" } else { "welcome" };
+                if let Err(error) = services::windows::open_hub(app.handle(), page) {
                     tracing::warn!(%error, "could not open the welcome page");
                 }
             }

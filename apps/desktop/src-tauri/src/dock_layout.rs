@@ -1,4 +1,4 @@
-use tauri::{PhysicalPosition, PhysicalSize, WebviewWindow};
+use tauri::{Manager, PhysicalPosition, PhysicalSize, WebviewWindow};
 
 use crate::geometry::{compute_dock_rect, cross_axis_thickness, DOCK_MARGIN};
 use crate::platform::{
@@ -16,7 +16,12 @@ pub fn apply_dock_layout(
     let scale = window.scale_factor().map_err(|e| e.to_string())?;
     // A dock that replaces the taskbar owns its edge, so it lays out against the whole
     // monitor; otherwise the reserved strip would push it up every time.
-    let replacing = settings.taskbar.mode == TaskbarMode::Replace;
+    let active_mode = window
+        .app_handle()
+        .try_state::<crate::state::AppState>()
+        .map(|state| state.taskbar.status().mode)
+        .unwrap_or(settings.taskbar.mode);
+    let replacing = active_mode == TaskbarMode::Replace;
     let area = if replacing {
         monitor_area_from_window(window)
     } else {

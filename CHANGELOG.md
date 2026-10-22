@@ -17,6 +17,10 @@ All notable changes to OpenDock are documented here. The format is based on [Kee
 - The website and the README describe taskbar restore as the exits OpenDock can see, including the gap when Windows kills OpenDock and the guard together. The manual results are in `docs/testing-matrix.md`.
 - The footer link that said Pricing now says Free. There is no paid plan.
 
+### Fixed
+
+- Taskbar replacement now requires a running recovery guard, restores the original state after a partial failure, and retains recovery data until restoration succeeds. Secondary taskbars are included in visibility checks. Startup failures open Dock settings with an error, and the dock is shown after initial layout.
+
 ## [0.2.0] - 2026-10-21
 
 The first release that can stand in for the Windows taskbar.

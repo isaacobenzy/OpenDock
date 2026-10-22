@@ -141,8 +141,11 @@ pub fn set_taskbar_autohide(enabled: bool) -> Result<(), String> {
 }
 
 pub fn taskbar_visible() -> Option<bool> {
-    let bar = primary_taskbar()?;
-    Some(unsafe { IsWindowVisible(bar).as_bool() })
+    let bars = all_taskbars();
+    (!bars.is_empty()).then(|| {
+        bars.iter()
+            .any(|bar| unsafe { IsWindowVisible(*bar).as_bool() })
+    })
 }
 
 pub fn set_taskbar_visible(visible: bool) -> Result<(), String> {
