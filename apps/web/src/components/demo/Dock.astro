@@ -5,12 +5,13 @@ import Icon from "../Icon.astro";
 type Props = {
   items: DockItem[];
   style?: "pill" | "bar";
+  skin?: "glass" | "solid" | "midnight" | "minimal" | "neon" | "ink";
   /** Interactive docks render flyout triggers as buttons; others are decorative. */
   interactive?: boolean;
   label?: string;
 };
 
-const { items, style = "pill", interactive = false, label = "OpenDock" } = Astro.props;
+const { items, style = "pill", skin = "glass", interactive = false, label = "OpenDock" } = Astro.props;
 
 function appLabel(item: Extract<DockItem, { kind: "app" }>): string {
   const { name, state, windows } = item.app;
@@ -21,7 +22,7 @@ function appLabel(item: Extract<DockItem, { kind: "app" }>): string {
 ---
 
 <div
-  class:list={["dock", `dock--${style}`]}
+  class:list={["dock", `dock--${style}`, `is-${skin}`]}
   role={interactive ? "group" : undefined}
   aria-label={interactive ? label : undefined}
   aria-hidden={interactive ? undefined : "true"}

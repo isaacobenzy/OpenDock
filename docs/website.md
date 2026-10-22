@@ -51,7 +51,7 @@ Cloudflare Pages builds the site from GitHub.
 
 The pnpm version in the build command must match the `packageManager` field in the root `package.json`, so the deployed build uses the same pnpm as CI and contributors. Update both together.
 
-Every push to `main` deploys to production; every other branch and pull request gets a preview URL. Security headers come from `public/_headers`.
+Every push to `main` deploys to production. `staging` and `develop`, and every other branch and pull request, get a preview URL. Security headers come from `public/_headers`.
 
 ### Custom domain
 
