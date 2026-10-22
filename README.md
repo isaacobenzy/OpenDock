@@ -87,7 +87,7 @@ A tour of every module is in [docs/project-structure.md](docs/project-structure.
 
 ## Contributing
 
-Contributions of every size are welcome: bug reports, widgets, translations, docs and code. Start with [CONTRIBUTING.md](CONTRIBUTING.md), and look for issues labelled [`good first issue`](https://github.com/isaacobenzy/OpenDock/labels/good%20first%20issue). The engineering rules every change follows are in [AGENTS.md](AGENTS.md).
+Contributions of every size are welcome: bug reports, widgets, translations, docs and code. Start with [CONTRIBUTING.md](CONTRIBUTING.md), and look for issues labelled [`good first issue`](https://github.com/isaacobenzy/OpenDock/labels/good%20first%20issue). Feature branches merge into `develop`, release candidates sit on `staging`, and `main` is what ships. The engineering rules every change follows are in [AGENTS.md](AGENTS.md).
 
 Please follow the [Code of Conduct](CODE_OF_CONDUCT.md). Report security issues privately as described in [SECURITY.md](SECURITY.md), not in public issues.
 

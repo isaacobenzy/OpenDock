@@ -36,6 +36,7 @@ export type DockLayout = {
   name: string;
   summary: string;
   style: "pill" | "bar";
+  skin: "glass" | "solid" | "midnight" | "minimal" | "neon" | "ink";
   items: DockItem[];
 };
 
@@ -72,6 +73,7 @@ export const exampleLayouts: DockLayout[] = [
     summary:
       "The default after setup: Start, your apps and the essentials, in a full-width bar that reserves the bottom edge like the taskbar did.",
     style: "bar",
+    skin: "solid",
     items: [
       { kind: "start" },
       { kind: "divider" },
@@ -92,6 +94,7 @@ export const exampleLayouts: DockLayout[] = [
     summary:
       "A focus timer, todos and your next meeting next to the tools you build with. Pair it with the Pause music while focusing recipe.",
     style: "pill",
+    skin: "glass",
     items: [
       { kind: "start" },
       { kind: "divider" },
@@ -111,6 +114,7 @@ export const exampleLayouts: DockLayout[] = [
     summary:
       "Music and system load front and centre while you render, with the weather and how much of the day is left.",
     style: "pill",
+    skin: "neon",
     items: [
       { kind: "start" },
       { kind: "divider" },

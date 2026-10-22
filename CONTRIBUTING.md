@@ -25,18 +25,25 @@ pnpm dev
 
 ## Branching model
 
+Work moves in one direction:
+
+```text
+feat/*  →  develop  →  staging  →  main
+```
+
 | Branch | Purpose | Who merges |
 | --- | --- | --- |
-| `main` | Always releasable. Every release is a tag on `main`. | Maintainers, from `develop` or a `hotfix/*` branch |
+| `main` | Production. Always releasable. The website deploys from here, and every release is a tag on `main`. | Maintainers, from `staging` or a `hotfix/*` branch |
+| `staging` | The release candidate. What is about to go to production. | Maintainers, from `develop` |
 | `develop` | Integration branch. All feature work lands here first. | Maintainers, after review and green CI |
 | `feat/<short-name>` | New features | Opened against `develop` |
 | `fix/<short-name>` | Bug fixes | Opened against `develop` |
 | `docs/<short-name>` | Documentation and website | Opened against `develop` |
 | `chore/<short-name>` | Tooling, dependencies, CI | Opened against `develop` |
-| `release/<version>` | Release preparation: version bump, changelog | Merged into `main`, then back into `develop` |
-| `hotfix/<version>` | Urgent fix for a published release | Merged into `main` and `develop` |
+| `release/<version>` | Release preparation: version bump, changelog | Merged into `staging`, then `staging` into `main`, then `main` back into `develop` |
+| `hotfix/<version>` | Urgent fix for a published release | Merged into `main`, then back into `staging` and `develop` |
 
-Both `main` and `develop` are protected: changes arrive by pull request with passing CI and at least one approving review.
+`main`, `staging` and `develop` are protected: changes arrive by pull request with passing CI and at least one approving review.
 
 ## Commit messages
 
