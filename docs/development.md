@@ -44,6 +44,8 @@ git switch develop
 pnpm install
 ```
 
+`develop` is where new work lands. `staging` is the release candidate. `main` is production, and the website deploys from it. See [Contributing](../CONTRIBUTING.md#branching-model).
+
 ## Everyday commands
 
 | Command | What it does |

@@ -27,7 +27,8 @@ git switch -c release/0.3.0
 
 - Bump the versions listed above.
 - In `CHANGELOG.md`, move the *Unreleased* entries under a new heading `## [0.3.0] - YYYY-MM-DD` and update the comparison links at the bottom.
-- Open a pull request from `release/0.3.0` into `main`. Only fixes for problems found during the release go into this branch from now on.
+- Open a pull request from `release/0.3.0` into `staging`. Only fixes for problems found during the release go into this branch from now on.
+- When `staging` is the candidate you want to ship, open a pull request from `staging` into `main`.
 
 ## 2. Verify
 
@@ -50,7 +51,7 @@ Record the results of the matrix, and the Windows versions you tested on, in the
 
 ## 3. Merge and tag
 
-1. Squash-merge the release pull request into `main`.
+1. Squash-merge the release pull request into `staging`, then merge `staging` into `main`.
 2. Tag the merge commit and push the tag:
 
    ```powershell
@@ -60,9 +61,12 @@ Record the results of the matrix, and the Windows versions you tested on, in the
    git push origin v0.3.0
    ```
 
-3. Merge `main` back into `develop` so the version bump and any release fixes are kept:
+3. Merge `main` back into `staging` and `develop` so the version bump and any release fixes are kept:
 
    ```powershell
+   git switch staging
+   git merge --no-ff main
+   git push
    git switch develop
    git merge --no-ff main
    git push
@@ -94,7 +98,7 @@ For an urgent fix to the released version:
 
 1. Branch from the tag: `git switch -c hotfix/0.3.1 v0.3.0`.
 2. Fix the bug, add a test, and bump the patch version.
-3. Follow steps 2 to 5, with the pull request going into `main`, then merge `main` back into `develop`.
+3. Follow steps 2 to 5, with the pull request going into `main`, then merge `main` back into `staging` and `develop`.
 
 ## Code signing
 

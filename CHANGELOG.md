@@ -4,6 +4,11 @@ All notable changes to OpenDock are documented here. The format is based on [Kee
 
 ## [Unreleased]
 
+### Added
+
+- The homepage has a dock you can use in the browser: open apps, search from Start, change the volume, switch skins, and turn widgets on and off.
+- Contributor branches now run `develop` → `staging` → `main`.
+
 ## [0.2.0] - 2026-10-21
 
 The first release that can stand in for the Windows taskbar.

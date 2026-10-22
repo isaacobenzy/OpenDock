@@ -57,6 +57,12 @@
   --wall-sun: rgba(255, 208, 160, 0.6);
   --legacy-bar: rgba(30, 32, 38, 0.86);
   --legacy-icon: rgba(255, 255, 255, 0.22);
+  --skin-solid: #12151c;
+  --skin-midnight-top: #1b2744;
+  --skin-midnight-bottom: #0c1018;
+  --skin-neon: #07080d;
+  --skin-ink: #0a0c10;
+  --skin-ink-line: #f4f7fb;
   --code-1: #8ab4ff;
   --code-2: #7cf2c8;
   --code-3: #ffc56b;
