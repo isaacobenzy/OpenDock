@@ -23,7 +23,7 @@ OpenDock replaces the Windows taskbar with a dock that shows your apps and windo
 
 ## Highlights
 
-- **A real taskbar replacement.** Pinned apps and every open window, grouped by app with live window previews. OpenDock reserves the screen edge so maximised windows never sit underneath it, and the Windows taskbar always comes back when OpenDock quits, crashes or is uninstalled.
+- **A real taskbar replacement.** Pinned apps and every open window, grouped by app with live window previews. OpenDock reserves the screen edge so maximised windows never sit underneath it. The taskbar is restored on quit, by a guard process after a crash, before power actions from the launcher, on the next start, and by the uninstaller. If Windows kills OpenDock and the guard together, auto-hide can stay on until the next launch. **Restore the Windows taskbar** is in the dock menu and the quick-actions tray.
 - **Start launcher.** Instant search across installed apps, pinning, and lock, sleep, sign out, restart and shut down.
 - **Fourteen built-in widgets.** Apps, Start, Volume, Quick actions, Clock, Now playing, Focus timer, Todos, Notes, Next event (iCal), System, Battery, Weather and Day progress. Each one renders in three sizes with proper loading, empty and error states.
 - **Automation Studio.** Rules are plain data: *when* an event happens, *unless* a condition holds, *then* run actions. Ships with recipes such as Meeting mode, Sunset dark mode and Pause music for calls, plus dry runs, an activity log and Undo.
@@ -62,7 +62,20 @@ pnpm install
 pnpm dev            # desktop app with hot reload
 ```
 
-You need Node.js 20+, pnpm 9+, Rust stable (MSVC), and the Visual Studio 2022 Build Tools with the C++ workload. Step-by-step setup is in [docs/development.md](docs/development.md).
+You need Node.js 22 (`.nvmrc`; `package.json` requires `>=22`), pnpm 10 (`packageManager` is pnpm 10.34.4), Rust stable (MSVC), and the Visual Studio 2022 Build Tools with the C++ workload. Step-by-step setup is in [docs/development.md](docs/development.md).
+
+## What is shipped
+
+| Capability | Status |
+| --- | --- |
+| Windows taskbar replacement, apps, live previews, 14 widgets, Automation Studio, Privacy Ledger | Shipped in 0.2.0 |
+| Taskbar restore on quit, crash, launcher power actions, next start, and uninstall | Shipped in code. Automated tests cover the marker file and which power actions restore first. The [manual matrix](docs/testing-matrix.md) has not been recorded against an installed build. |
+| Restore command in the dock menu and quick-actions tray | Shipped |
+| Code signing, winget, Scoop, auto-update | Planned for 1.0 |
+| Widget SDK | Planned |
+| Linux and macOS | Planned |
+
+## Commands
 
 | Command | What it does |
 | --- | --- |

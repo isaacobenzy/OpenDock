@@ -130,10 +130,7 @@ pub fn power_action(
     state: State<'_, AppState>,
     action: PowerAction,
 ) -> Result<(), String> {
-    if matches!(
-        action,
-        PowerAction::SignOut | PowerAction::Restart | PowerAction::ShutDown
-    ) {
+    if action.ends_session() {
         // Windows may not give OpenDock time to clean up, so hand the taskbar back first.
         if let Err(error) = state.taskbar.restore() {
             tracing::warn!(%error, "could not restore the taskbar before shutting down");

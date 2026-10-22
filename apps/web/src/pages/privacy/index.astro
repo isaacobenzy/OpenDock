@@ -12,7 +12,7 @@ const online = widgets.filter((widget) => widget.network.length > 0);
   description="OpenDock collects no personal data. How the app and this website handle privacy, in plain language."
 >
   <PageHead
-    eyebrow="Last updated 21 October 2026"
+    eyebrow="Last updated 22 October 2026"
     title="Privacy"
     lead="Short version: OpenDock doesn't collect anything about you, and neither does this website."
   />
@@ -50,7 +50,16 @@ const online = widgets.filter((widget) => widget.network.length > 0);
 
         <h2>This website</h2>
         <ul>
-          <li>No cookies, analytics, advertising, trackers or third-party scripts and fonts.</li>
+          <li>No cookies, analytics, advertising, trackers or third-party scripts and fonts on the pages themselves.</li>
+          <li>
+            Now playing on the dock is the exception. Opening that widget loads the selected film from YouTube:
+            <a href="https://www.youtube.com/watch?v=Ljy6IxNlaxw">Just 2 Minutes of Fusion Jazz!</a> by Giulio
+            Carmassi, or <a href="https://www.youtube.com/watch?v=0uPNXDD1sRU">Tokyo</a> by Toshiki Soejima. Nothing is
+            loaded from YouTube until you open it, and switching tracks loads only that film. Closing the widget
+            removes the player.
+            <a href="https://www.youtube.com/howyoutubeworks/user-settings/privacy/">YouTube's privacy notice</a> applies
+            to that player.
+          </li>
           <li>
             If you choose a light or dark theme, that choice is saved in your browser's local storage so the next page
             uses it. It never leaves your device, and choosing "System" removes it.

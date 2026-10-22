@@ -14,6 +14,7 @@ Start with [CONTRIBUTING.md](../CONTRIBUTING.md), then:
 - [Architecture](architecture.md): processes, windows, IPC, services, storage and the taskbar flow
 - [Project structure](project-structure.md): what lives where
 - [Testing](testing.md): automated tests and the manual Windows matrix
+- [Taskbar restore matrix](testing-matrix.md): each restore path, what is tested, and what is not
 - [Architecture decisions](adr/README.md): why the big choices were made
 
 ## Maintaining

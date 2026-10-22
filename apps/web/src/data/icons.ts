@@ -10,6 +10,7 @@ export const icons = {
   terminal: '<rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="m7 9.5 3 2.5-3 2.5M12.5 15H17"/>',
   palette: '<path d="M12 3a9 9 0 0 0 0 18c1.4 0 2-1 2-2 0-1.5-1-1.6-1-3 0-1 .8-1.8 1.8-1.8H17a4 4 0 0 0 4-4C21 6.4 17 3 12 3z"/><circle cx="7.5" cy="11" r="1" fill="currentColor"/><circle cx="10" cy="7.5" r="1" fill="currentColor"/><circle cx="14.5" cy="7.5" r="1" fill="currentColor"/>',
   music: '<path d="M9 17.5V6l10-2v11.5"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="15.5" r="2.5"/>',
+  play: '<path fill="currentColor" stroke="none" d="M8 5.5v13l11-6.5z"/>',
   pause: '<path d="M9 6v12M15 6v12"/>',
   next: '<path d="m6 6 8 6-8 6zM18 6v12"/>',
   prev: '<path d="m18 6-8 6 8 6zM6 6v12"/>',

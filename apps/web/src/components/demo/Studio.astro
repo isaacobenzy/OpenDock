@@ -1,5 +1,7 @@
 ---
+import NowPlayingPanel from "./NowPlayingPanel.astro";
 import Icon from "../Icon.astro";
+import { previewTrack } from "../../data/track";
 import { dockSkins, studioApps, studioWidgets } from "../../data/studio";
 
 const files = [
@@ -9,7 +11,7 @@ const files = [
 ];
 
 const hints = {
-  dock: "Click an app to open it. Click it again to minimise. Search from Start, or change the volume.",
+  dock: "Click Now playing on the dock. Previous and next switch tracks.",
   skins: "Pick a skin. The same six styles ship in the Windows app.",
   widgets: "Turn widgets on and off. The Start button and your apps stay.",
 };
@@ -66,8 +68,11 @@ const hints = {
       <div class="win-bar"><span class="win-title">Music</span><span class="win-ctrl"></span></div>
       <div class="win-page">
         <span class="dk-art"></span>
-        <strong>Slow Tide</strong>
-        <small>Harbour Lights</small>
+        <strong data-now-title>{previewTrack.title}</strong>
+        <small data-now-artist>{previewTrack.artist}</small>
+        <button type="button" data-flyout="studio-now" aria-controls="studio-now" aria-expanded="false">
+          Play from the dock
+        </button>
       </div>
     </div>
     <div class="win win--front stage-win" data-window="mail" hidden>
@@ -108,10 +113,11 @@ const hints = {
           ))
         }
         <span class="dk-divider" aria-hidden="true"></span>
-        <span class="dk-cell dk-media narrow-hide" data-widget="media">
+        <button type="button" class="dk-cell dk-media" data-widget="media" data-now-chip data-flyout="studio-now" aria-expanded="false" aria-controls="studio-now" aria-label={`Now playing, ${previewTrack.title} by ${previewTrack.artist}`}>
           <span class="dk-art"></span>
-          <span class="dk-text"><strong>Slow Tide</strong><small>Harbour Lights</small></span>
-        </span>
+          <span class="dk-text"><strong data-now-title>{previewTrack.title}</strong><small data-now-artist>{previewTrack.artist}</small></span>
+          <Icon name="play" size={14} />
+        </button>
         <span class="dk-cell dk-weather narrow-hide" data-widget="weather">
           <Icon name="sun" size={18} /><strong>18°</strong>
         </span>
@@ -162,6 +168,8 @@ const hints = {
       </label>
     </div>
 
+    <NowPlayingPanel id="studio-now" />
+
     <div class="panel panel--clock" id="studio-clock" hidden role="dialog" aria-label="Clock">
       <header class="clock-head">
         <strong>09:41</strong>
@@ -211,10 +219,11 @@ const hints = {
 </section>
 
 <script>
+  import { mountPreview, releasePreview } from "../../scripts/now-playing";
   import { dockSkins, filterApps, nextFrontApp, studioApps } from "../../data/studio";
 
   const hints: Record<string, string> = {
-    dock: "Click an app to open it. Click it again to minimise. Search from Start, or change the volume.",
+    dock: "Click Now playing on the dock. Previous and next switch tracks.",
     skins: "Pick a skin. The same six styles ship in the Windows app.",
     widgets: "Turn widgets on and off. The Start button and your apps stay.",
   };
@@ -244,6 +253,7 @@ const hints = {
     const closePanels = (returnFocus = false) => {
       if (!openPanel) return;
       const trigger = stage.querySelector<HTMLButtonElement>(`[aria-controls="${openPanel.id}"]`);
+      releasePreview(openPanel);
       openPanel.hidden = true;
       trigger?.setAttribute("aria-expanded", "false");
       if (returnFocus) trigger?.focus();
@@ -266,6 +276,7 @@ const hints = {
       if (same) return;
       panel.hidden = false;
       place(trigger, panel);
+      mountPreview(panel);
       trigger.setAttribute("aria-expanded", "true");
       openPanel = panel;
       if (panel.id === "studio-start") search?.focus();

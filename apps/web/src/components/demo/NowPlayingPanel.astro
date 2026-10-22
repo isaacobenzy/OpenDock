@@ -1,0 +1,52 @@
+---
+import Icon from "../Icon.astro";
+import { previewTrack, previewTracks, watchUrl } from "../../data/track";
+
+type Props = { id: string };
+const { id } = Astro.props;
+---
+
+<div
+  class="panel panel--now"
+  id={id}
+  hidden
+  data-now-flyout-panel
+  role="dialog"
+  aria-label="Now playing"
+>
+  <div class="now-transport">
+    <button type="button" data-track-step="-1" aria-label="Previous track">
+      <Icon name="prev" size={16} />
+    </button>
+    <p class="now-head">
+      <strong data-now-title>{previewTrack.title}</strong>
+      <small data-now-artist>{previewTrack.artist}</small>
+    </p>
+    <button type="button" data-track-step="1" aria-label="Next track">
+      <Icon name="next" size={16} />
+    </button>
+  </div>
+  <div class="yt-slot" data-yt-slot></div>
+  <ul class="now-queue" aria-label="Queue">
+    {
+      previewTracks.map((track, item) => (
+        <li>
+          <button type="button" data-track={track.id} aria-pressed={item === 0 ? "true" : "false"}>
+            <span>{track.title}</span>
+            <small>{track.artist}</small>
+          </button>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="now-note">
+    Plays from YouTube while this dock widget is open.
+    <a data-now-watch href={watchUrl(previewTrack.youtubeId)}>Watch on YouTube</a>
+  </p>
+</div>
+
+<script>
+  import { bindNowPlaying } from "../../scripts/now-playing";
+
+  bindNowPlaying();
+</script>

@@ -16,7 +16,7 @@ For anything larger than a bug fix, open an issue first so we can agree on the a
 
 ## Set up your environment
 
-Follow [docs/development.md](docs/development.md). In short: Node.js 20+, pnpm 9+, Rust stable (MSVC) and the Visual Studio 2022 C++ build tools, then:
+Follow [docs/development.md](docs/development.md). In short: Node.js 22, pnpm 10, Rust stable (MSVC) and the Visual Studio 2022 C++ build tools, then:
 
 ```powershell
 pnpm install

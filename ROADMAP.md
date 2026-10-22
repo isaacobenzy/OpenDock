@@ -18,7 +18,7 @@ This roadmap is a statement of direction, not a promise of dates. Progress is tr
 | Dock core | Widget gallery, sizes, themes, dock styles, drag to reorder | Done (0.2) |
 | Data layer | SQLite store and migrations, event bus, first-party widgets | Done (0.2) |
 | Automations | Rule engine, Automation Studio, recipes, activity log and Undo | Done (0.2) |
-| Windows shell integration | Taskbar replacement, screen-edge reservation, live window previews, guaranteed restore | Done (0.2) |
+| Windows shell integration | Taskbar replacement, screen-edge reservation, live window previews, restore on the exits OpenDock can see | Shipped in 0.2. A session end that kills OpenDock and the guard together can leave auto-hide on until the next launch. The manual restore rows are not yet recorded. |
 | **1.0 for Windows** | Code-signed installer, auto-updater, winget package, accessibility audit, localisation framework, per-monitor layouts | **Next** |
 | Widget SDK | `widget.json` manifest, sandboxed widget webviews, permission broker, starter template | Planned |
 | Linux | X11 and wlroots compositors (KDE Plasma, Sway, Hyprland), MPRIS, Secret Service, AppImage, deb, Flatpak | Planned |

@@ -1,5 +1,6 @@
 ---
 import type { DockItem } from "../../data/demo";
+import { previewTrack } from "../../data/track";
 import Icon from "../Icon.astro";
 
 type Props = {
@@ -72,18 +73,22 @@ function appLabel(item: Extract<DockItem, { kind: "app" }>): string {
         }
         case "media":
           return (
-            <span class:list={["dk-cell dk-media", hide]} aria-hidden="true">
-              <span class="dk-art" />
+            <button
+              type="button"
+              class:list={["dk-cell", "dk-media", hide]}
+              data-now-chip
+              data-now-flyout="layout-now"
+              aria-expanded="false"
+              aria-controls="layout-now"
+              aria-label={`Now playing, ${previewTrack.title} by ${previewTrack.artist}`}
+            >
+              <span class="dk-art" aria-hidden="true" />
               <span class="dk-text">
-                <strong>{item.title}</strong>
-                <small>{item.artist}</small>
+                <strong data-now-title>{previewTrack.title}</strong>
+                <small data-now-artist>{previewTrack.artist}</small>
               </span>
-              <span class="dk-controls">
-                <Icon name="prev" size={14} />
-                <Icon name="pause" size={14} />
-                <Icon name="next" size={14} />
-              </span>
-            </span>
+              <Icon name="play" size={14} />
+            </button>
           );
         case "weather":
           return (

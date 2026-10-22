@@ -1,5 +1,6 @@
 ---
 import Dock from "../../components/demo/Dock.astro";
+import NowPlayingPanel from "../../components/demo/NowPlayingPanel.astro";
 import Icon from "../../components/Icon.astro";
 import PageHead from "../../components/PageHead.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -24,6 +25,7 @@ import { repoLinks } from "../../data/site";
           <article class="layout" aria-labelledby={`layout-${layout.id}`}>
             <div class="layout-frame">
               <div class="wallpaper" aria-hidden="true" />
+              {layout.items.some((item) => item.kind === "media") ? <NowPlayingPanel id="layout-now" /> : null}
               <div class="layout-frame-inner">
                 <Dock items={layout.items} style={layout.style} skin={layout.skin} />
               </div>

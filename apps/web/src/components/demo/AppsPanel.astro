@@ -22,14 +22,16 @@ const windows = [
   <ul class="window-grid" aria-label="Windows">
     {
       windows.map((w) => (
-        <li class:list={["window-card", { "is-active": w.active }]}>
-          <span class="window-thumb" aria-hidden="true">
-            <span class="thumb-bar" />
-            {w.lines.map((width, i) => (
-              <span class="thumb-line" style={`--w: ${width}%; --i: ${i}`} />
-            ))}
-          </span>
-          <span class="window-title">{w.title}</span>
+        <li>
+          <button type="button" class:list={["window-card", { "is-active": w.active }]} data-window-card aria-pressed={w.active ? "true" : "false"}>
+            <span class="window-thumb" aria-hidden="true">
+              <span class="thumb-bar" />
+              {w.lines.map((width, i) => (
+                <span class="thumb-line" style={`--w: ${width}%; --i: ${i}`} />
+              ))}
+            </span>
+            <span class="window-title">{w.title}</span>
+          </button>
         </li>
       ))
     }
@@ -39,3 +41,17 @@ const windows = [
     <span class="menu-row is-danger"><Icon name="close" size={15} />Close all 2 windows</span>
   </div>
 </div>
+
+<script>
+  for (const panel of document.querySelectorAll<HTMLElement>(".panel--apps")) {
+    for (const card of panel.querySelectorAll<HTMLButtonElement>("[data-window-card]")) {
+      card.addEventListener("click", () => {
+        for (const other of panel.querySelectorAll<HTMLButtonElement>("[data-window-card]")) {
+          const on = other === card;
+          other.classList.toggle("is-active", on);
+          other.setAttribute("aria-pressed", on ? "true" : "false");
+        }
+      });
+    }
+  }
+</script>
