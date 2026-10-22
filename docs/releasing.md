@@ -81,9 +81,9 @@ Record the results of the matrix, and the Windows versions you tested on, in the
    ```
 
 2. Attach the installers. Either:
-   - run the **Release build** workflow (`.github/workflows/release.yml`) with the tag as input. It builds on a clean Windows runner, runs the tests, and uploads the installers and `SHA256SUMS.txt` to the draft. This is preferred, because the build doesn't depend on a maintainer's machine; or
+   - run the **Release build** workflow (`.github/workflows/release.yml`) with the tag as input. It verifies the draft/tag version, calls **Desktop packages** on clean Windows and Ubuntu 22.04 runners, runs the checks, and uploads EXE/MSI/DEB/RPM/AppImage packages only when both builds succeed. Each platform has its own checksum file (`SHA256SUMS-windows-x64.txt` and `SHA256SUMS-linux-x64.txt`). Existing assets are not overwritten. This is preferred, because the build doesn't depend on a maintainer's machine; or
    - upload the files you built and tested locally: `gh release upload v0.3.0 (Get-ChildItem release -File).FullName`.
-3. Download the setup file from the draft, check it against `SHA256SUMS.txt`, install it, and do a quick smoke test.
+3. Download the packages from the draft, check their platform checksum files, and test the installed Windows build and every advertised Linux distro/session. See [Linux acceptance](linux.md). Package compilation alone does not establish Linux shell support.
 4. Publish the release. For a pre-release version (`-beta.1` and so on), mark it as a pre-release.
 
 ## 5. Announce

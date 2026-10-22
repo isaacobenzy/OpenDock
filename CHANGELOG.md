@@ -6,6 +6,7 @@ All notable changes to OpenDock are documented here. The format is based on [Kee
 
 ### Added
 
+- Native Windows and Linux package workflow with DEB, RPM and AppImage build targets, per-platform checksums, and draft release attachment after both platforms succeed. Linux runtime support remains subject to the documented distro/session acceptance matrix.
 - The homepage has a dock you can use in the browser: open apps, search from Start, change the volume, switch skins, and turn widgets on and off.
 - Now playing opens from the dock, not a separate block. Previous and next switch between *Just 2 Minutes of Fusion Jazz!* by Giulio Carmassi and *Tokyo* by Toshiki Soejima. YouTube loads only while that widget is open.
 - Contributor branches now run `develop` → `staging` → `main`.
